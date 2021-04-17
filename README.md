@@ -12,3 +12,9 @@ Project Management. HUST_20202_DS
 ## DB desgin
 
 ![DBDesign](docs/dbdiagram/prom_db.png)
+
+## System design
+
+![SystemDesign](docs/drawio/prom_design.png)
+
+- NOTE: Nofications will be developed if there is enough time
