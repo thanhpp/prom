@@ -8,3 +8,7 @@ Project Management. HUST_20202_DS
    2. pkg: shared packages  
 2. web: web resources
 3. docs: documentation
+
+## DB desgin
+
+![DBDesign](docs/dbdiagram/prom_db.png)
