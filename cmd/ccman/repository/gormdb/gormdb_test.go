@@ -3,6 +3,9 @@ package gormdb_test
 import (
 	"context"
 	"testing"
+	"time"
+
+	"github.com/thanhpp/prom/pkg/timerpc"
 
 	"github.com/thanhpp/prom/cmd/ccman/repository/entity"
 	"github.com/thanhpp/prom/cmd/ccman/repository/gormdb"
@@ -27,6 +30,27 @@ func TestAutoMigrate(t *testing.T) {
 	)
 
 	if err := gormdb.GetGormDB().AutoMigrate(ctx, models...); err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func TestCreateCard(t *testing.T) {
+	TestInitConnection(t)
+
+	var (
+		ctx  = context.Background()
+		card = &entity.Card{
+			Title:       "test",
+			Description: "null",
+			ColumnID:    1,
+			AssignedTo:  1,
+			CreatedBy:   1,
+			DueDate:     timerpc.ToTimeRPC(time.Now()),
+		}
+	)
+
+	if err := gormdb.GetGormDB().CreateCard(ctx, card); err != nil {
 		t.Error(err)
 		return
 	}

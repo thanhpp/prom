@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+// gorm support
+
 func (t *Time) Scan(value interface{}) error {
 	ti, ok := value.(time.Time)
 	if !ok {
@@ -22,4 +24,17 @@ func (t *Time) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return time.Unix(t.Seconds, int64(t.Nanos)), nil
+}
+
+// util
+
+func ToTime(t *Time) (ti time.Time) {
+	return time.Unix(t.Seconds, int64(t.Nanos))
+}
+
+func ToTimeRPC(ti time.Time) (t *Time) {
+	return &Time{
+		Seconds: int64(ti.Unix()),
+		Nanos:   int32(ti.Nanosecond()),
+	}
 }
