@@ -41,6 +41,8 @@ var EmptyReqError = errors.New("Empty RPC request")
 // -----------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- IMPLEMENT ----------------------------------------------------------
 
+// CARD
+
 func (c *ccManSv) CreateCard(ctx context.Context, req *ccmanrpc.CreateCardReq) (resp *ccmanrpc.CreateCardResp, err error) {
 	// pre-exec check
 	if req == nil {
@@ -90,7 +92,12 @@ func (c *ccManSv) GetCardsByAssignedToID(ctx context.Context, req *ccmanrpc.GetC
 		return &ccmanrpc.GetCardsByAssignedToIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
-	return &ccmanrpc.GetCardsByAssignedToIDResp{Code: core.RPCSuccessCode}, nil
+	cards, err := repository.GetDAO().GetCardsByAssignedToID(ctx, req.AssignedToID)
+	if err != nil {
+		return &ccmanrpc.GetCardsByAssignedToIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
+	return &ccmanrpc.GetCardsByAssignedToIDResp{Code: core.RPCSuccessCode, Cards: cards}, nil
 }
 
 func (c *ccManSv) GetCardsByCreatorID(ctx context.Context, req *ccmanrpc.GetCardsByCreatorIDReq) (resp *ccmanrpc.GetCardsByCreatorIDResp, err error) {
@@ -99,8 +106,15 @@ func (c *ccManSv) GetCardsByCreatorID(ctx context.Context, req *ccmanrpc.GetCard
 		return &ccmanrpc.GetCardsByCreatorIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
-	return &ccmanrpc.GetCardsByCreatorIDResp{Code: core.RPCSuccessCode}, nil
+	cards, err := repository.GetDAO().GetCardsByCreatorID(ctx, req.CreatorID)
+	if err != nil {
+		return &ccmanrpc.GetCardsByCreatorIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
+	return &ccmanrpc.GetCardsByCreatorIDResp{Code: core.RPCSuccessCode, Cards: cards}, nil
 }
+
+// COLUMN
 
 func (c *ccManSv) GetCardsByColumnID(ctx context.Context, req *ccmanrpc.GetCardsByColumnIDReq) (resp *ccmanrpc.GetCardsByColumnIDResp, err error) {
 	// pre-exec check
@@ -108,13 +122,22 @@ func (c *ccManSv) GetCardsByColumnID(ctx context.Context, req *ccmanrpc.GetCards
 		return &ccmanrpc.GetCardsByColumnIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
-	return &ccmanrpc.GetCardsByColumnIDResp{Code: core.RPCSuccessCode}, nil
+	cards, err := repository.GetDAO().GetCardsByColumnID(ctx, req.ColumnID)
+	if err != nil {
+		return &ccmanrpc.GetCardsByColumnIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
+	return &ccmanrpc.GetCardsByColumnIDResp{Code: core.RPCSuccessCode, Cards: cards}, nil
 }
 
 func (c *ccManSv) UpdateCardByID(ctx context.Context, req *ccmanrpc.UpdateCardByIDReq) (resp *ccmanrpc.UpdateCardByIDResp, err error) {
 	// pre-exec check
 	if req == nil {
 		return &ccmanrpc.UpdateCardByIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
+	}
+
+	if err := repository.GetDAO().UpdateCardByID(ctx, req.CardID, req.UpdateCard); err != nil {
+		return &ccmanrpc.UpdateCardByIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
 	}
 
 	return &ccmanrpc.UpdateCardByIDResp{Code: core.RPCSuccessCode}, nil
@@ -126,13 +149,23 @@ func (c *ccManSv) DeleteCardByID(ctx context.Context, req *ccmanrpc.DeleteCardBy
 		return &ccmanrpc.DeleteCardByIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
+	if err := repository.GetDAO().DeleteCardByID(ctx, req.CardID); err != nil {
+		return &ccmanrpc.DeleteCardByIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
 	return &ccmanrpc.DeleteCardByIDResp{Code: core.RPCSuccessCode}, nil
 }
+
+// COLUMN
 
 func (c *ccManSv) CreateColumn(ctx context.Context, req *ccmanrpc.CreateColumnReq) (resp *ccmanrpc.CreateColumnResp, err error) {
 	// pre-exec check
 	if req == nil {
 		return &ccmanrpc.CreateColumnResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
+	}
+
+	if err := repository.GetDAO().CreateColumn(ctx, req.CreateColumn); err != nil {
+		return &ccmanrpc.CreateColumnResp{Code: core.DBErrorCode, Message: err.Error()}, err
 	}
 
 	return &ccmanrpc.CreateColumnResp{Code: core.RPCSuccessCode}, nil
@@ -144,7 +177,12 @@ func (c *ccManSv) GetColumnByID(ctx context.Context, req *ccmanrpc.GetColumnByID
 		return &ccmanrpc.GetColumnByIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
-	return &ccmanrpc.GetColumnByIDResp{Code: core.RPCSuccessCode}, nil
+	column, err := repository.GetDAO().GetColumnByID(ctx, req.ColumnID)
+	if err != nil {
+		return &ccmanrpc.GetColumnByIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
+	return &ccmanrpc.GetColumnByIDResp{Code: core.RPCSuccessCode, Column: column}, nil
 }
 
 func (c *ccManSv) GetColumnsByTitle(ctx context.Context, req *ccmanrpc.GetColumnsByTitleReq) (resp *ccmanrpc.GetColumnsByTitleResp, err error) {
@@ -153,7 +191,12 @@ func (c *ccManSv) GetColumnsByTitle(ctx context.Context, req *ccmanrpc.GetColumn
 		return &ccmanrpc.GetColumnsByTitleResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
-	return &ccmanrpc.GetColumnsByTitleResp{Code: core.RPCSuccessCode}, nil
+	columns, err := repository.GetDAO().GetColumnsByTitle(ctx, req.Title)
+	if err != nil {
+		return &ccmanrpc.GetColumnsByTitleResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
+	return &ccmanrpc.GetColumnsByTitleResp{Code: core.RPCSuccessCode, Columns: columns}, nil
 }
 
 func (c *ccManSv) GetColumnsByProjectID(ctx context.Context, req *ccmanrpc.GetColumnsByProjectIDReq) (resp *ccmanrpc.GetColumnsByProjectIDResp, err error) {
@@ -162,13 +205,22 @@ func (c *ccManSv) GetColumnsByProjectID(ctx context.Context, req *ccmanrpc.GetCo
 		return &ccmanrpc.GetColumnsByProjectIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
 	}
 
-	return &ccmanrpc.GetColumnsByProjectIDResp{Code: core.RPCSuccessCode}, nil
+	columns, err := repository.GetDAO().GetColumnsByProjectID(ctx, req.ProjectID)
+	if err != nil {
+		return &ccmanrpc.GetColumnsByProjectIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
+	}
+
+	return &ccmanrpc.GetColumnsByProjectIDResp{Code: core.RPCSuccessCode, Columns: columns}, nil
 }
 
 func (c *ccManSv) UpdateColumnByID(ctx context.Context, req *ccmanrpc.UpdateColumnByIDReq) (resp *ccmanrpc.UpdateColumnByIDResp, err error) {
 	// pre-exec check
 	if req == nil {
 		return &ccmanrpc.UpdateColumnByIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
+	}
+
+	if err := repository.GetDAO().UpdateColumnByID(ctx, req.ColumnID, req.Column); err != nil {
+		return &ccmanrpc.UpdateColumnByIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
 	}
 
 	return &ccmanrpc.UpdateColumnByIDResp{Code: core.RPCSuccessCode}, nil
@@ -178,6 +230,10 @@ func (c *ccManSv) DeleteColumnByID(ctx context.Context, req *ccmanrpc.DeleteColu
 	// pre-exec check
 	if req == nil {
 		return &ccmanrpc.DeleteColumnByIDResp{Code: core.RPCEmptyRequestCode, Message: EmptyReqError.Error()}, EmptyReqError
+	}
+
+	if err := repository.GetDAO().DeleteColumnByID(ctx, req.ColumnID); err != nil {
+		return &ccmanrpc.DeleteColumnByIDResp{Code: core.DBErrorCode, Message: err.Error()}, err
 	}
 
 	return &ccmanrpc.DeleteColumnByIDResp{Code: core.RPCSuccessCode}, nil

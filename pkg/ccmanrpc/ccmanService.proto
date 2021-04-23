@@ -78,6 +78,7 @@ message GetCardsByAssignedToIDResp {
 }
 
 message GetCardsByCreatorIDReq {
+    uint32 CreatorID = 1;
 }
 
 message GetCardsByCreatorIDResp {
