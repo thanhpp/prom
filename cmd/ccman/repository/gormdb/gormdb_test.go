@@ -2,6 +2,7 @@ package gormdb_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -54,4 +55,41 @@ func TestCreateCard(t *testing.T) {
 		t.Error(err)
 		return
 	}
+}
+
+func TestGetCardByID(t *testing.T) {
+	TestInitConnection(t)
+
+	var (
+		ctx        = context.Background()
+		id  uint32 = 1
+	)
+
+	card, err := gormdb.GetGormDB().GetCardByID(ctx, id)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Printf("%+v\n", card)
+	fmt.Println(timerpc.ToTime(card.CreatedAt))
+}
+
+func TestGetCardByDueDate(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx     = context.Background()
+		duedate = timerpc.ToTime(&timerpc.Time{
+			Seconds: 1619005776,
+			Nanos:   210219000,
+		})
+	)
+
+	cards, err := gormdb.GetGormDB().GetCardsByDueDate(ctx, duedate)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(cards)
 }

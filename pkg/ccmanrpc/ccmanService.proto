@@ -1,0 +1,178 @@
+syntax = "proto3";
+
+package ccmanrpc;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/thanhpp/prom/pkg/timerpc/time.proto";
+import "github.com/thanhpp/prom/pkg/ccmanrpc/ccmanEntity.proto";
+
+option go_package = "github.com/thanhpp/prom/pkg/ccmanrpc";
+
+option (gogoproto.gostring_all) = true;
+option (gogoproto.equal_all) = true;
+option (gogoproto.verbose_equal_all) = true;
+option (gogoproto.populate_all) = true;
+option (gogoproto.testgen_all) = true;
+option (gogoproto.benchgen_all) = false;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+
+service CCManager {
+    rpc CreateCard (CreateCardReq) returns (CreateCardResp);
+    rpc GetCardByID (GetCardByIDReq) returns (GetCardByIDResp);
+    rpc GetCardsByDueDate (GetCardsByDueDateReq) returns (GetCardsByDueDateResp);
+    rpc GetCardsByAssignedToID (GetCardsByAssignedToIDReq) returns (GetCardsByAssignedToIDResp);
+    rpc GetCardsByCreatorID (GetCardsByCreatorIDReq) returns (GetCardsByCreatorIDResp);
+    rpc GetCardsByColumnID (GetCardsByColumnIDReq) returns (GetCardsByColumnIDResp);
+    rpc UpdateCardByID (UpdateCardByIDReq) returns (UpdateCardByIDResp);
+    rpc DeleteCardByID (DeleteCardByIDReq) returns (DeleteCardByIDResp);
+
+    rpc CreateColumn (CreateColumnReq) returns (CreateColumnResp);
+    rpc GetColumnByID (GetColumnByIDReq) returns (GetColumnByIDResp);
+    rpc GetColumnsByTitle (GetColumnsByTitleReq) returns (GetColumnsByTitleResp);
+    rpc GetColumnsByProjectID (GetColumnsByProjectIDReq) returns (GetColumnsByProjectIDResp);
+    rpc UpdateColumnByID (UpdateColumnByIDReq) returns (UpdateColumnByIDResp);
+    rpc DeleteColumnByID (DeleteColumnByIDReq) returns (DeleteColumnByIDResp);
+}
+
+// CARD
+
+message CreateCardReq {
+    Card CreateCard = 1;
+}
+
+message CreateCardResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetCardByIDReq {
+    uint32 CardID = 1;
+}
+
+message GetCardByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    Card ResCard = 3;
+}
+
+message GetCardsByDueDateReq {
+    timerpc.Time DueDate = 1;
+}
+
+message GetCardsByDueDateResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Card Cards = 3;
+}
+
+message GetCardsByAssignedToIDReq {
+    uint32 AssignedToID = 1;
+}
+
+message GetCardsByAssignedToIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Card Cards = 3;
+}
+
+message GetCardsByCreatorIDReq {
+}
+
+message GetCardsByCreatorIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Card Cards = 3;
+}
+
+message GetCardsByColumnIDReq {
+    uint32 ColumnID = 1;
+}
+
+message GetCardsByColumnIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Card Cards = 3;
+}
+
+message UpdateCardByIDReq {
+    uint32 CardID = 1;
+    Card UpdateCard = 2;
+}
+
+message UpdateCardByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteCardByIDReq {
+    uint32 CardID = 1;
+}
+
+message DeleteCardByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+
+// COLUMN
+
+message CreateColumnReq {
+    Column CreateColumn = 1;
+}
+
+message CreateColumnResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetColumnByIDReq {
+    uint32 ColumnID = 1;
+}
+
+message GetColumnByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    Column Column = 3;
+}
+
+message GetColumnsByTitleReq {
+    string Title = 1;
+}
+
+message GetColumnsByTitleResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Column Columns = 3;
+}
+
+message GetColumnsByProjectIDReq {
+    uint32 ProjectID = 1;
+}
+
+message GetColumnsByProjectIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Column Columns = 3;
+}
+
+message UpdateColumnByIDReq {
+    uint32 ColumnID = 1;
+    Column Column = 2;
+}
+
+message UpdateColumnByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteColumnByIDReq {
+    uint32 ColumnID = 1;
+}
+
+message DeleteColumnByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+

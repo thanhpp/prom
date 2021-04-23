@@ -1,0 +1,10 @@
+database:
+  host: "127.0.0.1"
+  port: "5432"
+  user: "thanhpp"
+  pass: "testthanhpp"
+  log: "INFO"
+
+log:
+  level: "DEBUG"
+  color: true
