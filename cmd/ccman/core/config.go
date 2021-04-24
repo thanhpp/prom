@@ -7,19 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type dbConfig struct {
-	Host string `mapstructure:"host"`
-	Port string `mapstructure:"port"`
-	User string `mapstructure:"user"`
-	Pass string `mapstructure:"pass"`
-	Log  string `mapstructure:"log"`
-}
-
-type loggerConfig struct {
-	Level string `mapstructure:"level"`
-	Color bool   `mapstructure:"color"`
-}
-
 func readConfigFromFile(filepath string) (err error) {
 	v := viper.New()
 	filePart := strings.Split(filepath, ".")
