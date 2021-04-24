@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package usrmanrpc;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/thanhpp/prom/pkg/timerpc/time.proto";
+
+option go_package = "github.com/thanhpp/prom/cmd/usrman/repository/entity";
+
+option (gogoproto.gostring_all) = true;
+option (gogoproto.equal_all) = true;
+option (gogoproto.verbose_equal_all) = true;
+option (gogoproto.populate_all) = true;
+option (gogoproto.testgen_all) = true;
+option (gogoproto.benchgen_all) = false;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+
+message User {
+    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
+    string Username = 2 [(gogoproto.jsontag) = "username", (gogoproto.moretags) = "gorm:\"Column:username; Type:text\""];
+    string HashPass = 3 [(gogoproto.jsontag) = "hash_pass", (gogoproto.moretags) = "gorm:\"Column:hash_pass; Type:text\""];
+    timerpc.Time CreatedAt = 4 [(gogoproto.jsontag) = "created_at", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
+    timerpc.Time UpdatedAt = 5 [(gogoproto.jsontag) = "updated_at", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
+    timerpc.Time DeletedAt = 6 [(gogoproto.jsontag) = "deleted_at", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""];
+}
+
+message Team {
+    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
+    string Name = 2 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "gorm:\"Column:name; Type:text\""];
+    repeated User Members = 3 [(gogoproto.jsontag) = "members", (gogoproto.moretags) = "gorm:\"many2many:team_user\""];
+    repeated Project Projects = 4 [(gogoproto.jsontag) = "projects", (gogoproto.moretags) = "gorm:\"foreignKey:TeamID \""];
+    timerpc.Time CreatedAt = 5 [(gogoproto.jsontag) = "created_at", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
+    timerpc.Time UpdatedAt = 6 [(gogoproto.jsontag) = "updated_at", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
+    timerpc.Time DeletedAt = 7 [(gogoproto.jsontag) = "deleted_at", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""];
+}
+
+message Project {
+    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
+    string Name = 2 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "gorm:\"Column:name; Type:text\""];
+    uint32 CreatedBy = 3 [(gogoproto.jsontag) = "created_by", (gogoproto.moretags) = "gorm:\"Column:created_by; Type:int\""];
+    uint32 TeamID = 4 [(gogoproto.jsontag) = "team_id", (gogoproto.moretags) = "gorm:\"Column:team_id; Type:int\""];
+    timerpc.Time CreatedAt = 5 [(gogoproto.jsontag) = "created_at", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
+    timerpc.Time UpdatedAt = 6 [(gogoproto.jsontag) = "updated_at", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
+    timerpc.Time DeletedAt = 7 [(gogoproto.jsontag) = "deleted_at", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""];
+}
