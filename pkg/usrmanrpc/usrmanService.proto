@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+service UsrManSrv {
+    rpc GetUserByID (GetUserByIDReq) returns (GetUserByIDResp);
+    rpc CreateUser (CreateUserReq) returns (CreateUserResp);
+    rpc GetUserByUsernamePass (GetUserByUsernamePassReq) returns (GetUserByUsernamePassResp);
+    rpc GetUserByTeamID (GetUserByTeamIDReq) returns (GetUserByTeamIDResp);
+    rpc UpdateUserByID (UpdateUserByIDReq) returns (UpdateUserByIDResp);
+    rpc DeleteUserByID (DeleteUserByIDReq) returns (DeleteUserByIDResp);
+    rpc CreateTeam (CreateTeamReq) returns (CreateTeamResp);
+    rpc GetTeamByID (GetTeamByIDReq) returns (GetTeamByIDResp);
+    rpc GetTeamsByCreatorID (GetTeamsByCreatorIDReq) returns (GetTeamsByCreatorIDResp);
+    rpc GetTeamByName (GetTeamByNameReq) returns (GetTeamByNameResp);
+    rpc UpdateTeamByID (UpdateTeamByIDReq) returns (UpdateTeamByIDResp);
+    rpc AddMemberByID (AddMemberByIDReq) returns (AddMemberByIDResp);
+    rpc RemoveMemberByID (RemoveMemberByIDReq) returns (RemoveMemberByIDResp);
+    rpc DeleteTeamByID (DeleteTeamByIDReq) returns (DeleteTeamByIDResp);
+    rpc CreateProject (CreateProjectReq) returns (CreateProjectResp);
+    rpc GetProjectByID (GetProjectByIDReq) returns (GetProjectByIDResp);
+    rpc GetProjtectsByTeamID (GetProjtectsByTeamIDReq) returns (GetProjtectsByTeamIDResp);
+    rpc UpdateProjectByID (UpdateProjectByIDReq) returns (UpdateProjectByIDResp);
+    rpc DeleteProjectByID (DeleteProjectByIDReq) returns (DeleteProjectByIDResp);
+}
+
+message GetUserByIDReq {
+
+}
+
+message GetUserByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message CreateUserReq {
+
+}
+
+message CreateUserResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetUserByUsernamePassReq {
+
+}
+
+message GetUserByUsernamePassResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetUserByTeamIDReq {
+
+}
+
+message GetUserByTeamIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message UpdateUserByIDReq {
+
+}
+
+message UpdateUserByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteUserByIDReq {
+
+}
+
+message DeleteUserByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message CreateTeamReq {
+
+}
+
+message CreateTeamResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetTeamByIDReq {
+
+}
+
+message GetTeamByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetTeamsByCreatorIDReq {
+
+}
+
+message GetTeamsByCreatorIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetTeamByNameReq {
+
+}
+
+message GetTeamByNameResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message UpdateTeamByIDReq {
+
+}
+
+message UpdateTeamByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message AddMemberByIDReq {
+
+}
+
+message AddMemberByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message RemoveMemberByIDReq {
+
+}
+
+message RemoveMemberByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteTeamByIDReq {
+
+}
+
+message DeleteTeamByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message CreateProjectReq {
+
+}
+
+message CreateProjectResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetProjectByIDReq {
+
+}
+
+message GetProjectByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetProjtectsByTeamIDReq {
+
+}
+
+message GetProjtectsByTeamIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message UpdateProjectByIDReq {
+
+}
+
+message UpdateProjectByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteProjectByIDReq {
+
+}
+
+message DeleteProjectByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
