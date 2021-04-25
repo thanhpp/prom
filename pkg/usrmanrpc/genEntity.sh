@@ -9,4 +9,4 @@ protoc \
     -I=$GOPATH/src/github.com/gogo/protobuf/protobuf \
     github.com/thanhpp/prom/pkg/usrmanrpc/usrmanEntity.proto &&
 
-echo "DONE: GEN CCMAN ENTITY PROTO"
+echo "DONE: GEN USRMAN ENTITY PROTO"

@@ -7,6 +7,6 @@ protoc \
     -I=$GOPATH/src \
     --gogofaster_out=plugins=grpc:. \
     -I=$GOPATH/src/github.com/gogo/protobuf/protobuf \
-    github.com/thanhpp/prom/pkg/ccmanrpc/ccmanService.proto &&
+    github.com/thanhpp/prom/pkg/usrmanrpc/usrmanService.proto &&
 
-echo "DONE: GEN CCMAN ENTITY PROTO"
+echo "DONE: GEN USRMAN ENTITY PROTO"
