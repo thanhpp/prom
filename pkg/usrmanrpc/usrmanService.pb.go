@@ -6,18 +6,17 @@ package usrmanrpc
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	entity "github.com/thanhpp/prom/cmd/usrman/repository/entity"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -847,6 +846,110 @@ func (m *GetTeamByIDResp) GetTeam() *entity.Team {
 	return nil
 }
 
+type GetTeamsByUserIDReq struct {
+	UserID uint32 `protobuf:"varint,1,opt,name=UserID,proto3" json:"UserID,omitempty"`
+}
+
+func (m *GetTeamsByUserIDReq) Reset()         { *m = GetTeamsByUserIDReq{} }
+func (m *GetTeamsByUserIDReq) String() string { return proto.CompactTextString(m) }
+func (*GetTeamsByUserIDReq) ProtoMessage()    {}
+func (*GetTeamsByUserIDReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e1fdedd3c2808883, []int{16}
+}
+func (m *GetTeamsByUserIDReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetTeamsByUserIDReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetTeamsByUserIDReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetTeamsByUserIDReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTeamsByUserIDReq.Merge(m, src)
+}
+func (m *GetTeamsByUserIDReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetTeamsByUserIDReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTeamsByUserIDReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTeamsByUserIDReq proto.InternalMessageInfo
+
+func (m *GetTeamsByUserIDReq) GetUserID() uint32 {
+	if m != nil {
+		return m.UserID
+	}
+	return 0
+}
+
+type GetTeamsByUserIDResp struct {
+	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Teams   []*entity.Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
+}
+
+func (m *GetTeamsByUserIDResp) Reset()         { *m = GetTeamsByUserIDResp{} }
+func (m *GetTeamsByUserIDResp) String() string { return proto.CompactTextString(m) }
+func (*GetTeamsByUserIDResp) ProtoMessage()    {}
+func (*GetTeamsByUserIDResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e1fdedd3c2808883, []int{17}
+}
+func (m *GetTeamsByUserIDResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetTeamsByUserIDResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetTeamsByUserIDResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetTeamsByUserIDResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTeamsByUserIDResp.Merge(m, src)
+}
+func (m *GetTeamsByUserIDResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetTeamsByUserIDResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTeamsByUserIDResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTeamsByUserIDResp proto.InternalMessageInfo
+
+func (m *GetTeamsByUserIDResp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *GetTeamsByUserIDResp) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+func (m *GetTeamsByUserIDResp) GetTeams() []*entity.Team {
+	if m != nil {
+		return m.Teams
+	}
+	return nil
+}
+
 type GetTeamsByCreatorIDReq struct {
 	CreatorID uint32 `protobuf:"varint,1,opt,name=CreatorID,proto3" json:"CreatorID,omitempty"`
 }
@@ -855,7 +958,7 @@ func (m *GetTeamsByCreatorIDReq) Reset()         { *m = GetTeamsByCreatorIDReq{}
 func (m *GetTeamsByCreatorIDReq) String() string { return proto.CompactTextString(m) }
 func (*GetTeamsByCreatorIDReq) ProtoMessage()    {}
 func (*GetTeamsByCreatorIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{16}
+	return fileDescriptor_e1fdedd3c2808883, []int{18}
 }
 func (m *GetTeamsByCreatorIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -901,7 +1004,7 @@ func (m *GetTeamsByCreatorIDResp) Reset()         { *m = GetTeamsByCreatorIDResp
 func (m *GetTeamsByCreatorIDResp) String() string { return proto.CompactTextString(m) }
 func (*GetTeamsByCreatorIDResp) ProtoMessage()    {}
 func (*GetTeamsByCreatorIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{17}
+	return fileDescriptor_e1fdedd3c2808883, []int{19}
 }
 func (m *GetTeamsByCreatorIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -959,7 +1062,7 @@ func (m *GetTeamByNameReq) Reset()         { *m = GetTeamByNameReq{} }
 func (m *GetTeamByNameReq) String() string { return proto.CompactTextString(m) }
 func (*GetTeamByNameReq) ProtoMessage()    {}
 func (*GetTeamByNameReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{18}
+	return fileDescriptor_e1fdedd3c2808883, []int{20}
 }
 func (m *GetTeamByNameReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1005,7 +1108,7 @@ func (m *GetTeamByNameResp) Reset()         { *m = GetTeamByNameResp{} }
 func (m *GetTeamByNameResp) String() string { return proto.CompactTextString(m) }
 func (*GetTeamByNameResp) ProtoMessage()    {}
 func (*GetTeamByNameResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{19}
+	return fileDescriptor_e1fdedd3c2808883, []int{21}
 }
 func (m *GetTeamByNameResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1064,7 +1167,7 @@ func (m *UpdateTeamByIDReq) Reset()         { *m = UpdateTeamByIDReq{} }
 func (m *UpdateTeamByIDReq) String() string { return proto.CompactTextString(m) }
 func (*UpdateTeamByIDReq) ProtoMessage()    {}
 func (*UpdateTeamByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{20}
+	return fileDescriptor_e1fdedd3c2808883, []int{22}
 }
 func (m *UpdateTeamByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1116,7 +1219,7 @@ func (m *UpdateTeamByIDResp) Reset()         { *m = UpdateTeamByIDResp{} }
 func (m *UpdateTeamByIDResp) String() string { return proto.CompactTextString(m) }
 func (*UpdateTeamByIDResp) ProtoMessage()    {}
 func (*UpdateTeamByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{21}
+	return fileDescriptor_e1fdedd3c2808883, []int{23}
 }
 func (m *UpdateTeamByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1168,7 +1271,7 @@ func (m *AddMemberByIDReq) Reset()         { *m = AddMemberByIDReq{} }
 func (m *AddMemberByIDReq) String() string { return proto.CompactTextString(m) }
 func (*AddMemberByIDReq) ProtoMessage()    {}
 func (*AddMemberByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{22}
+	return fileDescriptor_e1fdedd3c2808883, []int{24}
 }
 func (m *AddMemberByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1220,7 +1323,7 @@ func (m *AddMemberByIDResp) Reset()         { *m = AddMemberByIDResp{} }
 func (m *AddMemberByIDResp) String() string { return proto.CompactTextString(m) }
 func (*AddMemberByIDResp) ProtoMessage()    {}
 func (*AddMemberByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{23}
+	return fileDescriptor_e1fdedd3c2808883, []int{25}
 }
 func (m *AddMemberByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1272,7 +1375,7 @@ func (m *RemoveMemberByIDReq) Reset()         { *m = RemoveMemberByIDReq{} }
 func (m *RemoveMemberByIDReq) String() string { return proto.CompactTextString(m) }
 func (*RemoveMemberByIDReq) ProtoMessage()    {}
 func (*RemoveMemberByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{24}
+	return fileDescriptor_e1fdedd3c2808883, []int{26}
 }
 func (m *RemoveMemberByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1324,7 +1427,7 @@ func (m *RemoveMemberByIDResp) Reset()         { *m = RemoveMemberByIDResp{} }
 func (m *RemoveMemberByIDResp) String() string { return proto.CompactTextString(m) }
 func (*RemoveMemberByIDResp) ProtoMessage()    {}
 func (*RemoveMemberByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{25}
+	return fileDescriptor_e1fdedd3c2808883, []int{27}
 }
 func (m *RemoveMemberByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1375,7 +1478,7 @@ func (m *DeleteTeamByIDReq) Reset()         { *m = DeleteTeamByIDReq{} }
 func (m *DeleteTeamByIDReq) String() string { return proto.CompactTextString(m) }
 func (*DeleteTeamByIDReq) ProtoMessage()    {}
 func (*DeleteTeamByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{26}
+	return fileDescriptor_e1fdedd3c2808883, []int{28}
 }
 func (m *DeleteTeamByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1420,7 +1523,7 @@ func (m *DeleteTeamByIDResp) Reset()         { *m = DeleteTeamByIDResp{} }
 func (m *DeleteTeamByIDResp) String() string { return proto.CompactTextString(m) }
 func (*DeleteTeamByIDResp) ProtoMessage()    {}
 func (*DeleteTeamByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{27}
+	return fileDescriptor_e1fdedd3c2808883, []int{29}
 }
 func (m *DeleteTeamByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1471,7 +1574,7 @@ func (m *CreateProjectReq) Reset()         { *m = CreateProjectReq{} }
 func (m *CreateProjectReq) String() string { return proto.CompactTextString(m) }
 func (*CreateProjectReq) ProtoMessage()    {}
 func (*CreateProjectReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{28}
+	return fileDescriptor_e1fdedd3c2808883, []int{30}
 }
 func (m *CreateProjectReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1516,7 +1619,7 @@ func (m *CreateProjectResp) Reset()         { *m = CreateProjectResp{} }
 func (m *CreateProjectResp) String() string { return proto.CompactTextString(m) }
 func (*CreateProjectResp) ProtoMessage()    {}
 func (*CreateProjectResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{29}
+	return fileDescriptor_e1fdedd3c2808883, []int{31}
 }
 func (m *CreateProjectResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1567,7 +1670,7 @@ func (m *GetProjectByIDReq) Reset()         { *m = GetProjectByIDReq{} }
 func (m *GetProjectByIDReq) String() string { return proto.CompactTextString(m) }
 func (*GetProjectByIDReq) ProtoMessage()    {}
 func (*GetProjectByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{30}
+	return fileDescriptor_e1fdedd3c2808883, []int{32}
 }
 func (m *GetProjectByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1613,7 +1716,7 @@ func (m *GetProjectByIDResp) Reset()         { *m = GetProjectByIDResp{} }
 func (m *GetProjectByIDResp) String() string { return proto.CompactTextString(m) }
 func (*GetProjectByIDResp) ProtoMessage()    {}
 func (*GetProjectByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{31}
+	return fileDescriptor_e1fdedd3c2808883, []int{33}
 }
 func (m *GetProjectByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1671,7 +1774,7 @@ func (m *GetProjtectsByTeamIDReq) Reset()         { *m = GetProjtectsByTeamIDReq
 func (m *GetProjtectsByTeamIDReq) String() string { return proto.CompactTextString(m) }
 func (*GetProjtectsByTeamIDReq) ProtoMessage()    {}
 func (*GetProjtectsByTeamIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{32}
+	return fileDescriptor_e1fdedd3c2808883, []int{34}
 }
 func (m *GetProjtectsByTeamIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1717,7 +1820,7 @@ func (m *GetProjtectsByTeamIDResp) Reset()         { *m = GetProjtectsByTeamIDRe
 func (m *GetProjtectsByTeamIDResp) String() string { return proto.CompactTextString(m) }
 func (*GetProjtectsByTeamIDResp) ProtoMessage()    {}
 func (*GetProjtectsByTeamIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{33}
+	return fileDescriptor_e1fdedd3c2808883, []int{35}
 }
 func (m *GetProjtectsByTeamIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1776,7 +1879,7 @@ func (m *UpdateProjectByIDReq) Reset()         { *m = UpdateProjectByIDReq{} }
 func (m *UpdateProjectByIDReq) String() string { return proto.CompactTextString(m) }
 func (*UpdateProjectByIDReq) ProtoMessage()    {}
 func (*UpdateProjectByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{34}
+	return fileDescriptor_e1fdedd3c2808883, []int{36}
 }
 func (m *UpdateProjectByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1828,7 +1931,7 @@ func (m *UpdateProjectByIDResp) Reset()         { *m = UpdateProjectByIDResp{} }
 func (m *UpdateProjectByIDResp) String() string { return proto.CompactTextString(m) }
 func (*UpdateProjectByIDResp) ProtoMessage()    {}
 func (*UpdateProjectByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{35}
+	return fileDescriptor_e1fdedd3c2808883, []int{37}
 }
 func (m *UpdateProjectByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1879,7 +1982,7 @@ func (m *DeleteProjectByIDReq) Reset()         { *m = DeleteProjectByIDReq{} }
 func (m *DeleteProjectByIDReq) String() string { return proto.CompactTextString(m) }
 func (*DeleteProjectByIDReq) ProtoMessage()    {}
 func (*DeleteProjectByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{36}
+	return fileDescriptor_e1fdedd3c2808883, []int{38}
 }
 func (m *DeleteProjectByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1924,7 +2027,7 @@ func (m *DeleteProjectByIDResp) Reset()         { *m = DeleteProjectByIDResp{} }
 func (m *DeleteProjectByIDResp) String() string { return proto.CompactTextString(m) }
 func (*DeleteProjectByIDResp) ProtoMessage()    {}
 func (*DeleteProjectByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e1fdedd3c2808883, []int{37}
+	return fileDescriptor_e1fdedd3c2808883, []int{39}
 }
 func (m *DeleteProjectByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1984,6 +2087,8 @@ func init() {
 	proto.RegisterType((*CreateTeamResp)(nil), "usrmanrpc.CreateTeamResp")
 	proto.RegisterType((*GetTeamByIDReq)(nil), "usrmanrpc.GetTeamByIDReq")
 	proto.RegisterType((*GetTeamByIDResp)(nil), "usrmanrpc.GetTeamByIDResp")
+	proto.RegisterType((*GetTeamsByUserIDReq)(nil), "usrmanrpc.GetTeamsByUserIDReq")
+	proto.RegisterType((*GetTeamsByUserIDResp)(nil), "usrmanrpc.GetTeamsByUserIDResp")
 	proto.RegisterType((*GetTeamsByCreatorIDReq)(nil), "usrmanrpc.GetTeamsByCreatorIDReq")
 	proto.RegisterType((*GetTeamsByCreatorIDResp)(nil), "usrmanrpc.GetTeamsByCreatorIDResp")
 	proto.RegisterType((*GetTeamByNameReq)(nil), "usrmanrpc.GetTeamByNameReq")
@@ -2013,73 +2118,75 @@ func init() {
 }
 
 var fileDescriptor_e1fdedd3c2808883 = []byte{
-	// 1042 bytes of a gzipped FileDescriptorProto
+	// 1078 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0x4f, 0x6f, 0x1b, 0x45,
 	0x14, 0xcf, 0xda, 0xfd, 0xe7, 0x57, 0x92, 0x26, 0xd3, 0xa4, 0x38, 0x4b, 0xb2, 0x35, 0x1b, 0x2a,
-	0x45, 0xa2, 0xd8, 0x6a, 0x41, 0x08, 0x2e, 0x88, 0xb8, 0x8e, 0x50, 0x2b, 0xb9, 0x8a, 0x1c, 0x02,
-	0x12, 0x42, 0x42, 0x6b, 0x7b, 0x70, 0x52, 0x58, 0xef, 0x76, 0x67, 0x13, 0x91, 0x2f, 0xc0, 0x99,
-	0x8f, 0xc1, 0x47, 0xe0, 0xc8, 0x91, 0x63, 0x8f, 0x1c, 0x1b, 0xe7, 0x0b, 0x70, 0xe4, 0x58, 0xcd,
-	0x9f, 0x1d, 0xcf, 0xcc, 0x4e, 0xd6, 0x5e, 0x57, 0xbd, 0x58, 0xfb, 0xe6, 0xfd, 0x99, 0xf7, 0xe6,
-	0xfd, 0xfb, 0xc9, 0xf0, 0xe5, 0xe8, 0x24, 0x3d, 0x3e, 0xed, 0x37, 0x07, 0x51, 0xd8, 0x4a, 0x8f,
-	0x83, 0xf1, 0x71, 0x1c, 0xb7, 0xe2, 0x24, 0x0a, 0x5b, 0xf1, 0x2f, 0xa3, 0xd6, 0x29, 0x49, 0xc2,
-	0x60, 0x9c, 0xc4, 0x03, 0xf1, 0x75, 0x88, 0x93, 0xb3, 0x93, 0x01, 0x6e, 0xc6, 0x49, 0x94, 0x46,
-	0xa8, 0x26, 0xd9, 0xee, 0x27, 0x8a, 0x95, 0x51, 0x34, 0x8a, 0x5a, 0x4c, 0xa2, 0x7f, 0xfa, 0x33,
-	0xa3, 0x18, 0xc1, 0xbe, 0xb8, 0xa6, 0xfb, 0x45, 0x99, 0x4b, 0xf7, 0xc7, 0xe9, 0x49, 0x7a, 0xce,
-	0x35, 0xfd, 0x5d, 0x58, 0xf9, 0x06, 0xa7, 0x47, 0x04, 0x27, 0xed, 0xf3, 0xa7, 0x9d, 0x1e, 0x7e,
-	0x89, 0xee, 0xc1, 0x0d, 0x4a, 0x3e, 0xed, 0xd4, 0x9d, 0x86, 0xb3, 0xbb, 0xdc, 0x13, 0x94, 0x3f,
-	0x84, 0x3b, 0x9a, 0x24, 0x89, 0x11, 0x82, 0x6b, 0x4f, 0xa2, 0x21, 0x66, 0x82, 0xd7, 0x7b, 0xec,
-	0x1b, 0xd5, 0xe1, 0x66, 0x17, 0x13, 0x12, 0x8c, 0x70, 0xbd, 0xd2, 0x70, 0x76, 0x6b, 0xbd, 0x8c,
-	0x44, 0x3b, 0x70, 0x8d, 0x6a, 0xd7, 0xab, 0x0d, 0x67, 0xf7, 0xf6, 0xe3, 0x3b, 0x4d, 0xe9, 0x57,
-	0x93, 0x1e, 0xf7, 0x18, 0xd3, 0xff, 0x0c, 0x96, 0x9f, 0x24, 0x38, 0x48, 0x31, 0x3b, 0xc3, 0x2f,
-	0xa5, 0x96, 0x53, 0xa4, 0xf5, 0x15, 0xac, 0xa8, 0x5a, 0x65, 0x5d, 0xf3, 0x9f, 0x41, 0x5d, 0xc6,
-	0x46, 0x7f, 0xc7, 0x41, 0x88, 0x0f, 0x02, 0x42, 0xa8, 0x03, 0x2e, 0xdc, 0xca, 0x8e, 0x98, 0xb5,
-	0x5a, 0x4f, 0xd2, 0xf4, 0x16, 0x2a, 0x26, 0xcc, 0xb1, 0x6f, 0x7f, 0x0c, 0x9b, 0x57, 0xd8, 0x7a,
-	0x37, 0x2f, 0xf6, 0x10, 0x90, 0xbc, 0xef, 0x5b, 0x1c, 0x84, 0x32, 0x8b, 0x9c, 0xc8, 0xb2, 0xc8,
-	0x29, 0xff, 0x05, 0xdc, 0xcd, 0x49, 0x97, 0xf6, 0xeb, 0x01, 0x5c, 0xa7, 0x16, 0x48, 0xbd, 0xda,
-	0xa8, 0xda, 0x1c, 0xe3, 0x5c, 0xff, 0x00, 0xd6, 0x8e, 0xe2, 0xa1, 0xc8, 0xca, 0x8c, 0xf2, 0x92,
-	0xb1, 0x56, 0x8a, 0x62, 0x6d, 0x03, 0x32, 0x2d, 0x96, 0xce, 0xf5, 0xc7, 0xb0, 0xd6, 0xc1, 0xbf,
-	0xe2, 0xb9, 0xbc, 0xa2, 0x17, 0x9a, 0xc2, 0xa5, 0x2f, 0x94, 0x25, 0x4d, 0xdf, 0x5b, 0x94, 0x34,
-	0xfd, 0xb4, 0x94, 0x34, 0x93, 0x60, 0xcc, 0x69, 0x49, 0x73, 0xad, 0xd2, 0xb7, 0xf2, 0xc6, 0xa6,
-	0xca, 0x4a, 0x8c, 0xd6, 0x92, 0xe0, 0x8d, 0x3d, 0x95, 0x5c, 0xa4, 0x4c, 0x59, 0x3c, 0xd5, 0xa2,
-	0x78, 0x3e, 0x87, 0x7b, 0xe2, 0x16, 0xd2, 0x3e, 0x67, 0x91, 0x45, 0x09, 0xf7, 0x6b, 0x0b, 0x6a,
-	0x92, 0x16, 0xae, 0x4d, 0x0f, 0xfc, 0x31, 0xbc, 0x6f, 0xd5, 0x5b, 0xa4, 0x68, 0x99, 0x15, 0x4b,
-	0xd1, 0x32, 0x37, 0x39, 0xd7, 0x6f, 0xc2, 0xaa, 0x7c, 0x8d, 0xe7, 0x41, 0x88, 0xc5, 0x08, 0xa0,
-	0x07, 0xcf, 0x95, 0x11, 0x90, 0xd1, 0xfe, 0x31, 0xac, 0x19, 0xf2, 0xef, 0xca, 0x33, 0xd9, 0x4e,
-	0x73, 0x24, 0x55, 0xe6, 0xa4, 0x52, 0x94, 0x13, 0xd9, 0x4e, 0x8b, 0x27, 0xdf, 0x6f, 0xc3, 0xea,
-	0xde, 0x70, 0xd8, 0xc5, 0x61, 0x5f, 0xeb, 0x26, 0xab, 0x53, 0xd3, 0x2e, 0xab, 0x68, 0x5d, 0xb6,
-	0x07, 0x6b, 0x86, 0x8d, 0xd2, 0x6e, 0xec, 0xc3, 0xdd, 0x1e, 0x0e, 0xa3, 0x33, 0xfc, 0x76, 0x9e,
-	0x74, 0x60, 0x3d, 0x6f, 0x66, 0xf1, 0x11, 0x33, 0x4f, 0xfb, 0xc9, 0x11, 0xf3, 0x16, 0x49, 0xf8,
-	0x1a, 0x56, 0xf9, 0xb0, 0x38, 0x48, 0xa2, 0x17, 0x78, 0x90, 0xd2, 0xfb, 0x1e, 0xc2, 0x4d, 0x41,
-	0x89, 0x41, 0x83, 0x94, 0x22, 0xc8, 0xe4, 0x32, 0x11, 0x9a, 0x02, 0xc3, 0x42, 0x69, 0x27, 0x1e,
-	0xb1, 0x4e, 0x10, 0xfa, 0x59, 0xd4, 0x5b, 0x50, 0x13, 0x27, 0xd3, 0xe6, 0x96, 0x07, 0x7e, 0xcc,
-	0x76, 0x97, 0xa6, 0x52, 0xba, 0x7b, 0x94, 0x38, 0xab, 0xb3, 0xe3, 0x7c, 0xc4, 0xc6, 0x09, 0xa5,
-	0x52, 0x3c, 0x48, 0xc9, 0x3c, 0x2b, 0xf3, 0x37, 0x06, 0x0e, 0x2c, 0x2a, 0xa5, 0x5d, 0x6d, 0xc2,
-	0x2d, 0xe1, 0x47, 0xd6, 0xeb, 0x36, 0x5f, 0xa5, 0x8c, 0xdf, 0x87, 0x75, 0xde, 0x9f, 0x65, 0x1e,
-	0x55, 0x7d, 0x90, 0xca, 0xec, 0x07, 0xd9, 0x87, 0x0d, 0xcb, 0x1d, 0x0b, 0x2c, 0xb9, 0x75, 0x5e,
-	0xc5, 0xa5, 0xf2, 0xbf, 0x0f, 0x1b, 0x16, 0xad, 0xb2, 0x97, 0x3f, 0xfe, 0xfd, 0x3d, 0xa8, 0x1d,
-	0x91, 0xa4, 0x1b, 0x8c, 0x0f, 0x93, 0x33, 0xd4, 0x81, 0xdb, 0x0a, 0x50, 0x45, 0x9b, 0x4a, 0xf4,
-	0x3a, 0xd4, 0x75, 0xdd, 0xab, 0x58, 0x24, 0x46, 0x7b, 0x00, 0x53, 0x48, 0x89, 0xea, 0x8a, 0xa4,
-	0x86, 0x4f, 0xdd, 0xcd, 0x2b, 0x38, 0x24, 0x46, 0x7d, 0xd8, 0xb0, 0x22, 0x41, 0xb4, 0x63, 0xbb,
-	0xd7, 0xc0, 0x9d, 0xee, 0x47, 0xb3, 0x85, 0x48, 0x8c, 0x0e, 0x14, 0x54, 0x2e, 0x66, 0xdb, 0xb6,
-	0x4d, 0x51, 0x96, 0xb9, 0xeb, 0x15, 0xb1, 0x49, 0x8c, 0xba, 0xb0, 0xa2, 0x63, 0x2c, 0xb4, 0xa5,
-	0x82, 0x31, 0x13, 0xd0, 0xb9, 0xdb, 0x05, 0x5c, 0x6e, 0x4e, 0x47, 0x50, 0x9a, 0xb9, 0x1c, 0x12,
-	0xd3, 0xcc, 0x59, 0xa0, 0x97, 0x4c, 0x0b, 0xf5, 0xd8, 0x92, 0x16, 0x81, 0xb1, 0x2c, 0x69, 0x91,
-	0x38, 0x8a, 0xd7, 0x47, 0x36, 0x6d, 0xcd, 0xfa, 0x50, 0x46, 0xb6, 0x59, 0x1f, 0xda, 0x80, 0xfe,
-	0x91, 0x01, 0x69, 0x13, 0x97, 0xa0, 0x0f, 0xf3, 0x2a, 0x06, 0xde, 0x71, 0xfd, 0x59, 0x22, 0x24,
-	0x46, 0xcf, 0x60, 0x59, 0x43, 0x15, 0xe8, 0x03, 0x9b, 0x2b, 0x02, 0x9f, 0xb8, 0x5b, 0x57, 0x33,
-	0xd5, 0x84, 0xca, 0x90, 0xf3, 0x09, 0x55, 0xa3, 0xde, 0x2e, 0xe0, 0x72, 0xd7, 0xb4, 0x65, 0xad,
-	0xb9, 0x66, 0x42, 0x01, 0xcd, 0xb5, 0xfc, 0x8e, 0x3f, 0x84, 0x55, 0x73, 0xdd, 0x22, 0xb5, 0x3e,
-	0x2d, 0x2b, 0xdd, 0xbd, 0x5f, 0xc8, 0x57, 0x2b, 0xce, 0x1a, 0x6f, 0x6e, 0x31, 0x5b, 0x2a, 0xce,
-	0x8c, 0x57, 0xdb, 0x8c, 0x5a, 0xbc, 0xe6, 0xd6, 0xd5, 0xe2, 0xcd, 0x2f, 0xd4, 0x2e, 0x03, 0xe5,
-	0xca, 0xb0, 0x43, 0x46, 0xea, 0xf4, 0xe9, 0xe9, 0x6e, 0x17, 0x70, 0x49, 0x8c, 0x7e, 0x82, 0x75,
-	0xdb, 0x66, 0x42, 0x7e, 0x5e, 0xcd, 0xdc, 0x76, 0xee, 0xce, 0x4c, 0x19, 0x12, 0xa3, 0xef, 0x32,
-	0xc8, 0xa9, 0xba, 0x7c, 0x3f, 0x57, 0x1f, 0x86, 0xd7, 0x8d, 0x62, 0x01, 0x6e, 0x37, 0x37, 0xf7,
-	0x35, 0xbb, 0xb6, 0x5d, 0xa2, 0xd9, 0xb5, 0xae, 0x8d, 0xf6, 0xf7, 0xaf, 0x2f, 0x3c, 0xe7, 0xbf,
-	0x0b, 0xcf, 0xf9, 0xff, 0xc2, 0x73, 0xfe, 0x9c, 0x78, 0xce, 0x5f, 0x13, 0xcf, 0xf9, 0x7b, 0xe2,
-	0x2d, 0xfd, 0x33, 0xf1, 0x9c, 0x57, 0x13, 0xcf, 0x79, 0x3d, 0xf1, 0x9c, 0x3f, 0x2e, 0xbd, 0xa5,
-	0x57, 0x97, 0xde, 0xd2, 0xbf, 0x97, 0xde, 0xd2, 0x0f, 0x0f, 0xe6, 0xfa, 0xe7, 0xa4, 0x7f, 0x83,
-	0xfd, 0x5b, 0xf2, 0xe9, 0x9b, 0x00, 0x00, 0x00, 0xff, 0xff, 0x73, 0x5f, 0xa2, 0xe4, 0xde, 0x11,
-	0x00, 0x00,
+	0x45, 0xa2, 0xb5, 0xd5, 0x82, 0x10, 0x5c, 0x10, 0x49, 0x1d, 0xa1, 0x56, 0x72, 0x15, 0x39, 0x04,
+	0x24, 0x84, 0x84, 0xd6, 0xf6, 0xe0, 0xa4, 0x65, 0xbd, 0xd3, 0x9d, 0x4d, 0x44, 0xbf, 0x05, 0x1f,
+	0x83, 0x8f, 0xc0, 0x91, 0x23, 0xc7, 0x1e, 0x91, 0xb8, 0x34, 0xce, 0x17, 0xe0, 0xc8, 0xb1, 0x9a,
+	0x99, 0xdd, 0xf1, 0xcc, 0xec, 0x64, 0xed, 0x75, 0x94, 0x4b, 0xb4, 0x33, 0xef, 0xcf, 0xbc, 0x37,
+	0xef, 0x37, 0xef, 0xfd, 0x1c, 0xf8, 0x6a, 0x78, 0x9c, 0x1c, 0x9d, 0xf4, 0x9a, 0xfd, 0x28, 0x6c,
+	0x25, 0x47, 0xc1, 0xe8, 0x88, 0x90, 0x16, 0x89, 0xa3, 0xb0, 0x45, 0x5e, 0x0d, 0x5b, 0x27, 0x34,
+	0x0e, 0x83, 0x51, 0x4c, 0xfa, 0xe9, 0xd7, 0x01, 0x8e, 0x4f, 0x8f, 0xfb, 0xb8, 0x49, 0xe2, 0x28,
+	0x89, 0x50, 0x4d, 0x8a, 0xdd, 0x47, 0x8a, 0x97, 0x61, 0x34, 0x8c, 0x5a, 0x5c, 0xa3, 0x77, 0xf2,
+	0x0b, 0x5f, 0xf1, 0x05, 0xff, 0x12, 0x96, 0xee, 0x97, 0x65, 0x0e, 0xdd, 0x1b, 0x25, 0xc7, 0xc9,
+	0x1b, 0x61, 0xe9, 0x6f, 0xc3, 0xd2, 0xb7, 0x38, 0x39, 0xa4, 0x38, 0xde, 0x7d, 0xf3, 0xac, 0xdd,
+	0xc5, 0xaf, 0xd1, 0x3d, 0xb8, 0xc1, 0x96, 0xcf, 0xda, 0x75, 0xa7, 0xe1, 0x6c, 0x2f, 0x76, 0xd3,
+	0x95, 0x3f, 0x80, 0x3b, 0x9a, 0x26, 0x25, 0x08, 0xc1, 0xb5, 0xa7, 0xd1, 0x00, 0x73, 0xc5, 0xeb,
+	0x5d, 0xfe, 0x8d, 0xea, 0x70, 0xb3, 0x83, 0x29, 0x0d, 0x86, 0xb8, 0x5e, 0x69, 0x38, 0xdb, 0xb5,
+	0x6e, 0xb6, 0x44, 0x5b, 0x70, 0x8d, 0x59, 0xd7, 0xab, 0x0d, 0x67, 0xfb, 0xf6, 0x93, 0x3b, 0x4d,
+	0x19, 0x57, 0x93, 0x6d, 0x77, 0xb9, 0xd0, 0xff, 0x1c, 0x16, 0x9f, 0xc6, 0x38, 0x48, 0x30, 0xdf,
+	0xc3, 0xaf, 0xa5, 0x95, 0x53, 0x64, 0xf5, 0x35, 0x2c, 0xa9, 0x56, 0x65, 0x43, 0xf3, 0x9f, 0x43,
+	0x5d, 0xe6, 0xc6, 0xfe, 0x8e, 0x82, 0x10, 0xef, 0x07, 0x94, 0xb2, 0x00, 0x5c, 0xb8, 0x95, 0x6d,
+	0x71, 0x6f, 0xb5, 0xae, 0x5c, 0xb3, 0x53, 0x98, 0x5a, 0xea, 0x8e, 0x7f, 0xfb, 0x23, 0x58, 0xbf,
+	0xc0, 0xd7, 0xd5, 0xdc, 0xd8, 0x43, 0x40, 0xf2, 0xbc, 0xef, 0x70, 0x10, 0xca, 0x2a, 0x8a, 0x45,
+	0x56, 0x45, 0xb1, 0xf2, 0x5f, 0xc2, 0xdd, 0x9c, 0x76, 0xe9, 0xb8, 0x1e, 0xc0, 0x75, 0xe6, 0x81,
+	0xd6, 0xab, 0x8d, 0xaa, 0x2d, 0x30, 0x21, 0xf5, 0xf7, 0x61, 0xe5, 0x90, 0x0c, 0xd2, 0xaa, 0x4c,
+	0x81, 0x97, 0xcc, 0xb5, 0x52, 0x94, 0xeb, 0x2e, 0x20, 0xd3, 0x63, 0xe9, 0x5a, 0x7f, 0x0a, 0x2b,
+	0x6d, 0xfc, 0x2b, 0x9e, 0x29, 0x2a, 0x76, 0xa0, 0xa9, 0x5c, 0xfa, 0x40, 0x09, 0x69, 0x76, 0xdf,
+	0x29, 0xa4, 0xd9, 0xa7, 0x05, 0xd2, 0x5c, 0x83, 0x0b, 0x27, 0x90, 0x16, 0x56, 0xa5, 0x4f, 0x15,
+	0x0f, 0x9b, 0x19, 0x2b, 0x39, 0x5a, 0x21, 0x21, 0x1e, 0xf6, 0x44, 0x73, 0x1e, 0x98, 0xf2, 0x7c,
+	0xaa, 0x45, 0xf9, 0x3c, 0xe2, 0xc0, 0x63, 0x9f, 0x54, 0xbc, 0x8b, 0xe2, 0x8b, 0x7f, 0x05, 0xab,
+	0x79, 0xf5, 0x79, 0x80, 0xca, 0x5d, 0x58, 0x80, 0xca, 0x43, 0x13, 0x52, 0xff, 0x0b, 0xb8, 0x37,
+	0x39, 0x8c, 0xdf, 0x7a, 0x94, 0x86, 0xb7, 0x01, 0x35, 0xb9, 0x4e, 0x23, 0x9c, 0x6c, 0xf8, 0x23,
+	0xf8, 0xd0, 0x6a, 0x77, 0x55, 0x71, 0x36, 0x61, 0x59, 0x56, 0xea, 0x45, 0x10, 0xe2, 0xb4, 0x3d,
+	0xb1, 0x8d, 0x17, 0x4a, 0x7b, 0xca, 0xd6, 0xfe, 0x11, 0xac, 0x18, 0xfa, 0x57, 0x15, 0x99, 0x7c,
+	0xea, 0x33, 0x00, 0x4e, 0xe2, 0xa5, 0x52, 0x84, 0x17, 0xf9, 0xd4, 0xe7, 0x07, 0xa6, 0xbf, 0x0b,
+	0xcb, 0x3b, 0x83, 0x41, 0x07, 0x87, 0x3d, 0xed, 0xa5, 0x5b, 0x83, 0x9a, 0x00, 0xb1, 0xa2, 0x01,
+	0x71, 0x07, 0x56, 0x0c, 0x1f, 0xa5, 0xc3, 0xd8, 0x83, 0xbb, 0x5d, 0x1c, 0x46, 0xa7, 0xf8, 0x72,
+	0x91, 0xb4, 0x61, 0x35, 0xef, 0x66, 0xfe, 0xf6, 0x37, 0x4b, 0x6b, 0x90, 0xed, 0xef, 0x12, 0x45,
+	0xf8, 0x06, 0x96, 0x45, 0x23, 0xdb, 0x8f, 0xa3, 0x97, 0xb8, 0x9f, 0xb0, 0xf3, 0x1e, 0xc2, 0xcd,
+	0x74, 0x95, 0x36, 0x41, 0xa4, 0x80, 0x20, 0xd3, 0xcb, 0x54, 0x58, 0x09, 0x0c, 0x0f, 0xa5, 0x83,
+	0x78, 0xcc, 0x5f, 0x42, 0x6a, 0x9f, 0x65, 0xbd, 0x01, 0xb5, 0x74, 0x67, 0xf2, 0xb8, 0xe5, 0x86,
+	0x4f, 0xf8, 0x5c, 0xd5, 0x4c, 0x4a, 0xbf, 0x1e, 0x25, 0xcf, 0xea, 0xf4, 0x3c, 0x1f, 0xf3, 0x76,
+	0xc2, 0x56, 0x09, 0xee, 0x27, 0x74, 0x96, 0x71, 0xfe, 0x1b, 0x27, 0x2e, 0x16, 0x93, 0xd2, 0xa1,
+	0x36, 0xe1, 0x56, 0x1a, 0x47, 0xf6, 0xd6, 0x6d, 0xb1, 0x4a, 0x1d, 0xbf, 0x07, 0xab, 0xe2, 0x7d,
+	0x96, 0xb9, 0x54, 0xf5, 0x42, 0x2a, 0xd3, 0x2f, 0x64, 0x0f, 0xd6, 0x2c, 0x67, 0xcc, 0x31, 0x80,
+	0x57, 0x05, 0x8a, 0x4b, 0xd5, 0x7f, 0x0f, 0xd6, 0x2c, 0x56, 0x65, 0x0f, 0x7f, 0xf2, 0xef, 0x07,
+	0x50, 0x3b, 0xa4, 0x71, 0x27, 0x18, 0x1d, 0xc4, 0xa7, 0xa8, 0x0d, 0xb7, 0x15, 0x12, 0x8d, 0xd6,
+	0x95, 0xec, 0x75, 0x1a, 0xee, 0xba, 0x17, 0x89, 0x28, 0x41, 0x3b, 0x00, 0x13, 0xba, 0x8b, 0xea,
+	0x8a, 0xa6, 0xc6, 0x9d, 0xdd, 0xf5, 0x0b, 0x24, 0x94, 0xa0, 0x1e, 0xac, 0x59, 0x59, 0x2a, 0xda,
+	0xb2, 0x9d, 0x6b, 0x70, 0x62, 0xf7, 0x93, 0xe9, 0x4a, 0x94, 0xa0, 0x7d, 0xe5, 0x17, 0x43, 0xda,
+	0xdb, 0x36, 0x6d, 0x86, 0x12, 0xe6, 0xae, 0x57, 0x24, 0xa6, 0x04, 0x75, 0x60, 0x49, 0xe7, 0x7f,
+	0x68, 0x43, 0x25, 0x8a, 0x26, 0xd9, 0x74, 0x37, 0x0b, 0xa4, 0xc2, 0x9d, 0xce, 0xee, 0x34, 0x77,
+	0x39, 0x96, 0xa8, 0xb9, 0xb3, 0xd0, 0x42, 0x59, 0x16, 0x16, 0xb1, 0xa5, 0x2c, 0x29, 0xff, 0xb3,
+	0x94, 0x45, 0x72, 0x3c, 0x81, 0x8f, 0xac, 0xdb, 0x9a, 0xf8, 0x50, 0x5a, 0xb6, 0x89, 0x0f, 0xad,
+	0x41, 0x1f, 0x48, 0x9e, 0x20, 0xc9, 0x13, 0xf2, 0xf2, 0xfa, 0x2a, 0x11, 0x73, 0xef, 0x17, 0xca,
+	0x29, 0x41, 0x3f, 0xa9, 0x04, 0x4e, 0x92, 0x1d, 0xf4, 0xb1, 0xd5, 0x4e, 0x25, 0x51, 0xae, 0x3f,
+	0x4d, 0x85, 0x12, 0xf4, 0x1c, 0x16, 0x35, 0xaa, 0x82, 0x3e, 0xb2, 0xe5, 0x97, 0x92, 0x1e, 0x77,
+	0xe3, 0x62, 0xa1, 0x8a, 0x12, 0x79, 0x8f, 0x79, 0x94, 0xa8, 0x57, 0xb9, 0x59, 0x20, 0x15, 0xa1,
+	0x69, 0x0c, 0x40, 0x0b, 0xcd, 0xe4, 0x17, 0x5a, 0x68, 0x79, 0xe2, 0x70, 0x00, 0xcb, 0xe6, 0x0c,
+	0xd7, 0x2a, 0x63, 0xe1, 0x09, 0x5a, 0x65, 0xac, 0x04, 0x40, 0xc2, 0xd8, 0x9a, 0x6f, 0x6e, 0xda,
+	0x5b, 0x60, 0x6c, 0xe6, 0xab, 0x8d, 0x5b, 0x2d, 0x5f, 0x73, 0x94, 0x6b, 0xf9, 0xe6, 0xa7, 0x74,
+	0x87, 0xff, 0x0a, 0x51, 0x3a, 0x28, 0x32, 0x4a, 0xa7, 0xb7, 0x64, 0x77, 0xb3, 0x40, 0x4a, 0x09,
+	0xfa, 0x99, 0xff, 0x2a, 0xc8, 0x8d, 0x3b, 0xe4, 0xe7, 0xcd, 0xcc, 0x11, 0xea, 0x6e, 0x4d, 0xd5,
+	0xa1, 0x04, 0x7d, 0x9f, 0xf1, 0x58, 0x35, 0xe4, 0xfb, 0x39, 0x7c, 0x18, 0x51, 0x37, 0x8a, 0x15,
+	0x84, 0xdf, 0xdc, 0x30, 0xd1, 0xfc, 0xda, 0x06, 0x94, 0xe6, 0xd7, 0x3a, 0x8b, 0x76, 0x7f, 0x78,
+	0x77, 0xe6, 0x39, 0xff, 0x9d, 0x79, 0xce, 0xff, 0x67, 0x9e, 0xf3, 0xc7, 0xd8, 0x73, 0xfe, 0x1c,
+	0x7b, 0xce, 0x5f, 0x63, 0x6f, 0xe1, 0xef, 0xb1, 0xe7, 0xbc, 0x1d, 0x7b, 0xce, 0xbb, 0xb1, 0xe7,
+	0xfc, 0x7e, 0xee, 0x2d, 0xbc, 0x3d, 0xf7, 0x16, 0xfe, 0x39, 0xf7, 0x16, 0x7e, 0x7c, 0x30, 0xd3,
+	0xbf, 0x8a, 0x7a, 0x37, 0xf8, 0xbf, 0x87, 0x3e, 0x7b, 0x1f, 0x00, 0x00, 0xff, 0xff, 0x74, 0xbe,
+	0x35, 0x2e, 0xcf, 0x12, 0x00, 0x00,
 }
 
 func (this *GetUserByIDReq) VerboseEqual(that interface{}) error {
@@ -3037,6 +3144,136 @@ func (this *GetTeamByIDResp) Equal(that interface{}) bool {
 	}
 	if !this.Team.Equal(that1.Team) {
 		return false
+	}
+	return true
+}
+func (this *GetTeamsByUserIDReq) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*GetTeamsByUserIDReq)
+	if !ok {
+		that2, ok := that.(GetTeamsByUserIDReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *GetTeamsByUserIDReq")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *GetTeamsByUserIDReq but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *GetTeamsByUserIDReq but is not nil && this == nil")
+	}
+	if this.UserID != that1.UserID {
+		return fmt.Errorf("UserID this(%v) Not Equal that(%v)", this.UserID, that1.UserID)
+	}
+	return nil
+}
+func (this *GetTeamsByUserIDReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetTeamsByUserIDReq)
+	if !ok {
+		that2, ok := that.(GetTeamsByUserIDReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.UserID != that1.UserID {
+		return false
+	}
+	return true
+}
+func (this *GetTeamsByUserIDResp) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*GetTeamsByUserIDResp)
+	if !ok {
+		that2, ok := that.(GetTeamsByUserIDResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *GetTeamsByUserIDResp")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *GetTeamsByUserIDResp but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *GetTeamsByUserIDResp but is not nil && this == nil")
+	}
+	if this.Code != that1.Code {
+		return fmt.Errorf("Code this(%v) Not Equal that(%v)", this.Code, that1.Code)
+	}
+	if this.Message != that1.Message {
+		return fmt.Errorf("Message this(%v) Not Equal that(%v)", this.Message, that1.Message)
+	}
+	if len(this.Teams) != len(that1.Teams) {
+		return fmt.Errorf("Teams this(%v) Not Equal that(%v)", len(this.Teams), len(that1.Teams))
+	}
+	for i := range this.Teams {
+		if !this.Teams[i].Equal(that1.Teams[i]) {
+			return fmt.Errorf("Teams this[%v](%v) Not Equal that[%v](%v)", i, this.Teams[i], i, that1.Teams[i])
+		}
+	}
+	return nil
+}
+func (this *GetTeamsByUserIDResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetTeamsByUserIDResp)
+	if !ok {
+		that2, ok := that.(GetTeamsByUserIDResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Code != that1.Code {
+		return false
+	}
+	if this.Message != that1.Message {
+		return false
+	}
+	if len(this.Teams) != len(that1.Teams) {
+		return false
+	}
+	for i := range this.Teams {
+		if !this.Teams[i].Equal(that1.Teams[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -4560,6 +4797,30 @@ func (this *GetTeamByIDResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetTeamsByUserIDReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&usrmanrpc.GetTeamsByUserIDReq{")
+	s = append(s, "UserID: "+fmt.Sprintf("%#v", this.UserID)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetTeamsByUserIDResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&usrmanrpc.GetTeamsByUserIDResp{")
+	s = append(s, "Code: "+fmt.Sprintf("%#v", this.Code)+",\n")
+	s = append(s, "Message: "+fmt.Sprintf("%#v", this.Message)+",\n")
+	if this.Teams != nil {
+		s = append(s, "Teams: "+fmt.Sprintf("%#v", this.Teams)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GetTeamsByCreatorIDReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -4842,6 +5103,7 @@ type UsrManSrvClient interface {
 	DeleteUserByID(ctx context.Context, in *DeleteUserByIDReq, opts ...grpc.CallOption) (*DeleteUserByIDResp, error)
 	CreateTeam(ctx context.Context, in *CreateTeamReq, opts ...grpc.CallOption) (*CreateTeamResp, error)
 	GetTeamByID(ctx context.Context, in *GetTeamByIDReq, opts ...grpc.CallOption) (*GetTeamByIDResp, error)
+	GetTeamsByUserID(ctx context.Context, in *GetTeamsByUserIDReq, opts ...grpc.CallOption) (*GetTeamsByUserIDResp, error)
 	GetTeamsByCreatorID(ctx context.Context, in *GetTeamsByCreatorIDReq, opts ...grpc.CallOption) (*GetTeamsByCreatorIDResp, error)
 	GetTeamByName(ctx context.Context, in *GetTeamByNameReq, opts ...grpc.CallOption) (*GetTeamByNameResp, error)
 	UpdateTeamByID(ctx context.Context, in *UpdateTeamByIDReq, opts ...grpc.CallOption) (*UpdateTeamByIDResp, error)
@@ -4929,6 +5191,15 @@ func (c *usrManSrvClient) CreateTeam(ctx context.Context, in *CreateTeamReq, opt
 func (c *usrManSrvClient) GetTeamByID(ctx context.Context, in *GetTeamByIDReq, opts ...grpc.CallOption) (*GetTeamByIDResp, error) {
 	out := new(GetTeamByIDResp)
 	err := c.cc.Invoke(ctx, "/usrmanrpc.UsrManSrv/GetTeamByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *usrManSrvClient) GetTeamsByUserID(ctx context.Context, in *GetTeamsByUserIDReq, opts ...grpc.CallOption) (*GetTeamsByUserIDResp, error) {
+	out := new(GetTeamsByUserIDResp)
+	err := c.cc.Invoke(ctx, "/usrmanrpc.UsrManSrv/GetTeamsByUserID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -5044,6 +5315,7 @@ type UsrManSrvServer interface {
 	DeleteUserByID(context.Context, *DeleteUserByIDReq) (*DeleteUserByIDResp, error)
 	CreateTeam(context.Context, *CreateTeamReq) (*CreateTeamResp, error)
 	GetTeamByID(context.Context, *GetTeamByIDReq) (*GetTeamByIDResp, error)
+	GetTeamsByUserID(context.Context, *GetTeamsByUserIDReq) (*GetTeamsByUserIDResp, error)
 	GetTeamsByCreatorID(context.Context, *GetTeamsByCreatorIDReq) (*GetTeamsByCreatorIDResp, error)
 	GetTeamByName(context.Context, *GetTeamByNameReq) (*GetTeamByNameResp, error)
 	UpdateTeamByID(context.Context, *UpdateTeamByIDReq) (*UpdateTeamByIDResp, error)
@@ -5084,6 +5356,9 @@ func (*UnimplementedUsrManSrvServer) CreateTeam(ctx context.Context, req *Create
 }
 func (*UnimplementedUsrManSrvServer) GetTeamByID(ctx context.Context, req *GetTeamByIDReq) (*GetTeamByIDResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTeamByID not implemented")
+}
+func (*UnimplementedUsrManSrvServer) GetTeamsByUserID(ctx context.Context, req *GetTeamsByUserIDReq) (*GetTeamsByUserIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTeamsByUserID not implemented")
 }
 func (*UnimplementedUsrManSrvServer) GetTeamsByCreatorID(ctx context.Context, req *GetTeamsByCreatorIDReq) (*GetTeamsByCreatorIDResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTeamsByCreatorID not implemented")
@@ -5263,6 +5538,24 @@ func _UsrManSrv_GetTeamByID_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UsrManSrvServer).GetTeamByID(ctx, req.(*GetTeamByIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UsrManSrv_GetTeamsByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTeamsByUserIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsrManSrvServer).GetTeamsByUserID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/usrmanrpc.UsrManSrv/GetTeamsByUserID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsrManSrvServer).GetTeamsByUserID(ctx, req.(*GetTeamsByUserIDReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -5500,6 +5793,10 @@ var _UsrManSrv_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTeamByID",
 			Handler:    _UsrManSrv_GetTeamByID_Handler,
+		},
+		{
+			MethodName: "GetTeamsByUserID",
+			Handler:    _UsrManSrv_GetTeamsByUserID_Handler,
 		},
 		{
 			MethodName: "GetTeamsByCreatorID",
@@ -6123,6 +6420,83 @@ func (m *GetTeamByIDResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x1a
+	}
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintUsrmanService(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintUsrmanService(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetTeamsByUserIDReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetTeamsByUserIDReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetTeamsByUserIDReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.UserID != 0 {
+		i = encodeVarintUsrmanService(dAtA, i, uint64(m.UserID))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetTeamsByUserIDResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetTeamsByUserIDResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetTeamsByUserIDResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Teams) > 0 {
+		for iNdEx := len(m.Teams) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Teams[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintUsrmanService(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
 	}
 	if len(m.Message) > 0 {
 		i -= len(m.Message)
@@ -7124,6 +7498,33 @@ func NewPopulatedGetTeamByIDResp(r randyUsrmanService, easy bool) *GetTeamByIDRe
 	return this
 }
 
+func NewPopulatedGetTeamsByUserIDReq(r randyUsrmanService, easy bool) *GetTeamsByUserIDReq {
+	this := &GetTeamsByUserIDReq{}
+	this.UserID = uint32(r.Uint32())
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedGetTeamsByUserIDResp(r randyUsrmanService, easy bool) *GetTeamsByUserIDResp {
+	this := &GetTeamsByUserIDResp{}
+	this.Code = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Code *= -1
+	}
+	this.Message = string(randStringUsrmanService(r))
+	if r.Intn(5) != 0 {
+		v2 := r.Intn(5)
+		this.Teams = make([]*entity.Team, v2)
+		for i := 0; i < v2; i++ {
+			this.Teams[i] = entity.NewPopulatedTeam(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedGetTeamsByCreatorIDReq(r randyUsrmanService, easy bool) *GetTeamsByCreatorIDReq {
 	this := &GetTeamsByCreatorIDReq{}
 	this.CreatorID = uint32(r.Uint32())
@@ -7140,9 +7541,9 @@ func NewPopulatedGetTeamsByCreatorIDResp(r randyUsrmanService, easy bool) *GetTe
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		v2 := r.Intn(5)
-		this.Teams = make([]*entity.Team, v2)
-		for i := 0; i < v2; i++ {
+		v3 := r.Intn(5)
+		this.Teams = make([]*entity.Team, v3)
+		for i := 0; i < v3; i++ {
 			this.Teams[i] = entity.NewPopulatedTeam(r, easy)
 		}
 	}
@@ -7167,9 +7568,9 @@ func NewPopulatedGetTeamByNameResp(r randyUsrmanService, easy bool) *GetTeamByNa
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		v3 := r.Intn(5)
-		this.Teams = make([]*entity.Team, v3)
-		for i := 0; i < v3; i++ {
+		v4 := r.Intn(5)
+		this.Teams = make([]*entity.Team, v4)
+		for i := 0; i < v4; i++ {
 			this.Teams[i] = entity.NewPopulatedTeam(r, easy)
 		}
 	}
@@ -7324,9 +7725,9 @@ func NewPopulatedGetProjtectsByTeamIDResp(r randyUsrmanService, easy bool) *GetP
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		v4 := r.Intn(5)
-		this.Projects = make([]*entity.Project, v4)
-		for i := 0; i < v4; i++ {
+		v5 := r.Intn(5)
+		this.Projects = make([]*entity.Project, v5)
+		for i := 0; i < v5; i++ {
 			this.Projects[i] = entity.NewPopulatedProject(r, easy)
 		}
 	}
@@ -7397,9 +7798,9 @@ func randUTF8RuneUsrmanService(r randyUsrmanService) rune {
 	return rune(ru + 61)
 }
 func randStringUsrmanService(r randyUsrmanService) string {
-	v5 := r.Intn(100)
-	tmps := make([]rune, v5)
-	for i := 0; i < v5; i++ {
+	v6 := r.Intn(100)
+	tmps := make([]rune, v6)
+	for i := 0; i < v6; i++ {
 		tmps[i] = randUTF8RuneUsrmanService(r)
 	}
 	return string(tmps)
@@ -7421,11 +7822,11 @@ func randFieldUsrmanService(dAtA []byte, r randyUsrmanService, fieldNumber int, 
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateUsrmanService(dAtA, uint64(key))
-		v6 := r.Int63()
+		v7 := r.Int63()
 		if r.Intn(2) == 0 {
-			v6 *= -1
+			v7 *= -1
 		}
-		dAtA = encodeVarintPopulateUsrmanService(dAtA, uint64(v6))
+		dAtA = encodeVarintPopulateUsrmanService(dAtA, uint64(v7))
 	case 1:
 		dAtA = encodeVarintPopulateUsrmanService(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -7699,6 +8100,40 @@ func (m *GetTeamByIDResp) Size() (n int) {
 	if m.Team != nil {
 		l = m.Team.Size()
 		n += 1 + l + sovUsrmanService(uint64(l))
+	}
+	return n
+}
+
+func (m *GetTeamsByUserIDReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserID != 0 {
+		n += 1 + sovUsrmanService(uint64(m.UserID))
+	}
+	return n
+}
+
+func (m *GetTeamsByUserIDResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovUsrmanService(uint64(m.Code))
+	}
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovUsrmanService(uint64(l))
+	}
+	if len(m.Teams) > 0 {
+		for _, e := range m.Teams {
+			l = e.Size()
+			n += 1 + l + sovUsrmanService(uint64(l))
+		}
 	}
 	return n
 }
@@ -9648,6 +10083,210 @@ func (m *GetTeamByIDResp) Unmarshal(dAtA []byte) error {
 				m.Team = &entity.Team{}
 			}
 			if err := m.Team.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipUsrmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthUsrmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTeamsByUserIDReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowUsrmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTeamsByUserIDReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTeamsByUserIDReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserID", wireType)
+			}
+			m.UserID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUsrmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.UserID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipUsrmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthUsrmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTeamsByUserIDResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowUsrmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTeamsByUserIDResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTeamsByUserIDResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUsrmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUsrmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUsrmanService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthUsrmanService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Teams", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUsrmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUsrmanService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthUsrmanService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Teams = append(m.Teams, &entity.Team{})
+			if err := m.Teams[len(m.Teams)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

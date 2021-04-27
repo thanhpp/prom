@@ -26,6 +26,7 @@ service UsrManSrv {
     rpc DeleteUserByID (DeleteUserByIDReq) returns (DeleteUserByIDResp);
     rpc CreateTeam (CreateTeamReq) returns (CreateTeamResp);
     rpc GetTeamByID (GetTeamByIDReq) returns (GetTeamByIDResp);
+    rpc GetTeamsByUserID (GetTeamsByUserIDReq) returns (GetTeamsByUserIDResp);
     rpc GetTeamsByCreatorID (GetTeamsByCreatorIDReq) returns (GetTeamsByCreatorIDResp);
     rpc GetTeamByName (GetTeamByNameReq) returns (GetTeamByNameResp);
     rpc UpdateTeamByID (UpdateTeamByIDReq) returns (UpdateTeamByIDResp);
@@ -115,6 +116,16 @@ message GetTeamByIDResp {
     int32 Code = 1;
     string Message = 2;
     Team Team = 3;
+}
+
+message GetTeamsByUserIDReq {
+    uint32 UserID = 1;
+}
+
+message GetTeamsByUserIDResp {
+    int32 Code = 1; 
+    string Message = 2;
+    repeated Team Teams = 3;
 }
 
 message GetTeamsByCreatorIDReq {

@@ -20,6 +20,7 @@ type iDAO interface {
 
 	CreateTeam(ctx context.Context, team *entity.Team) (err error)
 	GetTeamByID(ctx context.Context, teamID uint32) (team *entity.Team, err error)
+	GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*entity.Team, err error)
 	GetTeamsByCreatorID(ctx context.Context, creatorID uint32) (teams []*entity.Team, err error)
 	GetTeamByName(ctx context.Context, name string) (teams []*entity.Team, err error)
 	UpdateTeamByID(ctx context.Context, teamID uint32, team *entity.Team) (err error)

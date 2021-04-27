@@ -19,7 +19,7 @@ option (gogoproto.unmarshaler_all) = true;
 
 message User {
     uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
-    string Username = 2 [(gogoproto.jsontag) = "username", (gogoproto.moretags) = "gorm:\"Column:username; Type:text\""];
+    string Username = 2 [(gogoproto.jsontag) = "username", (gogoproto.moretags) = "gorm:\"Column:username; Type:text; unique\""];
     string HashPass = 3 [(gogoproto.jsontag) = "hash_pass", (gogoproto.moretags) = "gorm:\"Column:hash_pass; Type:text\""];
     timerpc.Time CreatedAt = 4 [(gogoproto.jsontag) = "created_at", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
     timerpc.Time UpdatedAt = 5 [(gogoproto.jsontag) = "updated_at", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];

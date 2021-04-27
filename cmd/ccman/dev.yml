@@ -3,6 +3,7 @@ database:
   port: "5432"
   user: "thanhpp"
   pass: "testthanhpp"
+  name: "prom"
   log: "INFO"
 
 log:

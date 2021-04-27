@@ -3,6 +3,8 @@ package boot
 import (
 	"context"
 
+	"github.com/thanhpp/prom/cmd/ccman/repository"
+
 	"github.com/thanhpp/prom/cmd/ccman/core"
 	"github.com/thanhpp/prom/cmd/ccman/rpcserver"
 	"github.com/thanhpp/prom/pkg/logger"
@@ -19,6 +21,11 @@ func Boot() (err error) {
 
 	logConfig := core.GetConfig().Log
 	if err := logger.Set("ZAP", "ccmanager", "DEVELOPMENT", logConfig.Level, logConfig.Color); err != nil {
+		return err
+	}
+
+	logger.Get().Info("CONNECTING TO DB")
+	if err := repository.GetDAO().InitDBConnection(core.GetConfig().DB.GenDBDSN(), core.GetConfig().DB.Log); err != nil {
 		return err
 	}
 

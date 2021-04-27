@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
-	"github.com/lib/pq"
+	"os"
+	"time"
 
 	"github.com/thanhpp/prom/cmd/usrman/repository/entity"
 	"gorm.io/driver/postgres"
@@ -38,28 +38,32 @@ func GetGormDB() *implGorm {
 
 // InitDBConnection ...
 func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
+	var gormLogConfig = gormlog.Config{
+		SlowThreshold: 200 * time.Millisecond,
+		LogLevel:      gormlog.Info,
+		Colorful:      false,
+	}
+
+	// create db log
+	switch logLevel {
+	case "WARN":
+		gormLogConfig.LogLevel = gormlog.Warn
+	case "ERROR":
+		gormLogConfig.LogLevel = gormlog.Error
+	case "SILENT":
+		gormLogConfig.LogLevel = gormlog.Silent
+	default:
+		log.Println("START GORM LOG WITH DEFAULT CONFIG: INFO")
+	}
+
 	var (
 		gormConfig = &gorm.Config{
-			Logger: gormlog.Default.LogMode(gormlog.Info),
+			Logger: gormlog.New(log.New(os.Stdout, "\r\n", log.LstdFlags), gormLogConfig),
 			NamingStrategy: schema.NamingStrategy{
 				SingularTable: true,
 			},
 		}
 	)
-
-	// create db log
-	switch logLevel {
-	case "INFO":
-		gormConfig.Logger = gormlog.Default.LogMode(gormlog.Info)
-	case "WARN":
-		gormConfig.Logger = gormlog.Default.LogMode(gormlog.Warn)
-	case "ERROR":
-		gormConfig.Logger = gormlog.Default.LogMode(gormlog.Error)
-	case "SILENT":
-		gormConfig.Logger = gormlog.Default.LogMode(gormlog.Silent)
-	default:
-		log.Println("START GORM LOG WITH DEFAULT CONFIG: INFO")
-	}
 
 	gDB, err = gorm.Open(postgres.Open(dsn), gormConfig)
 	if err != nil {
@@ -113,21 +117,12 @@ func (g *implGorm) GetUserByUsernamePass(ctx context.Context, usrname string, ha
 	return usr, nil
 }
 
-// NOTE: need to test carefully
 func (g *implGorm) GetUserByTeamID(ctx context.Context, teamID uint32) (usrs []*entity.User, err error) {
 	if err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		rows1, err1 := tx.WithContext(ctx).Table("team_user").Select("user_id").Where("teamID = ?", teamID).Rows()
-		if err1 != nil {
-			return err1
-		}
+		var usersID []int
 
-		var usersID pq.Int64Array
-		for rows1.Next() {
-			var usrID int64
-			if err := tx.ScanRows(rows1, &usrID); err != nil {
-				return err
-			}
-			usersID = append(usersID, usrID)
+		if err := tx.WithContext(ctx).Table("team_user").Select("user_id").Where("team_id = ?", teamID).Pluck("user_id", &usersID).Error; err != nil {
+			return err
 		}
 
 		rows2, err2 := tx.Model(usrModel).WithContext(ctx).Where("id IN ?", usersID).Rows()
@@ -183,6 +178,32 @@ func (g *implGorm) GetTeamByID(ctx context.Context, teamID uint32) (team *entity
 	return team, nil
 }
 
+func (g *implGorm) GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*entity.Team, err error) {
+	if err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		var teamsID []int
+
+		if err := tx.WithContext(ctx).Table("team_user").Select("team_id").Where("user_id = ?", userID).Pluck("teams_id", &teamsID).Error; err != nil {
+			return err
+		}
+
+		rows2, err2 := tx.Model(teamModel).WithContext(ctx).Where("id IN ?", teamsID).Rows()
+		if err2 != nil {
+			return err2
+		}
+
+		teams, err = scanTeams(tx, rows2)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	return teams, nil
+}
+
 func (g *implGorm) GetTeamsByCreatorID(ctx context.Context, creatorID uint32) (teams []*entity.Team, err error) {
 	rows, err := gDB.Model(teamModel).WithContext(ctx).Where("creator_id = ?", creatorID).Rows()
 	if err != nil {
@@ -219,7 +240,7 @@ func (g *implGorm) UpdateTeamByID(ctx context.Context, teamID uint32, team *enti
 	return nil
 }
 
-const stmtAddMemberByID = "INSERT INTO 'team_user' ('team_id', 'user_id') VALUES (?, ?)"
+const stmtAddMemberByID = "INSERT INTO team_user (team_id, user_id) VALUES (?, ?)"
 
 func (g *implGorm) AddMemberByID(ctx context.Context, teamID uint32, usrID uint32) (err error) {
 	if err = gDB.WithContext(ctx).Exec(stmtAddMemberByID, teamID, usrID).Error; err != nil {
@@ -229,7 +250,7 @@ func (g *implGorm) AddMemberByID(ctx context.Context, teamID uint32, usrID uint3
 	return nil
 }
 
-const stmtRemoveMemberByID = "DELETE FROM 'team_user' WHERE 'team_id' = ? AND 'user_id' = ?"
+const stmtRemoveMemberByID = "DELETE FROM team_user WHERE team_id = ? AND user_id = ?"
 
 func (g *implGorm) RemoveMemberByID(ctx context.Context, teamID uint32, usrID uint32) (err error) {
 	if err = gDB.WithContext(ctx).Exec(stmtRemoveMemberByID, teamID, usrID).Error; err != nil {
