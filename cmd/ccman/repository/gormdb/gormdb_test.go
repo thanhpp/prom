@@ -6,10 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/thanhpp/prom/pkg/timerpc"
-
-	"github.com/thanhpp/prom/cmd/ccman/repository/entity"
 	"github.com/thanhpp/prom/cmd/ccman/repository/gormdb"
+	"github.com/thanhpp/prom/pkg/ccmanrpc"
+	"github.com/thanhpp/prom/pkg/timerpc"
 )
 
 func TestInitConnection(t *testing.T) {
@@ -27,7 +26,7 @@ func TestAutoMigrate(t *testing.T) {
 	TestInitConnection(t)
 	var (
 		ctx    = context.Background()
-		models = []interface{}{entity.Card{}, entity.Column{}}
+		models = []interface{}{ccmanrpc.Card{}, ccmanrpc.Column{}}
 	)
 
 	if err := gormdb.GetGormDB().AutoMigrate(ctx, models...); err != nil {
@@ -41,7 +40,7 @@ func TestCreateCard(t *testing.T) {
 
 	var (
 		ctx  = context.Background()
-		card = &entity.Card{
+		card = &ccmanrpc.Card{
 			Title:       "test",
 			Description: "null",
 			ColumnID:    1,
