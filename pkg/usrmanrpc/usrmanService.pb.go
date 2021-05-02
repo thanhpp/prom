@@ -8,7 +8,6 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	entity "github.com/thanhpp/prom/cmd/usrman/repository/entity"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -75,9 +74,9 @@ func (m *GetUserByIDReq) GetUserID() uint32 {
 }
 
 type GetUserByIDResp struct {
-	Code    int32        `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string       `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	User    *entity.User `protobuf:"bytes,3,opt,name=User,proto3" json:"User,omitempty"`
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	User    *User  `protobuf:"bytes,3,opt,name=User,proto3" json:"User,omitempty"`
 }
 
 func (m *GetUserByIDResp) Reset()         { *m = GetUserByIDResp{} }
@@ -127,7 +126,7 @@ func (m *GetUserByIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetUserByIDResp) GetUser() *entity.User {
+func (m *GetUserByIDResp) GetUser() *User {
 	if m != nil {
 		return m.User
 	}
@@ -135,7 +134,7 @@ func (m *GetUserByIDResp) GetUser() *entity.User {
 }
 
 type CreateUserReq struct {
-	User *entity.User `protobuf:"bytes,1,opt,name=User,proto3" json:"User,omitempty"`
+	User *User `protobuf:"bytes,1,opt,name=User,proto3" json:"User,omitempty"`
 }
 
 func (m *CreateUserReq) Reset()         { *m = CreateUserReq{} }
@@ -171,7 +170,7 @@ func (m *CreateUserReq) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateUserReq proto.InternalMessageInfo
 
-func (m *CreateUserReq) GetUser() *entity.User {
+func (m *CreateUserReq) GetUser() *User {
 	if m != nil {
 		return m.User
 	}
@@ -283,9 +282,9 @@ func (m *GetUserByUsernamePassReq) GetPass() string {
 }
 
 type GetUserByUsernamePassResp struct {
-	Code    int32        `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string       `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	User    *entity.User `protobuf:"bytes,3,opt,name=User,proto3" json:"User,omitempty"`
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	User    *User  `protobuf:"bytes,3,opt,name=User,proto3" json:"User,omitempty"`
 }
 
 func (m *GetUserByUsernamePassResp) Reset()         { *m = GetUserByUsernamePassResp{} }
@@ -335,7 +334,7 @@ func (m *GetUserByUsernamePassResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetUserByUsernamePassResp) GetUser() *entity.User {
+func (m *GetUserByUsernamePassResp) GetUser() *User {
 	if m != nil {
 		return m.User
 	}
@@ -387,9 +386,9 @@ func (m *GetUserByTeamIDReq) GetTeamID() uint32 {
 }
 
 type GetUserByTeamIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Users   []*entity.User `protobuf:"bytes,3,rep,name=Users,proto3" json:"Users,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Users   []*User `protobuf:"bytes,3,rep,name=Users,proto3" json:"Users,omitempty"`
 }
 
 func (m *GetUserByTeamIDResp) Reset()         { *m = GetUserByTeamIDResp{} }
@@ -439,7 +438,7 @@ func (m *GetUserByTeamIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetUserByTeamIDResp) GetUsers() []*entity.User {
+func (m *GetUserByTeamIDResp) GetUsers() []*User {
 	if m != nil {
 		return m.Users
 	}
@@ -447,8 +446,8 @@ func (m *GetUserByTeamIDResp) GetUsers() []*entity.User {
 }
 
 type UpdateUserByIDReq struct {
-	UserID uint32       `protobuf:"varint,1,opt,name=UserID,proto3" json:"UserID,omitempty"`
-	User   *entity.User `protobuf:"bytes,2,opt,name=User,proto3" json:"User,omitempty"`
+	UserID uint32 `protobuf:"varint,1,opt,name=UserID,proto3" json:"UserID,omitempty"`
+	User   *User  `protobuf:"bytes,2,opt,name=User,proto3" json:"User,omitempty"`
 }
 
 func (m *UpdateUserByIDReq) Reset()         { *m = UpdateUserByIDReq{} }
@@ -491,7 +490,7 @@ func (m *UpdateUserByIDReq) GetUserID() uint32 {
 	return 0
 }
 
-func (m *UpdateUserByIDReq) GetUser() *entity.User {
+func (m *UpdateUserByIDReq) GetUser() *User {
 	if m != nil {
 		return m.User
 	}
@@ -647,7 +646,7 @@ func (m *DeleteUserByIDResp) GetMessage() string {
 }
 
 type CreateTeamReq struct {
-	Team *entity.Team `protobuf:"bytes,1,opt,name=Team,proto3" json:"Team,omitempty"`
+	Team *Team `protobuf:"bytes,1,opt,name=Team,proto3" json:"Team,omitempty"`
 }
 
 func (m *CreateTeamReq) Reset()         { *m = CreateTeamReq{} }
@@ -683,7 +682,7 @@ func (m *CreateTeamReq) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateTeamReq proto.InternalMessageInfo
 
-func (m *CreateTeamReq) GetTeam() *entity.Team {
+func (m *CreateTeamReq) GetTeam() *Team {
 	if m != nil {
 		return m.Team
 	}
@@ -787,9 +786,9 @@ func (m *GetTeamByIDReq) GetTeamID() uint32 {
 }
 
 type GetTeamByIDResp struct {
-	Code    int32        `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string       `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Team    *entity.Team `protobuf:"bytes,3,opt,name=Team,proto3" json:"Team,omitempty"`
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Team    *Team  `protobuf:"bytes,3,opt,name=Team,proto3" json:"Team,omitempty"`
 }
 
 func (m *GetTeamByIDResp) Reset()         { *m = GetTeamByIDResp{} }
@@ -839,7 +838,7 @@ func (m *GetTeamByIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetTeamByIDResp) GetTeam() *entity.Team {
+func (m *GetTeamByIDResp) GetTeam() *Team {
 	if m != nil {
 		return m.Team
 	}
@@ -891,9 +890,9 @@ func (m *GetTeamsByUserIDReq) GetUserID() uint32 {
 }
 
 type GetTeamsByUserIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Teams   []*entity.Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Teams   []*Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
 }
 
 func (m *GetTeamsByUserIDResp) Reset()         { *m = GetTeamsByUserIDResp{} }
@@ -943,7 +942,7 @@ func (m *GetTeamsByUserIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetTeamsByUserIDResp) GetTeams() []*entity.Team {
+func (m *GetTeamsByUserIDResp) GetTeams() []*Team {
 	if m != nil {
 		return m.Teams
 	}
@@ -995,9 +994,9 @@ func (m *GetTeamsByCreatorIDReq) GetCreatorID() uint32 {
 }
 
 type GetTeamsByCreatorIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Teams   []*entity.Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Teams   []*Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
 }
 
 func (m *GetTeamsByCreatorIDResp) Reset()         { *m = GetTeamsByCreatorIDResp{} }
@@ -1047,7 +1046,7 @@ func (m *GetTeamsByCreatorIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetTeamsByCreatorIDResp) GetTeams() []*entity.Team {
+func (m *GetTeamsByCreatorIDResp) GetTeams() []*Team {
 	if m != nil {
 		return m.Teams
 	}
@@ -1099,9 +1098,9 @@ func (m *GetTeamByNameReq) GetTeamName() string {
 }
 
 type GetTeamByNameResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Teams   []*entity.Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Teams   []*Team `protobuf:"bytes,3,rep,name=Teams,proto3" json:"Teams,omitempty"`
 }
 
 func (m *GetTeamByNameResp) Reset()         { *m = GetTeamByNameResp{} }
@@ -1151,7 +1150,7 @@ func (m *GetTeamByNameResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetTeamByNameResp) GetTeams() []*entity.Team {
+func (m *GetTeamByNameResp) GetTeams() []*Team {
 	if m != nil {
 		return m.Teams
 	}
@@ -1159,8 +1158,8 @@ func (m *GetTeamByNameResp) GetTeams() []*entity.Team {
 }
 
 type UpdateTeamByIDReq struct {
-	TeamID uint32       `protobuf:"varint,1,opt,name=TeamID,proto3" json:"TeamID,omitempty"`
-	Team   *entity.Team `protobuf:"bytes,2,opt,name=Team,proto3" json:"Team,omitempty"`
+	TeamID uint32 `protobuf:"varint,1,opt,name=TeamID,proto3" json:"TeamID,omitempty"`
+	Team   *Team  `protobuf:"bytes,2,opt,name=Team,proto3" json:"Team,omitempty"`
 }
 
 func (m *UpdateTeamByIDReq) Reset()         { *m = UpdateTeamByIDReq{} }
@@ -1203,7 +1202,7 @@ func (m *UpdateTeamByIDReq) GetTeamID() uint32 {
 	return 0
 }
 
-func (m *UpdateTeamByIDReq) GetTeam() *entity.Team {
+func (m *UpdateTeamByIDReq) GetTeam() *Team {
 	if m != nil {
 		return m.Team
 	}
@@ -1567,7 +1566,7 @@ func (m *DeleteTeamByIDResp) GetMessage() string {
 }
 
 type CreateProjectReq struct {
-	Project *entity.Project `protobuf:"bytes,1,opt,name=Project,proto3" json:"Project,omitempty"`
+	Project *Project `protobuf:"bytes,1,opt,name=Project,proto3" json:"Project,omitempty"`
 }
 
 func (m *CreateProjectReq) Reset()         { *m = CreateProjectReq{} }
@@ -1603,7 +1602,7 @@ func (m *CreateProjectReq) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateProjectReq proto.InternalMessageInfo
 
-func (m *CreateProjectReq) GetProject() *entity.Project {
+func (m *CreateProjectReq) GetProject() *Project {
 	if m != nil {
 		return m.Project
 	}
@@ -1707,9 +1706,9 @@ func (m *GetProjectByIDReq) GetProjectID() uint32 {
 }
 
 type GetProjectByIDResp struct {
-	Code    int32           `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string          `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Project *entity.Project `protobuf:"bytes,3,opt,name=Project,proto3" json:"Project,omitempty"`
+	Code    int32    `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string   `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Project *Project `protobuf:"bytes,3,opt,name=Project,proto3" json:"Project,omitempty"`
 }
 
 func (m *GetProjectByIDResp) Reset()         { *m = GetProjectByIDResp{} }
@@ -1759,7 +1758,7 @@ func (m *GetProjectByIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetProjectByIDResp) GetProject() *entity.Project {
+func (m *GetProjectByIDResp) GetProject() *Project {
 	if m != nil {
 		return m.Project
 	}
@@ -1811,9 +1810,9 @@ func (m *GetProjtectsByTeamIDReq) GetTeamID() uint32 {
 }
 
 type GetProjtectsByTeamIDResp struct {
-	Code     int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message  string            `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Projects []*entity.Project `protobuf:"bytes,3,rep,name=Projects,proto3" json:"Projects,omitempty"`
+	Code     int32      `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message  string     `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Projects []*Project `protobuf:"bytes,3,rep,name=Projects,proto3" json:"Projects,omitempty"`
 }
 
 func (m *GetProjtectsByTeamIDResp) Reset()         { *m = GetProjtectsByTeamIDResp{} }
@@ -1863,7 +1862,7 @@ func (m *GetProjtectsByTeamIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetProjtectsByTeamIDResp) GetProjects() []*entity.Project {
+func (m *GetProjtectsByTeamIDResp) GetProjects() []*Project {
 	if m != nil {
 		return m.Projects
 	}
@@ -1871,8 +1870,8 @@ func (m *GetProjtectsByTeamIDResp) GetProjects() []*entity.Project {
 }
 
 type UpdateProjectByIDReq struct {
-	ProjectID uint32          `protobuf:"varint,1,opt,name=ProjectID,proto3" json:"ProjectID,omitempty"`
-	Project   *entity.Project `protobuf:"bytes,2,opt,name=Project,proto3" json:"Project,omitempty"`
+	ProjectID uint32   `protobuf:"varint,1,opt,name=ProjectID,proto3" json:"ProjectID,omitempty"`
+	Project   *Project `protobuf:"bytes,2,opt,name=Project,proto3" json:"Project,omitempty"`
 }
 
 func (m *UpdateProjectByIDReq) Reset()         { *m = UpdateProjectByIDReq{} }
@@ -1915,7 +1914,7 @@ func (m *UpdateProjectByIDReq) GetProjectID() uint32 {
 	return 0
 }
 
-func (m *UpdateProjectByIDReq) GetProject() *entity.Project {
+func (m *UpdateProjectByIDReq) GetProject() *Project {
 	if m != nil {
 		return m.Project
 	}
@@ -7330,7 +7329,7 @@ func NewPopulatedGetUserByIDResp(r randyUsrmanService, easy bool) *GetUserByIDRe
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		this.User = entity.NewPopulatedUser(r, easy)
+		this.User = NewPopulatedUser(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7340,7 +7339,7 @@ func NewPopulatedGetUserByIDResp(r randyUsrmanService, easy bool) *GetUserByIDRe
 func NewPopulatedCreateUserReq(r randyUsrmanService, easy bool) *CreateUserReq {
 	this := &CreateUserReq{}
 	if r.Intn(5) != 0 {
-		this.User = entity.NewPopulatedUser(r, easy)
+		this.User = NewPopulatedUser(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7376,7 +7375,7 @@ func NewPopulatedGetUserByUsernamePassResp(r randyUsrmanService, easy bool) *Get
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		this.User = entity.NewPopulatedUser(r, easy)
+		this.User = NewPopulatedUser(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7400,9 +7399,9 @@ func NewPopulatedGetUserByTeamIDResp(r randyUsrmanService, easy bool) *GetUserBy
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
 		v1 := r.Intn(5)
-		this.Users = make([]*entity.User, v1)
+		this.Users = make([]*User, v1)
 		for i := 0; i < v1; i++ {
-			this.Users[i] = entity.NewPopulatedUser(r, easy)
+			this.Users[i] = NewPopulatedUser(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -7414,7 +7413,7 @@ func NewPopulatedUpdateUserByIDReq(r randyUsrmanService, easy bool) *UpdateUserB
 	this := &UpdateUserByIDReq{}
 	this.UserID = uint32(r.Uint32())
 	if r.Intn(5) != 0 {
-		this.User = entity.NewPopulatedUser(r, easy)
+		this.User = NewPopulatedUser(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7456,7 +7455,7 @@ func NewPopulatedDeleteUserByIDResp(r randyUsrmanService, easy bool) *DeleteUser
 func NewPopulatedCreateTeamReq(r randyUsrmanService, easy bool) *CreateTeamReq {
 	this := &CreateTeamReq{}
 	if r.Intn(5) != 0 {
-		this.Team = entity.NewPopulatedTeam(r, easy)
+		this.Team = NewPopulatedTeam(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7491,7 +7490,7 @@ func NewPopulatedGetTeamByIDResp(r randyUsrmanService, easy bool) *GetTeamByIDRe
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		this.Team = entity.NewPopulatedTeam(r, easy)
+		this.Team = NewPopulatedTeam(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7515,9 +7514,9 @@ func NewPopulatedGetTeamsByUserIDResp(r randyUsrmanService, easy bool) *GetTeams
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
 		v2 := r.Intn(5)
-		this.Teams = make([]*entity.Team, v2)
+		this.Teams = make([]*Team, v2)
 		for i := 0; i < v2; i++ {
-			this.Teams[i] = entity.NewPopulatedTeam(r, easy)
+			this.Teams[i] = NewPopulatedTeam(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -7542,9 +7541,9 @@ func NewPopulatedGetTeamsByCreatorIDResp(r randyUsrmanService, easy bool) *GetTe
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
 		v3 := r.Intn(5)
-		this.Teams = make([]*entity.Team, v3)
+		this.Teams = make([]*Team, v3)
 		for i := 0; i < v3; i++ {
-			this.Teams[i] = entity.NewPopulatedTeam(r, easy)
+			this.Teams[i] = NewPopulatedTeam(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -7569,9 +7568,9 @@ func NewPopulatedGetTeamByNameResp(r randyUsrmanService, easy bool) *GetTeamByNa
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
 		v4 := r.Intn(5)
-		this.Teams = make([]*entity.Team, v4)
+		this.Teams = make([]*Team, v4)
 		for i := 0; i < v4; i++ {
-			this.Teams[i] = entity.NewPopulatedTeam(r, easy)
+			this.Teams[i] = NewPopulatedTeam(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -7583,7 +7582,7 @@ func NewPopulatedUpdateTeamByIDReq(r randyUsrmanService, easy bool) *UpdateTeamB
 	this := &UpdateTeamByIDReq{}
 	this.TeamID = uint32(r.Uint32())
 	if r.Intn(5) != 0 {
-		this.Team = entity.NewPopulatedTeam(r, easy)
+		this.Team = NewPopulatedTeam(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7667,7 +7666,7 @@ func NewPopulatedDeleteTeamByIDResp(r randyUsrmanService, easy bool) *DeleteTeam
 func NewPopulatedCreateProjectReq(r randyUsrmanService, easy bool) *CreateProjectReq {
 	this := &CreateProjectReq{}
 	if r.Intn(5) != 0 {
-		this.Project = entity.NewPopulatedProject(r, easy)
+		this.Project = NewPopulatedProject(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7702,7 +7701,7 @@ func NewPopulatedGetProjectByIDResp(r randyUsrmanService, easy bool) *GetProject
 	}
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
-		this.Project = entity.NewPopulatedProject(r, easy)
+		this.Project = NewPopulatedProject(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -7726,9 +7725,9 @@ func NewPopulatedGetProjtectsByTeamIDResp(r randyUsrmanService, easy bool) *GetP
 	this.Message = string(randStringUsrmanService(r))
 	if r.Intn(5) != 0 {
 		v5 := r.Intn(5)
-		this.Projects = make([]*entity.Project, v5)
+		this.Projects = make([]*Project, v5)
 		for i := 0; i < v5; i++ {
-			this.Projects[i] = entity.NewPopulatedProject(r, easy)
+			this.Projects[i] = NewPopulatedProject(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -7740,7 +7739,7 @@ func NewPopulatedUpdateProjectByIDReq(r randyUsrmanService, easy bool) *UpdatePr
 	this := &UpdateProjectByIDReq{}
 	this.ProjectID = uint32(r.Uint32())
 	if r.Intn(5) != 0 {
-		this.Project = entity.NewPopulatedProject(r, easy)
+		this.Project = NewPopulatedProject(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -8669,7 +8668,7 @@ func (m *GetUserByIDResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.User == nil {
-				m.User = &entity.User{}
+				m.User = &User{}
 			}
 			if err := m.User.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8755,7 +8754,7 @@ func (m *CreateUserReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.User == nil {
-				m.User = &entity.User{}
+				m.User = &User{}
 			}
 			if err := m.User.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9107,7 +9106,7 @@ func (m *GetUserByUsernamePassResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.User == nil {
-				m.User = &entity.User{}
+				m.User = &User{}
 			}
 			if err := m.User.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9312,7 +9311,7 @@ func (m *GetUserByTeamIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Users = append(m.Users, &entity.User{})
+			m.Users = append(m.Users, &User{})
 			if err := m.Users[len(m.Users)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9416,7 +9415,7 @@ func (m *UpdateUserByIDReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.User == nil {
-				m.User = &entity.User{}
+				m.User = &User{}
 			}
 			if err := m.User.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9773,7 +9772,7 @@ func (m *CreateTeamReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Team == nil {
-				m.Team = &entity.Team{}
+				m.Team = &Team{}
 			}
 			if err := m.Team.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -10080,7 +10079,7 @@ func (m *GetTeamByIDResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Team == nil {
-				m.Team = &entity.Team{}
+				m.Team = &Team{}
 			}
 			if err := m.Team.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -10285,7 +10284,7 @@ func (m *GetTeamsByUserIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Teams = append(m.Teams, &entity.Team{})
+			m.Teams = append(m.Teams, &Team{})
 			if err := m.Teams[len(m.Teams)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10489,7 +10488,7 @@ func (m *GetTeamsByCreatorIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Teams = append(m.Teams, &entity.Team{})
+			m.Teams = append(m.Teams, &Team{})
 			if err := m.Teams[len(m.Teams)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10706,7 +10705,7 @@ func (m *GetTeamByNameResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Teams = append(m.Teams, &entity.Team{})
+			m.Teams = append(m.Teams, &Team{})
 			if err := m.Teams[len(m.Teams)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10810,7 +10809,7 @@ func (m *UpdateTeamByIDReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Team == nil {
-				m.Team = &entity.Team{}
+				m.Team = &Team{}
 			}
 			if err := m.Team.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11545,7 +11544,7 @@ func (m *CreateProjectReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Project == nil {
-				m.Project = &entity.Project{}
+				m.Project = &Project{}
 			}
 			if err := m.Project.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11852,7 +11851,7 @@ func (m *GetProjectByIDResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Project == nil {
-				m.Project = &entity.Project{}
+				m.Project = &Project{}
 			}
 			if err := m.Project.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -12057,7 +12056,7 @@ func (m *GetProjtectsByTeamIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Projects = append(m.Projects, &entity.Project{})
+			m.Projects = append(m.Projects, &Project{})
 			if err := m.Projects[len(m.Projects)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12161,7 +12160,7 @@ func (m *UpdateProjectByIDReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Project == nil {
-				m.Project = &entity.Project{}
+				m.Project = &Project{}
 			}
 			if err := m.Project.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

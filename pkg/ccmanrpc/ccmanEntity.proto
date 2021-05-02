@@ -5,7 +5,7 @@ package ccmanrpc;
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/thanhpp/prom/pkg/timerpc/time.proto";
 
-option go_package = "github.com/thanhpp/prom/cmd/ccman/repository/entity";
+option go_package = "github.com/thanhpp/prom/pkg/ccmanrpc";
 
 option (gogoproto.gostring_all) = true;
 option (gogoproto.equal_all) = true;

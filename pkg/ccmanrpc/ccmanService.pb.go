@@ -8,7 +8,6 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	entity "github.com/thanhpp/prom/cmd/ccman/repository/entity"
 	timerpc "github.com/thanhpp/prom/pkg/timerpc"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -32,7 +31,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type CreateCardReq struct {
-	CreateCard *entity.Card `protobuf:"bytes,1,opt,name=CreateCard,proto3" json:"CreateCard,omitempty"`
+	CreateCard *Card `protobuf:"bytes,1,opt,name=CreateCard,proto3" json:"CreateCard,omitempty"`
 }
 
 func (m *CreateCardReq) Reset()         { *m = CreateCardReq{} }
@@ -68,7 +67,7 @@ func (m *CreateCardReq) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateCardReq proto.InternalMessageInfo
 
-func (m *CreateCardReq) GetCreateCard() *entity.Card {
+func (m *CreateCardReq) GetCreateCard() *Card {
 	if m != nil {
 		return m.CreateCard
 	}
@@ -172,9 +171,9 @@ func (m *GetCardByIDReq) GetCardID() uint32 {
 }
 
 type GetCardByIDResp struct {
-	Code    int32        `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string       `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	ResCard *entity.Card `protobuf:"bytes,3,opt,name=ResCard,proto3" json:"ResCard,omitempty"`
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	ResCard *Card  `protobuf:"bytes,3,opt,name=ResCard,proto3" json:"ResCard,omitempty"`
 }
 
 func (m *GetCardByIDResp) Reset()         { *m = GetCardByIDResp{} }
@@ -224,7 +223,7 @@ func (m *GetCardByIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetCardByIDResp) GetResCard() *entity.Card {
+func (m *GetCardByIDResp) GetResCard() *Card {
 	if m != nil {
 		return m.ResCard
 	}
@@ -276,9 +275,9 @@ func (m *GetCardsByDueDateReq) GetDueDate() *timerpc.Time {
 }
 
 type GetCardsByDueDateResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Cards   []*entity.Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Cards   []*Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
 }
 
 func (m *GetCardsByDueDateResp) Reset()         { *m = GetCardsByDueDateResp{} }
@@ -328,7 +327,7 @@ func (m *GetCardsByDueDateResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetCardsByDueDateResp) GetCards() []*entity.Card {
+func (m *GetCardsByDueDateResp) GetCards() []*Card {
 	if m != nil {
 		return m.Cards
 	}
@@ -380,9 +379,9 @@ func (m *GetCardsByAssignedToIDReq) GetAssignedToID() uint32 {
 }
 
 type GetCardsByAssignedToIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Cards   []*entity.Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Cards   []*Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
 }
 
 func (m *GetCardsByAssignedToIDResp) Reset()         { *m = GetCardsByAssignedToIDResp{} }
@@ -432,7 +431,7 @@ func (m *GetCardsByAssignedToIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetCardsByAssignedToIDResp) GetCards() []*entity.Card {
+func (m *GetCardsByAssignedToIDResp) GetCards() []*Card {
 	if m != nil {
 		return m.Cards
 	}
@@ -484,9 +483,9 @@ func (m *GetCardsByCreatorIDReq) GetCreatorID() uint32 {
 }
 
 type GetCardsByCreatorIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Cards   []*entity.Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Cards   []*Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
 }
 
 func (m *GetCardsByCreatorIDResp) Reset()         { *m = GetCardsByCreatorIDResp{} }
@@ -536,7 +535,7 @@ func (m *GetCardsByCreatorIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetCardsByCreatorIDResp) GetCards() []*entity.Card {
+func (m *GetCardsByCreatorIDResp) GetCards() []*Card {
 	if m != nil {
 		return m.Cards
 	}
@@ -588,9 +587,9 @@ func (m *GetCardsByColumnIDReq) GetColumnID() uint32 {
 }
 
 type GetCardsByColumnIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Cards   []*entity.Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Cards   []*Card `protobuf:"bytes,3,rep,name=Cards,proto3" json:"Cards,omitempty"`
 }
 
 func (m *GetCardsByColumnIDResp) Reset()         { *m = GetCardsByColumnIDResp{} }
@@ -640,7 +639,7 @@ func (m *GetCardsByColumnIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetCardsByColumnIDResp) GetCards() []*entity.Card {
+func (m *GetCardsByColumnIDResp) GetCards() []*Card {
 	if m != nil {
 		return m.Cards
 	}
@@ -648,8 +647,8 @@ func (m *GetCardsByColumnIDResp) GetCards() []*entity.Card {
 }
 
 type UpdateCardByIDReq struct {
-	CardID     uint32       `protobuf:"varint,1,opt,name=CardID,proto3" json:"CardID,omitempty"`
-	UpdateCard *entity.Card `protobuf:"bytes,2,opt,name=UpdateCard,proto3" json:"UpdateCard,omitempty"`
+	CardID     uint32 `protobuf:"varint,1,opt,name=CardID,proto3" json:"CardID,omitempty"`
+	UpdateCard *Card  `protobuf:"bytes,2,opt,name=UpdateCard,proto3" json:"UpdateCard,omitempty"`
 }
 
 func (m *UpdateCardByIDReq) Reset()         { *m = UpdateCardByIDReq{} }
@@ -692,7 +691,7 @@ func (m *UpdateCardByIDReq) GetCardID() uint32 {
 	return 0
 }
 
-func (m *UpdateCardByIDReq) GetUpdateCard() *entity.Card {
+func (m *UpdateCardByIDReq) GetUpdateCard() *Card {
 	if m != nil {
 		return m.UpdateCard
 	}
@@ -848,7 +847,7 @@ func (m *DeleteCardByIDResp) GetMessage() string {
 }
 
 type CreateColumnReq struct {
-	CreateColumn *entity.Column `protobuf:"bytes,1,opt,name=CreateColumn,proto3" json:"CreateColumn,omitempty"`
+	CreateColumn *Column `protobuf:"bytes,1,opt,name=CreateColumn,proto3" json:"CreateColumn,omitempty"`
 }
 
 func (m *CreateColumnReq) Reset()         { *m = CreateColumnReq{} }
@@ -884,7 +883,7 @@ func (m *CreateColumnReq) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateColumnReq proto.InternalMessageInfo
 
-func (m *CreateColumnReq) GetCreateColumn() *entity.Column {
+func (m *CreateColumnReq) GetCreateColumn() *Column {
 	if m != nil {
 		return m.CreateColumn
 	}
@@ -988,9 +987,9 @@ func (m *GetColumnByIDReq) GetColumnID() uint32 {
 }
 
 type GetColumnByIDResp struct {
-	Code    int32          `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string         `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Column  *entity.Column `protobuf:"bytes,3,opt,name=Column,proto3" json:"Column,omitempty"`
+	Code    int32   `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string  `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Column  *Column `protobuf:"bytes,3,opt,name=Column,proto3" json:"Column,omitempty"`
 }
 
 func (m *GetColumnByIDResp) Reset()         { *m = GetColumnByIDResp{} }
@@ -1040,7 +1039,7 @@ func (m *GetColumnByIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetColumnByIDResp) GetColumn() *entity.Column {
+func (m *GetColumnByIDResp) GetColumn() *Column {
 	if m != nil {
 		return m.Column
 	}
@@ -1092,9 +1091,9 @@ func (m *GetColumnsByTitleReq) GetTitle() string {
 }
 
 type GetColumnsByTitleResp struct {
-	Code    int32            `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string           `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Columns []*entity.Column `protobuf:"bytes,3,rep,name=Columns,proto3" json:"Columns,omitempty"`
+	Code    int32     `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string    `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Columns []*Column `protobuf:"bytes,3,rep,name=Columns,proto3" json:"Columns,omitempty"`
 }
 
 func (m *GetColumnsByTitleResp) Reset()         { *m = GetColumnsByTitleResp{} }
@@ -1144,7 +1143,7 @@ func (m *GetColumnsByTitleResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetColumnsByTitleResp) GetColumns() []*entity.Column {
+func (m *GetColumnsByTitleResp) GetColumns() []*Column {
 	if m != nil {
 		return m.Columns
 	}
@@ -1196,9 +1195,9 @@ func (m *GetColumnsByProjectIDReq) GetProjectID() uint32 {
 }
 
 type GetColumnsByProjectIDResp struct {
-	Code    int32            `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Message string           `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-	Columns []*entity.Column `protobuf:"bytes,3,rep,name=Columns,proto3" json:"Columns,omitempty"`
+	Code    int32     `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string    `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Columns []*Column `protobuf:"bytes,3,rep,name=Columns,proto3" json:"Columns,omitempty"`
 }
 
 func (m *GetColumnsByProjectIDResp) Reset()         { *m = GetColumnsByProjectIDResp{} }
@@ -1248,7 +1247,7 @@ func (m *GetColumnsByProjectIDResp) GetMessage() string {
 	return ""
 }
 
-func (m *GetColumnsByProjectIDResp) GetColumns() []*entity.Column {
+func (m *GetColumnsByProjectIDResp) GetColumns() []*Column {
 	if m != nil {
 		return m.Columns
 	}
@@ -1256,8 +1255,8 @@ func (m *GetColumnsByProjectIDResp) GetColumns() []*entity.Column {
 }
 
 type UpdateColumnByIDReq struct {
-	ColumnID uint32         `protobuf:"varint,1,opt,name=ColumnID,proto3" json:"ColumnID,omitempty"`
-	Column   *entity.Column `protobuf:"bytes,2,opt,name=Column,proto3" json:"Column,omitempty"`
+	ColumnID uint32  `protobuf:"varint,1,opt,name=ColumnID,proto3" json:"ColumnID,omitempty"`
+	Column   *Column `protobuf:"bytes,2,opt,name=Column,proto3" json:"Column,omitempty"`
 }
 
 func (m *UpdateColumnByIDReq) Reset()         { *m = UpdateColumnByIDReq{} }
@@ -1300,7 +1299,7 @@ func (m *UpdateColumnByIDReq) GetColumnID() uint32 {
 	return 0
 }
 
-func (m *UpdateColumnByIDReq) GetColumn() *entity.Column {
+func (m *UpdateColumnByIDReq) GetColumn() *Column {
 	if m != nil {
 		return m.Column
 	}
@@ -5206,7 +5205,7 @@ func encodeVarintCcmanService(dAtA []byte, offset int, v uint64) int {
 func NewPopulatedCreateCardReq(r randyCcmanService, easy bool) *CreateCardReq {
 	this := &CreateCardReq{}
 	if r.Intn(5) != 0 {
-		this.CreateCard = entity.NewPopulatedCard(r, easy)
+		this.CreateCard = NewPopulatedCard(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5241,7 +5240,7 @@ func NewPopulatedGetCardByIDResp(r randyCcmanService, easy bool) *GetCardByIDRes
 	}
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
-		this.ResCard = entity.NewPopulatedCard(r, easy)
+		this.ResCard = NewPopulatedCard(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5267,9 +5266,9 @@ func NewPopulatedGetCardsByDueDateResp(r randyCcmanService, easy bool) *GetCards
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
 		v1 := r.Intn(5)
-		this.Cards = make([]*entity.Card, v1)
+		this.Cards = make([]*Card, v1)
 		for i := 0; i < v1; i++ {
-			this.Cards[i] = entity.NewPopulatedCard(r, easy)
+			this.Cards[i] = NewPopulatedCard(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5294,9 +5293,9 @@ func NewPopulatedGetCardsByAssignedToIDResp(r randyCcmanService, easy bool) *Get
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
 		v2 := r.Intn(5)
-		this.Cards = make([]*entity.Card, v2)
+		this.Cards = make([]*Card, v2)
 		for i := 0; i < v2; i++ {
-			this.Cards[i] = entity.NewPopulatedCard(r, easy)
+			this.Cards[i] = NewPopulatedCard(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5321,9 +5320,9 @@ func NewPopulatedGetCardsByCreatorIDResp(r randyCcmanService, easy bool) *GetCar
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
 		v3 := r.Intn(5)
-		this.Cards = make([]*entity.Card, v3)
+		this.Cards = make([]*Card, v3)
 		for i := 0; i < v3; i++ {
-			this.Cards[i] = entity.NewPopulatedCard(r, easy)
+			this.Cards[i] = NewPopulatedCard(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5348,9 +5347,9 @@ func NewPopulatedGetCardsByColumnIDResp(r randyCcmanService, easy bool) *GetCard
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
 		v4 := r.Intn(5)
-		this.Cards = make([]*entity.Card, v4)
+		this.Cards = make([]*Card, v4)
 		for i := 0; i < v4; i++ {
-			this.Cards[i] = entity.NewPopulatedCard(r, easy)
+			this.Cards[i] = NewPopulatedCard(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5362,7 +5361,7 @@ func NewPopulatedUpdateCardByIDReq(r randyCcmanService, easy bool) *UpdateCardBy
 	this := &UpdateCardByIDReq{}
 	this.CardID = uint32(r.Uint32())
 	if r.Intn(5) != 0 {
-		this.UpdateCard = entity.NewPopulatedCard(r, easy)
+		this.UpdateCard = NewPopulatedCard(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5404,7 +5403,7 @@ func NewPopulatedDeleteCardByIDResp(r randyCcmanService, easy bool) *DeleteCardB
 func NewPopulatedCreateColumnReq(r randyCcmanService, easy bool) *CreateColumnReq {
 	this := &CreateColumnReq{}
 	if r.Intn(5) != 0 {
-		this.CreateColumn = entity.NewPopulatedColumn(r, easy)
+		this.CreateColumn = NewPopulatedColumn(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5439,7 +5438,7 @@ func NewPopulatedGetColumnByIDResp(r randyCcmanService, easy bool) *GetColumnByI
 	}
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
-		this.Column = entity.NewPopulatedColumn(r, easy)
+		this.Column = NewPopulatedColumn(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5463,9 +5462,9 @@ func NewPopulatedGetColumnsByTitleResp(r randyCcmanService, easy bool) *GetColum
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
 		v5 := r.Intn(5)
-		this.Columns = make([]*entity.Column, v5)
+		this.Columns = make([]*Column, v5)
 		for i := 0; i < v5; i++ {
-			this.Columns[i] = entity.NewPopulatedColumn(r, easy)
+			this.Columns[i] = NewPopulatedColumn(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5490,9 +5489,9 @@ func NewPopulatedGetColumnsByProjectIDResp(r randyCcmanService, easy bool) *GetC
 	this.Message = string(randStringCcmanService(r))
 	if r.Intn(5) != 0 {
 		v6 := r.Intn(5)
-		this.Columns = make([]*entity.Column, v6)
+		this.Columns = make([]*Column, v6)
 		for i := 0; i < v6; i++ {
-			this.Columns[i] = entity.NewPopulatedColumn(r, easy)
+			this.Columns[i] = NewPopulatedColumn(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5504,7 +5503,7 @@ func NewPopulatedUpdateColumnByIDReq(r randyCcmanService, easy bool) *UpdateColu
 	this := &UpdateColumnByIDReq{}
 	this.ColumnID = uint32(r.Uint32())
 	if r.Intn(5) != 0 {
-		this.Column = entity.NewPopulatedColumn(r, easy)
+		this.Column = NewPopulatedColumn(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -6128,7 +6127,7 @@ func (m *CreateCardReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.CreateCard == nil {
-				m.CreateCard = &entity.Card{}
+				m.CreateCard = &Card{}
 			}
 			if err := m.CreateCard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6140,10 +6139,7 @@ func (m *CreateCardReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6244,10 +6240,7 @@ func (m *CreateCardResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6316,10 +6309,7 @@ func (m *GetCardByIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6444,7 +6434,7 @@ func (m *GetCardByIDResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ResCard == nil {
-				m.ResCard = &entity.Card{}
+				m.ResCard = &Card{}
 			}
 			if err := m.ResCard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6456,10 +6446,7 @@ func (m *GetCardByIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6545,10 +6532,7 @@ func (m *GetCardsByDueDateReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6672,7 +6656,7 @@ func (m *GetCardsByDueDateResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Cards = append(m.Cards, &entity.Card{})
+			m.Cards = append(m.Cards, &Card{})
 			if err := m.Cards[len(m.Cards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6683,10 +6667,7 @@ func (m *GetCardsByDueDateResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6755,10 +6736,7 @@ func (m *GetCardsByAssignedToIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6882,7 +6860,7 @@ func (m *GetCardsByAssignedToIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Cards = append(m.Cards, &entity.Card{})
+			m.Cards = append(m.Cards, &Card{})
 			if err := m.Cards[len(m.Cards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6893,10 +6871,7 @@ func (m *GetCardsByAssignedToIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -6965,10 +6940,7 @@ func (m *GetCardsByCreatorIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7092,7 +7064,7 @@ func (m *GetCardsByCreatorIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Cards = append(m.Cards, &entity.Card{})
+			m.Cards = append(m.Cards, &Card{})
 			if err := m.Cards[len(m.Cards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7103,10 +7075,7 @@ func (m *GetCardsByCreatorIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7175,10 +7144,7 @@ func (m *GetCardsByColumnIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7302,7 +7268,7 @@ func (m *GetCardsByColumnIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Cards = append(m.Cards, &entity.Card{})
+			m.Cards = append(m.Cards, &Card{})
 			if err := m.Cards[len(m.Cards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7313,10 +7279,7 @@ func (m *GetCardsByColumnIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7409,7 +7372,7 @@ func (m *UpdateCardByIDReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.UpdateCard == nil {
-				m.UpdateCard = &entity.Card{}
+				m.UpdateCard = &Card{}
 			}
 			if err := m.UpdateCard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7421,10 +7384,7 @@ func (m *UpdateCardByIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7525,10 +7485,7 @@ func (m *UpdateCardByIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7597,10 +7554,7 @@ func (m *DeleteCardByIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7701,10 +7655,7 @@ func (m *DeleteCardByIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7778,7 +7729,7 @@ func (m *CreateColumnReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.CreateColumn == nil {
-				m.CreateColumn = &entity.Column{}
+				m.CreateColumn = &Column{}
 			}
 			if err := m.CreateColumn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7790,10 +7741,7 @@ func (m *CreateColumnReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7894,10 +7842,7 @@ func (m *CreateColumnResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -7966,10 +7911,7 @@ func (m *GetColumnByIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8094,7 +8036,7 @@ func (m *GetColumnByIDResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Column == nil {
-				m.Column = &entity.Column{}
+				m.Column = &Column{}
 			}
 			if err := m.Column.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8106,10 +8048,7 @@ func (m *GetColumnByIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8191,10 +8130,7 @@ func (m *GetColumnsByTitleReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8318,7 +8254,7 @@ func (m *GetColumnsByTitleResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Columns = append(m.Columns, &entity.Column{})
+			m.Columns = append(m.Columns, &Column{})
 			if err := m.Columns[len(m.Columns)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8329,10 +8265,7 @@ func (m *GetColumnsByTitleResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8401,10 +8334,7 @@ func (m *GetColumnsByProjectIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8528,7 +8458,7 @@ func (m *GetColumnsByProjectIDResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Columns = append(m.Columns, &entity.Column{})
+			m.Columns = append(m.Columns, &Column{})
 			if err := m.Columns[len(m.Columns)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8539,10 +8469,7 @@ func (m *GetColumnsByProjectIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8635,7 +8562,7 @@ func (m *UpdateColumnByIDReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Column == nil {
-				m.Column = &entity.Column{}
+				m.Column = &Column{}
 			}
 			if err := m.Column.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8647,10 +8574,7 @@ func (m *UpdateColumnByIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8751,10 +8675,7 @@ func (m *UpdateColumnByIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8823,10 +8744,7 @@ func (m *DeleteColumnByIDReq) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
@@ -8927,10 +8845,7 @@ func (m *DeleteColumnByIDResp) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthCcmanService
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthCcmanService
 			}
 			if (iNdEx + skippy) > l {
