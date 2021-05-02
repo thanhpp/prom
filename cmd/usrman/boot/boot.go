@@ -3,10 +3,9 @@ package boot
 import (
 	"context"
 
-	"github.com/thanhpp/prom/cmd/ccman/repository"
-
-	"github.com/thanhpp/prom/cmd/ccman/core"
-	"github.com/thanhpp/prom/cmd/ccman/rpcserver"
+	"github.com/thanhpp/prom/cmd/usrman/core"
+	"github.com/thanhpp/prom/cmd/usrman/repository"
+	"github.com/thanhpp/prom/cmd/usrman/rpcserver"
 	"github.com/thanhpp/prom/pkg/logger"
 )
 

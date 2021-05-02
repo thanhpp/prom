@@ -1,11 +1,6 @@
 package core
 
-import (
-	"github.com/thanhpp/prom/pkg/configs"
-)
-
-// --------------------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------- CONFIG ----------------------------------------------------------
+import "github.com/thanhpp/prom/pkg/configs"
 
 type MainConfig struct {
 	DB   configs.DBConfig     `mapstructure:"database"`

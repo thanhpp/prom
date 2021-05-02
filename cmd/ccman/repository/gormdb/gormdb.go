@@ -113,7 +113,7 @@ func (g *implGorm) GetCardsByDueDate(ctx context.Context, dueDate time.Time) (ca
 		return nil, err
 	}
 
-	cards, err = scanCards(rows)
+	cards, err = scanCards(gDB, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (g *implGorm) GetCardsByAssignedToID(ctx context.Context, assignedTo uint32
 		return nil, err
 	}
 
-	cards, err = scanCards(rows)
+	cards, err = scanCards(gDB, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (g *implGorm) GetCardsByCreatorID(ctx context.Context, creatorID uint32) (c
 		return nil, err
 	}
 
-	cards, err = scanCards(rows)
+	cards, err = scanCards(gDB, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func (g *implGorm) GetCardsByColumnID(ctx context.Context, columnID uint32) (car
 		return nil, err
 	}
 
-	cards, err = scanCards(rows)
+	cards, err = scanCards(gDB, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +214,7 @@ func (g *implGorm) GetColumnsByTitle(ctx context.Context, title string) (columns
 		return nil, err
 	}
 
-	columns, err = scanColumns(rows)
+	columns, err = scanColumns(gDB, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -229,7 +229,7 @@ func (g *implGorm) GetColumnsByProjectID(ctx context.Context, projectID uint32) 
 		return nil, err
 	}
 
-	columns, err = scanColumns(rows)
+	columns, err = scanColumns(gDB, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -258,10 +258,10 @@ func (g *implGorm) DeleteColumnByID(ctx context.Context, columnID uint32) (err e
 // ------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- UTILS ----------------------------------------------------------
 
-func scanCards(rows *sql.Rows) (cards []*entity.Card, err error) {
+func scanCards(gormDB *gorm.DB, rows *sql.Rows) (cards []*entity.Card, err error) {
 	for rows.Next() {
 		var card = new(entity.Card)
-		if err := gDB.ScanRows(rows, card); err != nil {
+		if err := gormDB.ScanRows(rows, card); err != nil {
 			return nil, err
 		}
 
@@ -271,10 +271,10 @@ func scanCards(rows *sql.Rows) (cards []*entity.Card, err error) {
 	return cards, nil
 }
 
-func scanColumns(rows *sql.Rows) (columns []*entity.Column, err error) {
+func scanColumns(gormDB *gorm.DB, rows *sql.Rows) (columns []*entity.Column, err error) {
 	for rows.Next() {
 		var column = new(entity.Column)
-		if err := gDB.ScanRows(rows, column); err != nil {
+		if err := gormDB.ScanRows(rows, column); err != nil {
 			return nil, err
 		}
 

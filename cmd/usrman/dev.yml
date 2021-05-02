@@ -3,7 +3,7 @@ database:
   port: "5432"
   user: "thanhpp"
   pass: "testthanhpp"
-  name: "prom"
+  name: "promuser"
   log: "INFO"
 
 log:
@@ -12,5 +12,5 @@ log:
 
 grpc:
   publichost: "0.0.0.0"
-  port: "8080"
+  port: "8090"
   maxconnections: 100
