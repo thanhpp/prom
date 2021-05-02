@@ -9,7 +9,6 @@ import (
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/thanhpp/prom/cmd/usrman/repository/entity"
 	go_parser "go/parser"
 	math "math"
 	math_rand "math/rand"

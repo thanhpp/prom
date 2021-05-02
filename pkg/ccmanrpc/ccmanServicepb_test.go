@@ -9,7 +9,6 @@ import (
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/thanhpp/prom/cmd/ccman/repository/entity"
 	_ "github.com/thanhpp/prom/pkg/timerpc"
 	go_parser "go/parser"
 	math "math"

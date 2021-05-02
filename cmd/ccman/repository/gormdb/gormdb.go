@@ -12,7 +12,7 @@ import (
 	gormlog "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 
-	"github.com/thanhpp/prom/cmd/ccman/repository/entity"
+	"github.com/thanhpp/prom/pkg/ccmanrpc"
 )
 
 // --------------------------------------------------------------------------------------------------------------------------
@@ -23,8 +23,8 @@ type implGorm struct{}
 var (
 	gDB         = &gorm.DB{}
 	gormObj     = new(implGorm)
-	cardModel   = new(entity.Card)
-	columnModel = new(entity.Column)
+	cardModel   = new(ccmanrpc.Card)
+	columnModel = new(ccmanrpc.Column)
 )
 
 // GetGormDB ...
@@ -87,7 +87,7 @@ func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err 
 // -------------------------------------------------------- CARD ----------------------------------------------------------
 
 // CreateCard ...
-func (g *implGorm) CreateCard(ctx context.Context, card *entity.Card) (err error) {
+func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (err error) {
 	if err := gDB.Table("card").WithContext(ctx).Save(card).Error; err != nil {
 		return err
 	}
@@ -96,8 +96,8 @@ func (g *implGorm) CreateCard(ctx context.Context, card *entity.Card) (err error
 }
 
 // GetCardByID ...
-func (g *implGorm) GetCardByID(ctx context.Context, cardID uint32) (card *entity.Card, err error) {
-	card = new(entity.Card)
+func (g *implGorm) GetCardByID(ctx context.Context, cardID uint32) (card *ccmanrpc.Card, err error) {
+	card = new(ccmanrpc.Card)
 
 	if err := gDB.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Take(card).Error; err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ func (g *implGorm) GetCardByID(ctx context.Context, cardID uint32) (card *entity
 }
 
 // GetCardsByDueDate ...
-func (g *implGorm) GetCardsByDueDate(ctx context.Context, dueDate time.Time) (cards []*entity.Card, err error) {
+func (g *implGorm) GetCardsByDueDate(ctx context.Context, dueDate time.Time) (cards []*ccmanrpc.Card, err error) {
 	rows, err := gDB.Model(cardModel).WithContext(ctx).Where("due_date = ?", dueDate).Rows()
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (g *implGorm) GetCardsByDueDate(ctx context.Context, dueDate time.Time) (ca
 }
 
 // GetCardsByAssignedToID ...
-func (g *implGorm) GetCardsByAssignedToID(ctx context.Context, assignedTo uint32) (cards []*entity.Card, err error) {
+func (g *implGorm) GetCardsByAssignedToID(ctx context.Context, assignedTo uint32) (cards []*ccmanrpc.Card, err error) {
 	rows, err := gDB.Model(cardModel).WithContext(ctx).Where("assigned_to = ?", assignedTo).Rows()
 	if err != nil {
 		return nil, err
@@ -137,7 +137,7 @@ func (g *implGorm) GetCardsByAssignedToID(ctx context.Context, assignedTo uint32
 }
 
 // GetCardsByCreatorID ...
-func (g *implGorm) GetCardsByCreatorID(ctx context.Context, creatorID uint32) (cards []*entity.Card, err error) {
+func (g *implGorm) GetCardsByCreatorID(ctx context.Context, creatorID uint32) (cards []*ccmanrpc.Card, err error) {
 	rows, err := gDB.Model(cardModel).WithContext(ctx).Where("created_by = ?", creatorID).Rows()
 	if err != nil {
 		return nil, err
@@ -152,7 +152,7 @@ func (g *implGorm) GetCardsByCreatorID(ctx context.Context, creatorID uint32) (c
 }
 
 // GetCardsByColumnID ...
-func (g *implGorm) GetCardsByColumnID(ctx context.Context, columnID uint32) (cards []*entity.Card, err error) {
+func (g *implGorm) GetCardsByColumnID(ctx context.Context, columnID uint32) (cards []*ccmanrpc.Card, err error) {
 	rows, err := gDB.Model(cardModel).WithContext(ctx).Where("column_id = ?", columnID).Rows()
 	if err != nil {
 		return nil, err
@@ -167,7 +167,7 @@ func (g *implGorm) GetCardsByColumnID(ctx context.Context, columnID uint32) (car
 }
 
 // UpdateCardByID ...
-func (g *implGorm) UpdateCardByID(ctx context.Context, cardID uint32, card *entity.Card) (err error) {
+func (g *implGorm) UpdateCardByID(ctx context.Context, cardID uint32, card *ccmanrpc.Card) (err error) {
 	if err = gDB.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Updates(card).Error; err != nil {
 		return err
 	}
@@ -177,7 +177,7 @@ func (g *implGorm) UpdateCardByID(ctx context.Context, cardID uint32, card *enti
 
 // DeleteCardByID ...
 func (g *implGorm) DeleteCardByID(ctx context.Context, cardID uint32) (err error) {
-	if err = gDB.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Delete(&entity.Card{}).Error; err != nil {
+	if err = gDB.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Delete(&ccmanrpc.Card{}).Error; err != nil {
 		return err
 	}
 
@@ -188,7 +188,7 @@ func (g *implGorm) DeleteCardByID(ctx context.Context, cardID uint32) (err error
 // -------------------------------------------------------- COLUMN ----------------------------------------------------------
 
 // CreateColumn ...
-func (g *implGorm) CreateColumn(ctx context.Context, column *entity.Column) (err error) {
+func (g *implGorm) CreateColumn(ctx context.Context, column *ccmanrpc.Column) (err error) {
 	if err = gDB.Model(columnModel).WithContext(ctx).Save(column).Error; err != nil {
 		return err
 	}
@@ -197,8 +197,8 @@ func (g *implGorm) CreateColumn(ctx context.Context, column *entity.Column) (err
 }
 
 // GetColumnByID ...
-func (g *implGorm) GetColumnByID(ctx context.Context, columnID uint32) (column *entity.Column, err error) {
-	column = new(entity.Column) //alloc
+func (g *implGorm) GetColumnByID(ctx context.Context, columnID uint32) (column *ccmanrpc.Column, err error) {
+	column = new(ccmanrpc.Column) //alloc
 
 	if err = gDB.Model(columnModel).WithContext(ctx).Where("id = ?", columnID).Take(column).Error; err != nil {
 		return nil, err
@@ -208,7 +208,7 @@ func (g *implGorm) GetColumnByID(ctx context.Context, columnID uint32) (column *
 }
 
 // GetColumnsByTitle ...
-func (g *implGorm) GetColumnsByTitle(ctx context.Context, title string) (columns []*entity.Column, err error) {
+func (g *implGorm) GetColumnsByTitle(ctx context.Context, title string) (columns []*ccmanrpc.Column, err error) {
 	rows, err := gDB.Model(columnModel).WithContext(ctx).Where("title LIKE %?%", fmt.Sprintf("%%%s%%", title)).Rows()
 	if err != nil {
 		return nil, err
@@ -223,7 +223,7 @@ func (g *implGorm) GetColumnsByTitle(ctx context.Context, title string) (columns
 }
 
 // GetColumnsByProjectID ...
-func (g *implGorm) GetColumnsByProjectID(ctx context.Context, projectID uint32) (columns []*entity.Column, err error) {
+func (g *implGorm) GetColumnsByProjectID(ctx context.Context, projectID uint32) (columns []*ccmanrpc.Column, err error) {
 	rows, err := gDB.Model(columnModel).WithContext(ctx).Where("project_id = ?", projectID).Rows()
 	if err != nil {
 		return nil, err
@@ -238,7 +238,7 @@ func (g *implGorm) GetColumnsByProjectID(ctx context.Context, projectID uint32) 
 }
 
 // UpdateColumnByID ...
-func (g *implGorm) UpdateColumnByID(ctx context.Context, columnID uint32, column *entity.Column) (err error) {
+func (g *implGorm) UpdateColumnByID(ctx context.Context, columnID uint32, column *ccmanrpc.Column) (err error) {
 	if err = gDB.Model(columnModel).WithContext(ctx).Where("id = ?", columnID).Updates(column).Error; err != nil {
 		return err
 	}
@@ -248,7 +248,7 @@ func (g *implGorm) UpdateColumnByID(ctx context.Context, columnID uint32, column
 
 // DeleteColumnByID ...
 func (g *implGorm) DeleteColumnByID(ctx context.Context, columnID uint32) (err error) {
-	if err = gDB.Model(columnModel).WithContext(ctx).Where("id = ?", columnID).Delete(&entity.Column{}).Error; err != nil {
+	if err = gDB.Model(columnModel).WithContext(ctx).Where("id = ?", columnID).Delete(&ccmanrpc.Column{}).Error; err != nil {
 		return err
 	}
 
@@ -258,9 +258,9 @@ func (g *implGorm) DeleteColumnByID(ctx context.Context, columnID uint32) (err e
 // ------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- UTILS ----------------------------------------------------------
 
-func scanCards(gormDB *gorm.DB, rows *sql.Rows) (cards []*entity.Card, err error) {
+func scanCards(gormDB *gorm.DB, rows *sql.Rows) (cards []*ccmanrpc.Card, err error) {
 	for rows.Next() {
-		var card = new(entity.Card)
+		var card = new(ccmanrpc.Card)
 		if err := gormDB.ScanRows(rows, card); err != nil {
 			return nil, err
 		}
@@ -271,9 +271,9 @@ func scanCards(gormDB *gorm.DB, rows *sql.Rows) (cards []*entity.Card, err error
 	return cards, nil
 }
 
-func scanColumns(gormDB *gorm.DB, rows *sql.Rows) (columns []*entity.Column, err error) {
+func scanColumns(gormDB *gorm.DB, rows *sql.Rows) (columns []*ccmanrpc.Column, err error) {
 	for rows.Next() {
-		var column = new(entity.Column)
+		var column = new(ccmanrpc.Column)
 		if err := gormDB.ScanRows(rows, column); err != nil {
 			return nil, err
 		}

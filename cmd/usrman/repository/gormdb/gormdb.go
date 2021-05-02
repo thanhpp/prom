@@ -8,11 +8,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/thanhpp/prom/cmd/usrman/repository/entity"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormlog "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+
+	"github.com/thanhpp/prom/pkg/usrmanrpc"
 )
 
 // --------------------------------------------------------------------------------------------------------------------------
@@ -23,9 +24,9 @@ type implGorm struct{}
 var (
 	gDB       = &gorm.DB{}
 	gormObj   = new(implGorm)
-	usrModel  = new(entity.User)
-	teamModel = new(entity.Team)
-	prjModel  = new(entity.Project)
+	usrModel  = new(usrmanrpc.User)
+	teamModel = new(usrmanrpc.Team)
+	prjModel  = new(usrmanrpc.Project)
 )
 
 // GetGormDB ...
@@ -91,7 +92,7 @@ func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err 
 	return nil
 }
 
-func (g *implGorm) CreateUser(ctx context.Context, usr *entity.User) (err error) {
+func (g *implGorm) CreateUser(ctx context.Context, usr *usrmanrpc.User) (err error) {
 	if err = gDB.Model(usrModel).WithContext(ctx).Save(usr).Error; err != nil {
 		return err
 	}
@@ -99,8 +100,8 @@ func (g *implGorm) CreateUser(ctx context.Context, usr *entity.User) (err error)
 	return nil
 }
 
-func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *entity.User, err error) {
-	usr = new(entity.User)
+func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *usrmanrpc.User, err error) {
+	usr = new(usrmanrpc.User)
 	if err = gDB.Model(usrModel).WithContext(ctx).Where("id = ?", usrID).Take(usr).Error; err != nil {
 		return nil, err
 	}
@@ -108,8 +109,8 @@ func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *entity.U
 	return usr, nil
 }
 
-func (g *implGorm) GetUserByUsernamePass(ctx context.Context, usrname string, hashpwd string) (usr *entity.User, err error) {
-	usr = new(entity.User)
+func (g *implGorm) GetUserByUsernamePass(ctx context.Context, usrname string, hashpwd string) (usr *usrmanrpc.User, err error) {
+	usr = new(usrmanrpc.User)
 	if err = gDB.Model(usrModel).WithContext(ctx).Where("username LIKE ? AND hash_pass LIKE ?", usrname, hashpwd).Error; err != nil {
 		return nil, err
 	}
@@ -117,7 +118,7 @@ func (g *implGorm) GetUserByUsernamePass(ctx context.Context, usrname string, ha
 	return usr, nil
 }
 
-func (g *implGorm) GetUserByTeamID(ctx context.Context, teamID uint32) (usrs []*entity.User, err error) {
+func (g *implGorm) GetUserByTeamID(ctx context.Context, teamID uint32) (usrs []*usrmanrpc.User, err error) {
 	if err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var usersID []int
 
@@ -143,7 +144,7 @@ func (g *implGorm) GetUserByTeamID(ctx context.Context, teamID uint32) (usrs []*
 	return usrs, nil
 }
 
-func (g *implGorm) UpdateUserByID(ctx context.Context, usrID uint32, usr *entity.User) (err error) {
+func (g *implGorm) UpdateUserByID(ctx context.Context, usrID uint32, usr *usrmanrpc.User) (err error) {
 	if err = gDB.Model(usrModel).WithContext(ctx).Where("id = ?", usrID).Updates(usr).Error; err != nil {
 		return err
 	}
@@ -152,7 +153,7 @@ func (g *implGorm) UpdateUserByID(ctx context.Context, usrID uint32, usr *entity
 }
 
 func (g *implGorm) DeleteUserByID(ctx context.Context, usrID uint32) (err error) {
-	if err = gDB.Model(usrModel).WithContext(ctx).Where("id = ?", usrID).Delete(entity.User{}).Error; err != nil {
+	if err = gDB.Model(usrModel).WithContext(ctx).Where("id = ?", usrID).Delete(usrmanrpc.User{}).Error; err != nil {
 		return err
 	}
 
@@ -161,7 +162,7 @@ func (g *implGorm) DeleteUserByID(ctx context.Context, usrID uint32) (err error)
 
 // TEAM
 
-func (g *implGorm) CreateTeam(ctx context.Context, team *entity.Team) (err error) {
+func (g *implGorm) CreateTeam(ctx context.Context, team *usrmanrpc.Team) (err error) {
 	if err = gDB.Model(teamModel).WithContext(ctx).Save(team).Error; err != nil {
 		return err
 	}
@@ -169,8 +170,8 @@ func (g *implGorm) CreateTeam(ctx context.Context, team *entity.Team) (err error
 	return nil
 }
 
-func (g *implGorm) GetTeamByID(ctx context.Context, teamID uint32) (team *entity.Team, err error) {
-	team = new(entity.Team)
+func (g *implGorm) GetTeamByID(ctx context.Context, teamID uint32) (team *usrmanrpc.Team, err error) {
+	team = new(usrmanrpc.Team)
 	if err = gDB.Model(teamModel).WithContext(ctx).Where("id = ?", teamID).Take(team).Error; err != nil {
 		return nil, err
 	}
@@ -178,7 +179,7 @@ func (g *implGorm) GetTeamByID(ctx context.Context, teamID uint32) (team *entity
 	return team, nil
 }
 
-func (g *implGorm) GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*entity.Team, err error) {
+func (g *implGorm) GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*usrmanrpc.Team, err error) {
 	if err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var teamsID []int
 
@@ -204,7 +205,7 @@ func (g *implGorm) GetTeamsByUserID(ctx context.Context, userID uint32) (teams [
 	return teams, nil
 }
 
-func (g *implGorm) GetTeamsByCreatorID(ctx context.Context, creatorID uint32) (teams []*entity.Team, err error) {
+func (g *implGorm) GetTeamsByCreatorID(ctx context.Context, creatorID uint32) (teams []*usrmanrpc.Team, err error) {
 	rows, err := gDB.Model(teamModel).WithContext(ctx).Where("creator_id = ?", creatorID).Rows()
 	if err != nil {
 		return nil, err
@@ -218,7 +219,7 @@ func (g *implGorm) GetTeamsByCreatorID(ctx context.Context, creatorID uint32) (t
 	return teams, nil
 }
 
-func (g *implGorm) GetTeamByName(ctx context.Context, name string) (teams []*entity.Team, err error) {
+func (g *implGorm) GetTeamByName(ctx context.Context, name string) (teams []*usrmanrpc.Team, err error) {
 	rows, err := gDB.Model(teamModel).WithContext(ctx).Where("name LIKE ?", fmt.Sprintf("%%%s%%", name)).Rows()
 	if err != nil {
 		return nil, err
@@ -232,7 +233,7 @@ func (g *implGorm) GetTeamByName(ctx context.Context, name string) (teams []*ent
 	return teams, nil
 }
 
-func (g *implGorm) UpdateTeamByID(ctx context.Context, teamID uint32, team *entity.Team) (err error) {
+func (g *implGorm) UpdateTeamByID(ctx context.Context, teamID uint32, team *usrmanrpc.Team) (err error) {
 	if err = gDB.Model(teamModel).Where("id = ?", teamID).Updates(team).Error; err != nil {
 		return err
 	}
@@ -261,7 +262,7 @@ func (g *implGorm) RemoveMemberByID(ctx context.Context, teamID uint32, usrID ui
 }
 
 func (g *implGorm) DeleteTeamByID(ctx context.Context, teamID uint32) (err error) {
-	if err = gDB.Model(teamModel).WithContext(ctx).Where("id = ?", teamID).Delete(entity.Team{}).Error; err != nil {
+	if err = gDB.Model(teamModel).WithContext(ctx).Where("id = ?", teamID).Delete(usrmanrpc.Team{}).Error; err != nil {
 		return err
 	}
 
@@ -270,7 +271,7 @@ func (g *implGorm) DeleteTeamByID(ctx context.Context, teamID uint32) (err error
 
 // PROJECT
 
-func (g *implGorm) CreateProject(ctx context.Context, project *entity.Project) (err error) {
+func (g *implGorm) CreateProject(ctx context.Context, project *usrmanrpc.Project) (err error) {
 	if err = gDB.Model(prjModel).WithContext(ctx).Save(project).Error; err != nil {
 		return err
 	}
@@ -278,8 +279,8 @@ func (g *implGorm) CreateProject(ctx context.Context, project *entity.Project) (
 	return nil
 }
 
-func (g *implGorm) GetProjectByID(ctx context.Context, projectID uint32) (project *entity.Project, err error) {
-	project = new(entity.Project)
+func (g *implGorm) GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error) {
+	project = new(usrmanrpc.Project)
 	if err = gDB.Model(prjModel).WithContext(ctx).Where("id = ?", projectID).Take(project).Error; err != nil {
 		return nil, err
 	}
@@ -287,7 +288,7 @@ func (g *implGorm) GetProjectByID(ctx context.Context, projectID uint32) (projec
 	return project, nil
 }
 
-func (g *implGorm) GetProjtectsByTeamID(ctx context.Context, teamID uint32) (projects []*entity.Project, err error) {
+func (g *implGorm) GetProjtectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error) {
 	rows, err := gDB.Model(prjModel).WithContext(ctx).Where("team_id = ?", teamID).Rows()
 	if err != nil {
 		return nil, err
@@ -301,7 +302,7 @@ func (g *implGorm) GetProjtectsByTeamID(ctx context.Context, teamID uint32) (pro
 	return projects, nil
 }
 
-func (g *implGorm) UpdateProjectByID(ctx context.Context, projectID uint32, project *entity.Project) (err error) {
+func (g *implGorm) UpdateProjectByID(ctx context.Context, projectID uint32, project *usrmanrpc.Project) (err error) {
 	if err = gDB.Model(prjModel).WithContext(ctx).Where("id = ?", projectID).Updates(project).Error; err != nil {
 		return err
 	}
@@ -310,7 +311,7 @@ func (g *implGorm) UpdateProjectByID(ctx context.Context, projectID uint32, proj
 }
 
 func (g *implGorm) DeleteProjectByID(ctx context.Context, projectID uint32) (err error) {
-	if err = gDB.Model(prjModel).WithContext(ctx).Where("id = ?", projectID).Delete(entity.Project{}).Error; err != nil {
+	if err = gDB.Model(prjModel).WithContext(ctx).Where("id = ?", projectID).Delete(usrmanrpc.Project{}).Error; err != nil {
 		return err
 	}
 
@@ -320,9 +321,9 @@ func (g *implGorm) DeleteProjectByID(ctx context.Context, projectID uint32) (err
 // ------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- UTIL ----------------------------------------------------------
 
-func scanUsers(gormDB *gorm.DB, rows *sql.Rows) (users []*entity.User, err error) {
+func scanUsers(gormDB *gorm.DB, rows *sql.Rows) (users []*usrmanrpc.User, err error) {
 	for rows.Next() {
-		var user = new(entity.User)
+		var user = new(usrmanrpc.User)
 		if err = gormDB.ScanRows(rows, user); err != nil {
 			return nil, err
 		}
@@ -331,9 +332,9 @@ func scanUsers(gormDB *gorm.DB, rows *sql.Rows) (users []*entity.User, err error
 	return users, nil
 }
 
-func scanTeams(gormDB *gorm.DB, rows *sql.Rows) (teams []*entity.Team, err error) {
+func scanTeams(gormDB *gorm.DB, rows *sql.Rows) (teams []*usrmanrpc.Team, err error) {
 	for rows.Next() {
-		var team = new(entity.Team)
+		var team = new(usrmanrpc.Team)
 		if err = gormDB.ScanRows(rows, team); err != nil {
 			return nil, err
 		}
@@ -342,9 +343,9 @@ func scanTeams(gormDB *gorm.DB, rows *sql.Rows) (teams []*entity.Team, err error
 	return teams, nil
 }
 
-func scanProjects(gormDB *gorm.DB, rows *sql.Rows) (projects []*entity.Project, err error) {
+func scanProjects(gormDB *gorm.DB, rows *sql.Rows) (projects []*usrmanrpc.Project, err error) {
 	for rows.Next() {
-		var project = new(entity.Project)
+		var project = new(usrmanrpc.Project)
 		if err = gormDB.ScanRows(rows, project); err != nil {
 			return nil, err
 		}
