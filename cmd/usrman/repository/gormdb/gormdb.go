@@ -111,7 +111,7 @@ func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *usrmanrp
 
 func (g *implGorm) GetUserByUsernamePass(ctx context.Context, usrname string, hashpwd string) (usr *usrmanrpc.User, err error) {
 	usr = new(usrmanrpc.User)
-	if err = gDB.Model(usrModel).WithContext(ctx).Where("username LIKE ? AND hash_pass LIKE ?", usrname, hashpwd).Error; err != nil {
+	if err = gDB.Model(usrModel).WithContext(ctx).Where("username LIKE ? AND hash_pass LIKE ?", usrname, hashpwd).Take(usr).Error; err != nil {
 		return nil, err
 	}
 
