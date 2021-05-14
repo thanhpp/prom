@@ -20,7 +20,15 @@ type iJWTSrv interface {
 	GetClaimsValidate(tokenStr string) (claims *ClaimsDetail, err error)
 }
 
-var _ iJWTSrv = (*JWTSrv)(nil)
+var iplmJWT = new(JWTSrv)
+
+func Get() iJWTSrv {
+	return iplmJWT
+}
+
+func Set(key string) {
+	iplmJWT.SecretKey = []byte(key)
+}
 
 // -----------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- FUNCTIONS ----------------------------------------------------------

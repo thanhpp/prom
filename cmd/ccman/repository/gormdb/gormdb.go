@@ -3,12 +3,16 @@ package gormdb
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	gormlog "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 
@@ -67,16 +71,7 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 
 // AutoMigrate ...
 func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err error) {
-	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		for i := range models {
-			if err := tx.WithContext(ctx).AutoMigrate(models[i]); err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
+	if err = gDB.WithContext(ctx).AutoMigrate(models...); err != nil {
 		return err
 	}
 
@@ -86,9 +81,56 @@ func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err 
 // ------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- CARD ----------------------------------------------------------
 
+// GetAllFromProjectID
+
+func (g *implGorm) GetAllFromProjectID(ctx context.Context, projectID uint32) (cols []*ccmanrpc.Column, err error) {
+	if err := gDB.WithContext(ctx).Model(columnModel).Preload(clause.Associations).
+		Where("project_id = ?", projectID).Find(&cols).Error; err != nil {
+		return nil, err
+	}
+
+	for i := range cols {
+		index := strings.Split(strings.TrimRight(cols[i].Index, ","), ",")
+		if len(index) != len(cols[i].Cards) {
+			return nil, errors.New("Mismatch index and cards len")
+		}
+
+		for j := range index {
+			for k := range cols[i].Cards {
+				id, err := strconv.Atoi(index[j])
+				if err != nil {
+					return nil, err
+				}
+				if cols[i].Cards[k].ID == uint32(id) {
+					cols[i].Cards = append(cols[i].Cards, cols[i].Cards[k])
+				}
+			}
+		}
+
+		cols[i].Cards = cols[i].Cards[len(cols[i].Cards)/2:]
+	}
+
+	return cols, nil
+}
+
+// CreateCard Const
+const createCardColIndex = "UPDATE \"column\" SET index = ? || ',' || index  WHERE id = ?"
+
 // CreateCard ...
 func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (err error) {
-	if err := gDB.Table("card").WithContext(ctx).Save(card).Error; err != nil {
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.WithContext(ctx).Table("card").WithContext(ctx).Save(card).Error; err != nil {
+			return err
+		}
+
+		if err := tx.WithContext(ctx).Exec(createCardColIndex, strconv.Itoa(int(card.ID)), card.ColumnID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		return err
 	}
 
@@ -164,6 +206,23 @@ func (g *implGorm) GetCardsByColumnID(ctx context.Context, columnID uint32) (car
 	}
 
 	return cards, nil
+}
+
+// MoveCardToCol
+func (g *implGorm) MoveCardToCol(ctx context.Context, cardID uint32, newColID uint32) (err error) {
+	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := moveCardToColTransaction(tx, ctx, cardID, newColID); err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // UpdateCardByID ...
@@ -255,6 +314,44 @@ func (g *implGorm) DeleteColumnByID(ctx context.Context, columnID uint32) (err e
 	return nil
 }
 
+// DeleteColumnByID ...
+func (g *implGorm) DeleteColumnByIDAndMove(ctx context.Context, columnID uint32, newColID uint32) (err error) {
+	if columnID == newColID {
+		return errors.New("Duplicate columnID")
+	}
+
+	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		column := new(ccmanrpc.Column)
+		if err := tx.WithContext(ctx).Model(columnModel).Where("id = ?", columnID).Take(column).Error; err != nil {
+			return err
+		}
+
+		cardIDs := strings.Split(strings.TrimRight(column.Index, ","), ",")
+		for i := range cardIDs {
+			id, err := strconv.Atoi(cardIDs[i])
+			if err != nil {
+				return err
+			}
+			if err := moveCardToColTransaction(tx, ctx, uint32(id), newColID); err != nil {
+				return err
+			}
+		}
+
+		if err = tx.Model(columnModel).WithContext(ctx).Where("id = ?", columnID).Delete(&ccmanrpc.Column{}).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
 // ------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- UTILS ----------------------------------------------------------
 
@@ -282,4 +379,41 @@ func scanColumns(gormDB *gorm.DB, rows *sql.Rows) (columns []*ccmanrpc.Column, e
 	}
 
 	return columns, nil
+}
+
+// moveCardToColTransaction
+const moveCardColIndex = "UPDATE \"column\" SET index = ? || ',' || index  WHERE id = ?"
+
+func moveCardToColTransaction(tx *gorm.DB, ctx context.Context, cardID uint32, newColID uint32) (err error) {
+	card := new(ccmanrpc.Card)
+	if err := tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Take(card).Error; err != nil {
+		return err
+	}
+
+	// remove from old column index
+	column := new(ccmanrpc.Column)
+	if err := tx.Model(columnModel).WithContext(ctx).Where("id = ?", card.ColumnID).Take(column).Error; err != nil {
+		return err
+	}
+
+	column.Index = strings.Replace(column.Index, fmt.Sprintf("%d,", card.ID), "", 1)
+	if len(column.Index) > 0 && column.Index[len(column.Index)] != ',' {
+		column.Index += ","
+	}
+
+	if err := tx.Model(columnModel).WithContext(ctx).Where("id = ?", column.ID).Updates(column).Error; err != nil {
+		return err
+	}
+
+	// add to new column index
+	if err := tx.WithContext(ctx).Exec(moveCardColIndex, strconv.Itoa(int(card.ID)), newColID).Error; err != nil {
+		return err
+	}
+
+	// update card columnID
+	if err := tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Update("column_id", newColID).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

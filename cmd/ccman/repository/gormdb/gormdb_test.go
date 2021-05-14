@@ -26,7 +26,7 @@ func TestAutoMigrate(t *testing.T) {
 	TestInitConnection(t)
 	var (
 		ctx    = context.Background()
-		models = []interface{}{ccmanrpc.Card{}, ccmanrpc.Column{}}
+		models = []interface{}{ccmanrpc.Column{}, ccmanrpc.Card{}}
 	)
 
 	if err := gormdb.GetGormDB().AutoMigrate(ctx, models...); err != nil {
@@ -41,7 +41,7 @@ func TestCreateCard(t *testing.T) {
 	var (
 		ctx  = context.Background()
 		card = &ccmanrpc.Card{
-			Title:       "test",
+			Title:       "test1",
 			Description: "null",
 			ColumnID:    1,
 			AssignedTo:  1,
@@ -54,6 +54,7 @@ func TestCreateCard(t *testing.T) {
 		t.Error(err)
 		return
 	}
+	fmt.Println(card.ID)
 }
 
 func TestGetCardByID(t *testing.T) {
@@ -91,4 +92,70 @@ func TestGetCardByDueDate(t *testing.T) {
 	}
 
 	fmt.Println(cards)
+}
+
+func TestCreateColumn(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx    = context.Background()
+		column = &ccmanrpc.Column{
+			ProjectID: 1,
+			Title:     "test2",
+			Index:     "",
+		}
+	)
+
+	if err := gormdb.GetGormDB().CreateColumn(ctx, column); err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func TestGetAllFromProjectID(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx              = context.Background()
+		projectID uint32 = 1
+	)
+
+	cols, err := gormdb.GetGormDB().GetAllFromProjectID(ctx, projectID)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	for i := range cols {
+		for j := range cols[i].Cards {
+			fmt.Println(cols[i].Cards[j])
+		}
+		fmt.Println()
+	}
+}
+
+func TestMoveCardToCol(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx             = context.Background()
+		cardID   uint32 = 2
+		newColID uint32 = 2
+	)
+
+	if err := gormdb.GetGormDB().MoveCardToCol(ctx, cardID, newColID); err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func TestDeleteColumnByIDAndMove(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx             = context.Background()
+		colID    uint32 = 2
+		newColID uint32 = 1
+	)
+
+	if err := gormdb.GetGormDB().DeleteColumnByIDAndMove(ctx, colID, newColID); err != nil {
+		t.Error(err)
+		return
+	}
 }

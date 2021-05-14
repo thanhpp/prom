@@ -32,6 +32,7 @@ type iDAO interface {
 	GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error)
 	GetProjtectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error)
 	UpdateProjectByID(ctx context.Context, projectID uint32, project *usrmanrpc.Project) (err error)
+	AddColumnsToProject(ctx context.Context, projectID uint32, columnID uint32) (err error)
 	DeleteProjectByID(ctx context.Context, projectID uint32) (err error)
 }
 

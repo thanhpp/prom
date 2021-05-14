@@ -423,7 +423,7 @@ paths:
               schema:
                 $ref:  "#/components/schemas/DefaultErrorResp"
           
-  /users?username={username}:
+  /user?username={username}:
     description: "query username"
     parameters:
       - in: query

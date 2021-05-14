@@ -19,7 +19,7 @@ option (gogoproto.unmarshaler_all) = true;
 
 // card
 message Card {
-    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey\""];
+    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
     string Title = 2 [(gogoproto.jsontag) = "title", (gogoproto.moretags) = "gorm:\"Column:title; Type:text\""];
     string Description = 3 [(gogoproto.jsontag) = "description", (gogoproto.moretags) = "gorm:\"Column:description; Type:text\""];
     uint32 ColumnID = 4 [(gogoproto.jsontag) = "column_id", (gogoproto.moretags) = "gorm:\"Column:column_id; Type:bigint\""];
@@ -36,9 +36,10 @@ message Column {
     uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
     string Title = 2 [(gogoproto.jsontag) = "title", (gogoproto.moretags) = "gorm:\"Column:title; Type:text\""];
     uint32 ProjectID = 3 [(gogoproto.jsontag) = "project_id", (gogoproto.moretags) = "gorm:\"Column:project_id; Type:bigint\""];
-    repeated Card Cards = 4 [(gogoproto.jsontag) = "cards", (gogoproto.moretags) = "gorm:\"foreignKey:ColumnID; references:ID\""];
+    repeated Card Cards = 4 [(gogoproto.jsontag) = "cards", (gogoproto.moretags) = "gorm:\"foreignKey:ColumnID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE\""];
     uint32 CreatedBy  = 5 [(gogoproto.jsontag) = "created_by", (gogoproto.moretags) = "gorm:\"Column:created_by; Type:bigint\""];
-    timerpc.Time CreatedAt = 6 [(gogoproto.jsontag) = "created_at", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
-    timerpc.Time UpdatedAt = 7 [(gogoproto.jsontag) = "updated_at", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
-    timerpc.Time DeletedAt = 8 [(gogoproto.jsontag) = "deleted_at", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""]; 
+    string Index = 6 [(gogoproto.jsontag) = "index", (gogoproto.moretags) = "gorm:\"Column:index; Type:text\""];
+    timerpc.Time CreatedAt = 7 [(gogoproto.jsontag) = "createdAt", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
+    timerpc.Time UpdatedAt = 8 [(gogoproto.jsontag) = "updatedAt", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
+    timerpc.Time DeletedAt = 9 [(gogoproto.jsontag) = "deletedAt", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""]; 
 }

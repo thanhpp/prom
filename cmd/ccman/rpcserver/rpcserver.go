@@ -19,6 +19,7 @@ import (
 type ccManSv struct{}
 
 type iCCManSv interface {
+	GetAllFromProjectID(ctx context.Context, req *ccmanrpc.GetAllFromProjectIDReq) (resp *ccmanrpc.GetAllFromProjectIDResp, err error)
 	CreateCard(ctx context.Context, req *ccmanrpc.CreateCardReq) (resp *ccmanrpc.CreateCardResp, err error)
 	GetCardByID(ctx context.Context, req *ccmanrpc.GetCardByIDReq) (resp *ccmanrpc.GetCardByIDResp, err error)
 	GetCardsByDueDate(ctx context.Context, req *ccmanrpc.GetCardsByDueDateReq) (resp *ccmanrpc.GetCardsByDueDateResp, err error)
@@ -39,6 +40,17 @@ var _ iCCManSv = (*ccManSv)(nil) //compile check
 
 // -----------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- IMPLEMENT ----------------------------------------------------------
+
+// GET ALL
+
+func (c *ccManSv) GetAllFromProjectID(ctx context.Context, req *ccmanrpc.GetAllFromProjectIDReq) (resp *ccmanrpc.GetAllFromProjectIDResp, err error) {
+	if req == nil {
+		logger.Get().Errorf("Create card error: %v", errconst.RPCEmptyRequestErr)
+		return nil, status.Error(codes.Unavailable, "Empty request")
+	}
+
+	return resp, nil
+}
 
 // CARD
 

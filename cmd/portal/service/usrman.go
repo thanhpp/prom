@@ -40,6 +40,7 @@ type iUsrManSrv interface {
 	UpdatePassword(ctx context.Context, userID uint32, password string) (err error)
 
 	// team
+	CreateNewTeam(ctx context.Context, team *usrmanrpc.Team) (err error)
 	GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*usrmanrpc.Team, err error)
 	GetTeamMembersByID(ctx context.Context, teamID uint32) (users []*usrmanrpc.User, err error)
 	AddMemberByID(ctx context.Context, teamID uint32, userID uint32) (err error)
@@ -49,6 +50,8 @@ type iUsrManSrv interface {
 	GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error)
 	NewProject(ctx context.Context, project *usrmanrpc.Project) (err error)
 	UpdateProject(ctx context.Context, project *usrmanrpc.Project) (err error)
+	ReorderProjectColumns(ctx context.Context, projectID uint32, columnsIdx string) (err error)
+	AddColumnsToProject(ctx context.Context, projectID uint32, columnID uint32) (err error)
 	DeleteProjectByID(ctx context.Context, projectID uint32) (err error)
 }
 
@@ -155,6 +158,23 @@ func (uS *usrManSrv) UpdatePassword(ctx context.Context, userID uint32, password
 	}
 
 	return
+}
+
+func (uS *usrManSrv) CreateNewTeam(ctx context.Context, team *usrmanrpc.Team) (err error) {
+	if ctx.Err() != nil {
+		return uS.error(ctx.Err())
+	}
+
+	in := &usrmanrpc.CreateTeamReq{
+		Team: team,
+	}
+
+	_, err = uS.client().CreateTeam(ctx, in)
+	if err != nil {
+		return uS.error(err)
+	}
+
+	return nil
 }
 
 func (uS *usrManSrv) GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*usrmanrpc.Team, err error) {
@@ -275,6 +295,16 @@ func (uS *usrManSrv) UpdateProject(ctx context.Context, project *usrmanrpc.Proje
 	if err != nil {
 		return uS.error(err)
 	}
+
+	return nil
+}
+
+func (uS *usrManSrv) ReorderProjectColumns(ctx context.Context, projectID uint32, columnsIdx string) (err error) {
+
+	return nil
+}
+
+func (uS *usrManSrv) AddColumnsToProject(ctx context.Context, projectID uint32, columnID uint32) (err error) {
 
 	return nil
 }

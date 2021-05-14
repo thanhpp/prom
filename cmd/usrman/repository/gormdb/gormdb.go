@@ -76,16 +76,7 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 
 // AutoMigrate ...
 func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err error) {
-	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		for i := range models {
-			if err := tx.WithContext(ctx).AutoMigrate(models[i]); err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
+	if err := gDB.WithContext(ctx).AutoMigrate(models...); err != nil {
 		return err
 	}
 
@@ -307,6 +298,16 @@ func (g *implGorm) UpdateProjectByID(ctx context.Context, projectID uint32, proj
 		return err
 	}
 
+	return nil
+}
+
+// const
+const addColumnToLastPrjIdx string = "UPDATE \"column\" SET index = index || ',' || ?  WHERE id = ?"
+
+func (g *implGorm) AddColumnsToProject(ctx context.Context, projectID uint32, columnID uint32) (err error) {
+	if err := gDB.WithContext(ctx).Model(prjModel).Exec(addColumnToLastPrjIdx, columnID, projectID).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
