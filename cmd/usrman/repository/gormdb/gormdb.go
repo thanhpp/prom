@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	"gorm.io/gorm/clause"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormlog "gorm.io/gorm/logger"
@@ -33,6 +35,15 @@ var (
 func GetGormDB() *implGorm {
 	return gormObj
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- QUERY CONST ----------------------------------------------------------
+
+const (
+	stmtAddMemberByID     = "INSERT INTO team_user (team_id, user_id) VALUES (?, ?)"
+	stmtRemoveMemberByID  = "DELETE FROM team_user WHERE team_id = ? AND user_id = ?"
+	addColumnToLastPrjIdx = "UPDATE \"column\" SET index = index || ',' || ?  WHERE id = ?"
+)
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- IMPLEMENT DAO ----------------------------------------------------------
@@ -168,16 +179,24 @@ func (g *implGorm) DeleteUserByID(ctx context.Context, usrID uint32) (err error)
 // TEAM
 
 func (g *implGorm) CreateTeam(ctx context.Context, team *usrmanrpc.Team) (err error) {
-	if err = gDB.Model(teamModel).WithContext(ctx).Save(team).Error; err != nil {
-		return err
-	}
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		if err = tx.Model(teamModel).WithContext(ctx).Save(team).Error; err != nil {
+			return err
+		}
+
+		if err = tx.WithContext(ctx).Exec(stmtAddMemberByID, team.ID, team.CreatorID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 
 	return nil
 }
 
 func (g *implGorm) GetTeamByID(ctx context.Context, teamID uint32) (team *usrmanrpc.Team, err error) {
 	team = new(usrmanrpc.Team)
-	if err = gDB.Model(teamModel).WithContext(ctx).Where("id = ?", teamID).Take(team).Error; err != nil {
+	if err = gDB.Model(teamModel).WithContext(ctx).Preload(clause.Associations).Where("id = ?", teamID).Take(team).Error; err != nil {
 		return nil, err
 	}
 
@@ -246,8 +265,6 @@ func (g *implGorm) UpdateTeamByID(ctx context.Context, teamID uint32, team *usrm
 	return nil
 }
 
-const stmtAddMemberByID = "INSERT INTO team_user (team_id, user_id) VALUES (?, ?)"
-
 func (g *implGorm) AddMemberByID(ctx context.Context, teamID uint32, usrID uint32) (err error) {
 	if err = gDB.WithContext(ctx).Exec(stmtAddMemberByID, teamID, usrID).Error; err != nil {
 		return err
@@ -255,8 +272,6 @@ func (g *implGorm) AddMemberByID(ctx context.Context, teamID uint32, usrID uint3
 
 	return nil
 }
-
-const stmtRemoveMemberByID = "DELETE FROM team_user WHERE team_id = ? AND user_id = ?"
 
 func (g *implGorm) RemoveMemberByID(ctx context.Context, teamID uint32, usrID uint32) (err error) {
 	if err = gDB.WithContext(ctx).Exec(stmtRemoveMemberByID, teamID, usrID).Error; err != nil {
@@ -315,9 +330,6 @@ func (g *implGorm) UpdateProjectByID(ctx context.Context, projectID uint32, proj
 	return nil
 }
 
-// const
-const addColumnToLastPrjIdx string = "UPDATE \"column\" SET index = index || ',' || ?  WHERE id = ?"
-
 func (g *implGorm) AddColumnsToProject(ctx context.Context, projectID uint32, columnID uint32) (err error) {
 	if err := gDB.WithContext(ctx).Model(prjModel).Exec(addColumnToLastPrjIdx, columnID, projectID).Error; err != nil {
 		return err
@@ -342,6 +354,7 @@ func scanUsers(gormDB *gorm.DB, rows *sql.Rows) (users []*usrmanrpc.User, err er
 		if err = gormDB.ScanRows(rows, user); err != nil {
 			return nil, err
 		}
+		user.HashPass = "" // prevent expose hashpass
 		users = append(users, user)
 	}
 	return users, nil

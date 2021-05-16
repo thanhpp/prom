@@ -45,10 +45,12 @@ type iUsrManSrv interface {
 
 	// team
 	CreateNewTeam(ctx context.Context, team *usrmanrpc.Team) (err error)
+	GetTeamByID(ctx context.Context, teamID uint32) (team *usrmanrpc.Team, err error)
 	GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*usrmanrpc.Team, err error)
 	GetTeamMembersByID(ctx context.Context, teamID uint32) (users []*usrmanrpc.User, err error)
 	AddMemberByID(ctx context.Context, teamID uint32, userID uint32) (err error)
 	RemoveMemberByID(ctx context.Context, teamID uint32, userID uint32) (err error)
+	DeleteTeamByID(ctx context.Context, teamID uint32) (err error)
 
 	// project
 	GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error)
@@ -182,6 +184,9 @@ func (uS *usrManSrv) UpdatePassword(ctx context.Context, userID uint32, password
 	return
 }
 
+// ------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- TEAM ----------------------------------------------------------
+
 func (uS *usrManSrv) CreateNewTeam(ctx context.Context, team *usrmanrpc.Team) (err error) {
 	if ctx.Err() != nil {
 		return uS.error(ctx.Err())
@@ -197,6 +202,23 @@ func (uS *usrManSrv) CreateNewTeam(ctx context.Context, team *usrmanrpc.Team) (e
 	}
 
 	return nil
+}
+
+func (uS *usrManSrv) GetTeamByID(ctx context.Context, teamID uint32) (team *usrmanrpc.Team, err error) {
+	if ctx.Err() != nil {
+		return nil, uS.error(ctx.Err())
+	}
+
+	in := &usrmanrpc.GetTeamByIDReq{
+		TeamID: teamID,
+	}
+
+	resp, err := uS.client().GetTeamByID(ctx, in)
+	if err != nil {
+		return nil, uS.error(err)
+	}
+
+	return resp.Team, nil
 }
 
 func (uS *usrManSrv) GetTeamsByUserID(ctx context.Context, userID uint32) (teams []*usrmanrpc.Team, err error) {
@@ -268,6 +290,26 @@ func (uS *usrManSrv) RemoveMemberByID(ctx context.Context, teamID uint32, userID
 
 	return
 }
+
+func (uS *usrManSrv) DeleteTeamByID(ctx context.Context, teamID uint32) (err error) {
+	if ctx.Err() != nil {
+		return uS.error(ctx.Err())
+	}
+
+	in := &usrmanrpc.DeleteTeamByIDReq{
+		TeamID: teamID,
+	}
+
+	_, err = uS.client().DeleteTeamByID(ctx, in)
+	if err != nil {
+		return uS.error(err)
+	}
+
+	return
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- PROJECT ----------------------------------------------------------
 
 func (uS *usrManSrv) GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error) {
 	if ctx.Err() != nil {

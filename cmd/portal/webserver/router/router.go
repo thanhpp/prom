@@ -57,15 +57,17 @@ func NewRouter() (routers *gin.Engine) {
 	}
 
 	// JWT from here
+	routers.Use(authMw.ValidateToken())
+	teamCtrl := new(controller.TeamCtrl)
 	teams := routers.Group("/teams")
 	{
-		teams.GET("")
-		teams.POST("")
+		teams.GET("", teamCtrl.GetAllTeamByUserID)
+		teams.POST("", teamCtrl.CreateNewTeam)
 		teamsID := teams.Group("/:teamID")
 		{
-			teamsID.GET("/:teamID")
-			teamsID.PUT("/:teamID")
-			teamsID.DELETE("/:teamID")
+			teamsID.GET("", teamCtrl.GetTeamByID)
+			teamsID.PUT("", teamCtrl.EditMember)
+			teamsID.DELETE("", teamCtrl.DeleteTeam)
 
 			projects := teamsID.Group("/projects")
 			{
