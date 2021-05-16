@@ -1,0 +1,917 @@
+openapi: '3.0.2'
+info:
+  title: Portal api
+  version: 'v1.0.0'
+servers:
+  - url: localhost
+
+components:
+  schemas:
+    DefaultErrorResp:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+
+    LoginReq:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginRespOK:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+          properties:
+            token:
+              type: string
+            refreshToken:
+              type: string
+
+    CreateUserReq:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    QueryUsernameResp:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+          properties:
+            users:
+              type: array
+              items:
+                $ref:  "#/components/schemas/userObject"
+
+    UpdateUserReq:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    
+    GetTeamsRespOK:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+          properties:
+            teams:
+              type: array
+              items:
+                $ref:  "#/components/schemas/teamShortObject"
+
+    CreateNewTeamReq:
+      type: object
+      properties:
+        teamName:
+          type: string
+
+    GetTeamDetailsResp:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+          properties:
+            team:
+              $ref:  "#/components/schemas/teamFullObject"
+
+    GetProjectsResp:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+          properties:
+            teams:
+              type: array
+              items:
+                $ref:  "#/components/schemas/projectShortObject"
+
+    CreateNewProjectReq:
+      $ref:  "#/components/schemas/projectShortObject"
+
+    GetProjectDetailResp:
+      type: object
+      properties:
+        error:
+          $ref:  "#/components/schemas/errorObject"
+        data:
+          type: object
+          properties:
+            project:
+                $ref:  "#/components/schemas/projectFullObject"
+
+    CreateNewColumnReq:
+      type: object
+      properties:
+        columnName:
+          type: string
+
+    UpdateColumnIndexReq:
+      type: object
+      properties:
+        columnIndex:
+          type: array
+          items:
+            type: integer
+
+    DeleteColumnReq:
+      type: object
+      description: if moveToColumnID == -1, then delete all cards
+      properties:
+        columnID:
+          type: integer
+        moveToColumnID:
+          type: integer
+
+    CreateNewCardReq:
+      type: object
+      properties:
+        columnID:
+          type: integer
+        card:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            assignedTo:
+              type: integer
+            duedate:
+              type: integer
+
+    UpdateCardInfoReq:
+      type: object
+      description: "if you want to move card to another column, only specify card.ID & columnID"
+      properties:
+        card:
+          type: object
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            description:
+              type: string
+            assignedTo:
+              type: integer
+            duedate:
+              type: integer
+        columnID:
+          type: integer
+
+    UpdateCardIndexReq:
+      type: object
+      description: "Update card index"
+      properties:
+        cardIndex:
+          type: array
+          items:
+            type: integer
+
+    errorObject:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+  
+    teamShortObject:
+      type: object
+      properties:
+        teamID:
+          type: integer
+        name: 
+          type: integer
+        membersCount:
+          type: integer
+
+    teamFullObject:
+      type: object
+      properties:
+        teamID:
+          type: integer
+        teamName:
+          type: string
+        members:
+          type: array
+          items:
+            $ref:  "#/components/schemas/userObject"
+
+    userObject:
+      type: object
+      properties:
+        userID:
+          type: integer
+        username: 
+          type: string
+
+    projectShortObject:
+      type: object
+      properties:
+        projectID:
+          type: string
+        projectName:
+          type: string
+
+    projectFullObject:
+      type: object
+      properties:
+        projectID:
+          type: integer
+        projectName:
+          type: string
+        columns:
+          type: array
+          items:
+            $ref:  "#/components/schemas/columnObject"
+
+    columnObject:
+      type: object
+      properties:
+        columnID:
+          type: integer
+        title:
+          type: string
+        cards:
+          type: array
+          items:
+            $ref:  "#/components/schemas/cardObject"
+
+    cardObject:
+      type: object
+      properties:
+        cardID:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        assignedTo:
+          $ref: "#/components/schemas/userObject"
+        createdBy:
+          $ref: "#/components/schemas/userObject"
+        dueDate:
+          type: integer
+        updatedAt:
+          type: integer
+        createdAt:
+          type: integer
+
+  responses:
+    Default401Resp:
+      description: 'Unauthorized'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultErrorResp"
+
+    Default500Resp:
+      description: 'Internal server error'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultErrorResp"
+
+  parameters:
+    teamID:
+      name: teamID
+      in: path
+      required: true
+      description: "team ID"
+      schema:
+        type: integer
+
+
+
+  securitySchemes:
+    JWTToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /login:
+    post:
+      description: "user login"
+      requestBody:
+        required: true
+        content:
+          json:
+            schema: 
+              $ref: "#/components/schemas/LoginReq"
+      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/LoginRespOK"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+  /logout:
+    get:
+      description: "User logout"
+      security:
+        - JWTToken: []
+      responses:
+        '200':
+          description: "Logout OK"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+  /user:
+    post:
+      description: "create new user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/CreateUserReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    patch:
+      description: "Update user info"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/UpdateUserReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+          
+  /user?username={username}:
+    description: "query username"
+    parameters:
+      - in: query
+        name: username
+        required: true
+        schema:
+          type: string
+    
+    get:
+      description: "Get all usernames contain query part"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/QueryUsernameResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+  /teams:
+    get:
+      description: "Show all teams user belong"
+      security:
+        - JWTToken: []
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTeamsRespOK"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    post:
+      description: "Create new team"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/CreateNewTeamReq"
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+      
+  /teams/{teamID}:
+    parameters:
+      - in: path
+        name: teamID
+        required: true
+        description: "team ID"
+        schema:
+          type: integer
+    
+    get:
+      description: "Show team details"
+      security:
+        - JWTToken: []
+      responses:
+        '200':
+          description: "OK"  
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/GetTeamDetailsResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    put:
+      description: "Add/remove member based on op in req body"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                op:
+                  type: string
+                  default: "add/remove"
+
+                memberID:
+                  type: integer
+      responses:
+        '200':
+          description: "OK"  
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    delete:
+      description: "delete team"
+      security:
+        - JWTToken: []
+      responses:
+        '200':
+          description: "OK"  
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+  /teams/{teamID}/projects:
+    parameters:
+      - in: path
+        name: teamID
+        required: true
+        description: "team ID"
+        schema:
+          type: integer
+
+    get:
+      description: "Get all projects"
+      security:
+        - JWTToken: []
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/GetProjectsResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    post:
+      description: "Create new project"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNewProjectReq"
+          
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        
+  /teams/{teamID}/projects/{projectID}:
+    parameters:
+      - in: path
+        name: teamID
+        required: true
+        description: "team ID"
+        schema:
+          type: integer
+      - in: path
+        name: projectID
+        required: true
+        description: "project ID"
+        schema:
+          type: integer
+
+    get:
+      description: "Get project details"
+      security:
+        - JWTToken: []
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/GetProjectDetailResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+  /teams/{teamID}/projects/{projectID}/columns:
+    parameters:
+      - in: path
+        name: teamID
+        required: true
+        description: "team ID"
+        schema:
+          type: integer
+      - in: path
+        name: projectID
+        required: true
+        description: "project ID"
+        schema:
+          type: integer
+
+    post:
+      description: "Create new column"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/CreateNewColumnReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    patch:
+      description: "Update column index"
+      security:
+        - JWTToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/UpdateColumnIndexReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    delete:
+      description: "Delete column, if moved to index is specified then move all card to column"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/DeleteColumnReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+  /teams/{teamID}/projects/{projectID}/cards:
+    parameters:
+      - in: path
+        name: teamID
+        required: true
+        description: "team ID"
+        schema:
+          type: integer
+      - in: path
+        name: projectID
+        required: true
+        description: "project ID"
+        schema:
+          type: integer
+
+    post:
+      description: "Create new card"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/CreateNewCardReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    put:
+      description: "Update card info"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/UpdateCardInfoReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+
+    patch:
+      description: "Update card index in 1 column"
+      security:
+        - JWTToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/UpdateCardIndexReq"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+        '500':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/DefaultErrorResp"
+

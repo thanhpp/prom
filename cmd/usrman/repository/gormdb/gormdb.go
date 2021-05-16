@@ -76,16 +76,7 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 
 // AutoMigrate ...
 func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err error) {
-	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		for i := range models {
-			if err := tx.WithContext(ctx).AutoMigrate(models[i]); err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
+	if err := gDB.WithContext(ctx).AutoMigrate(models...); err != nil {
 		return err
 	}
 
@@ -100,6 +91,20 @@ func (g *implGorm) CreateUser(ctx context.Context, usr *usrmanrpc.User) (err err
 	return nil
 }
 
+func (g *implGorm) GetUsersByPattern(ctx context.Context, pattern string) (users []*usrmanrpc.User, err error) {
+	rows, err := gDB.Model(usrModel).WithContext(ctx).Where(fmt.Sprintf("username LIKE '%%%s%%'", pattern)).Rows()
+	if err != nil {
+		return nil, err
+	}
+
+	users, err = scanUsers(gDB, rows)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
 func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *usrmanrpc.User, err error) {
 	usr = new(usrmanrpc.User)
 	if err = gDB.Model(usrModel).WithContext(ctx).Where("id = ?", usrID).Take(usr).Error; err != nil {
@@ -111,7 +116,7 @@ func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *usrmanrp
 
 func (g *implGorm) GetUserByUsernamePass(ctx context.Context, usrname string, hashpwd string) (usr *usrmanrpc.User, err error) {
 	usr = new(usrmanrpc.User)
-	if err = gDB.Model(usrModel).WithContext(ctx).Where("username LIKE ? AND hash_pass LIKE ?", usrname, hashpwd).Error; err != nil {
+	if err = gDB.Model(usrModel).WithContext(ctx).Where("username LIKE ? AND hash_pass LIKE ?", usrname, hashpwd).Take(usr).Error; err != nil {
 		return nil, err
 	}
 
@@ -307,6 +312,16 @@ func (g *implGorm) UpdateProjectByID(ctx context.Context, projectID uint32, proj
 		return err
 	}
 
+	return nil
+}
+
+// const
+const addColumnToLastPrjIdx string = "UPDATE \"column\" SET index = index || ',' || ?  WHERE id = ?"
+
+func (g *implGorm) AddColumnsToProject(ctx context.Context, projectID uint32, columnID uint32) (err error) {
+	if err := gDB.WithContext(ctx).Model(prjModel).Exec(addColumnToLastPrjIdx, columnID, projectID).Error; err != nil {
+		return err
+	}
 	return nil
 }
 

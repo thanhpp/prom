@@ -4,6 +4,7 @@ package configs
 import "fmt"
 
 type GRPCConfig struct {
+	Name       string `mapstructure:"name"`
 	PublicHost string `mapstructure:"publichost"`
 	Port       string `mapstructure:"port"`
 	MaxStream  int    `mapstructure:"maxconnections"`

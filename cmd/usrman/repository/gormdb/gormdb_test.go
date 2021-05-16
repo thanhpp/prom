@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/thanhpp/prom/cmd/usrman/repository/entity"
 	"github.com/thanhpp/prom/cmd/usrman/repository/gormdb"
+	"github.com/thanhpp/prom/pkg/usrmanrpc"
 )
 
 func TestInitConnection(t *testing.T) {
@@ -24,7 +24,7 @@ func TestAutoMigrate(t *testing.T) {
 	TestInitConnection(t)
 	var (
 		ctx    = context.Background()
-		models = []interface{}{entity.User{}, entity.Project{}, entity.Team{}}
+		models = []interface{}{usrmanrpc.User{}, usrmanrpc.Project{}, usrmanrpc.Team{}}
 	)
 
 	if err := gormdb.GetGormDB().AutoMigrate(ctx, models...); err != nil {
@@ -38,7 +38,7 @@ func TestCreateUser(t *testing.T) {
 
 	var (
 		ctx  = context.Background()
-		user = &entity.User{
+		user = &usrmanrpc.User{
 			Username: "testusername3",
 			HashPass: "testpass",
 		}
@@ -56,7 +56,7 @@ func TestCreateTeam(t *testing.T) {
 	TestInitConnection(t)
 	var (
 		ctx  = context.Background()
-		team = &entity.Team{
+		team = &usrmanrpc.Team{
 			Name: "testteam",
 		}
 	)
@@ -123,8 +123,24 @@ func TestRemoveMemberByID(t *testing.T) {
 		userID uint32 = 4
 	)
 
-	if err := gormdb.GetGormDB().RemoveMemberByID(ctx, teamID, userID ); err != nil {
+	if err := gormdb.GetGormDB().RemoveMemberByID(ctx, teamID, userID); err != nil {
 		t.Error(err)
 		return
 	}
+}
+
+func TestGetUsersByPattern(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx     = context.Background()
+		pattern = "test"
+	)
+
+	users, err := gormdb.GetGormDB().GetUsersByPattern(ctx, pattern)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(users)
 }

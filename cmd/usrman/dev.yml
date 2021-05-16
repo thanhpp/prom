@@ -11,6 +11,12 @@ log:
   color: true
 
 grpc:
+  name: "usermanager"
   publichost: "0.0.0.0"
   port: "8090"
   maxconnections: 100
+
+etcd:
+  endpoints:
+    - "127.0.0.1:2379"
+  timeout: 10

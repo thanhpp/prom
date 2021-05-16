@@ -19,6 +19,8 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 
 service CCManager {
+    rpc GetAllFromProjectID(GetAllFromProjectIDReq) returns (GetAllFromProjectIDResp);
+
     rpc CreateCard (CreateCardReq) returns (CreateCardResp);
     rpc GetCardByID (GetCardByIDReq) returns (GetCardByIDResp);
     rpc GetCardsByDueDate (GetCardsByDueDateReq) returns (GetCardsByDueDateResp);
@@ -37,6 +39,16 @@ service CCManager {
 }
 
 // CARD
+
+message GetAllFromProjectIDReq {
+    uint32 ProjectID = 1;
+}
+
+message GetAllFromProjectIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Column Columns = 3;
+}
 
 message CreateCardReq {
     Card CreateCard = 1;
