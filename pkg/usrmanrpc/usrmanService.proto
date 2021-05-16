@@ -20,6 +20,7 @@ option (gogoproto.unmarshaler_all) = true;
 service UsrManSrv {
     rpc GetUserByID (GetUserByIDReq) returns (GetUserByIDResp);
     rpc CreateUser (CreateUserReq) returns (CreateUserResp);
+    rpc GetUserByPattern (GetUserByPatternReq) returns (GetUserByPatternResp);
     rpc GetUserByUsernamePass (GetUserByUsernamePassReq) returns (GetUserByUsernamePassResp);
     rpc GetUserByTeamID (GetUserByTeamIDReq) returns (GetUserByTeamIDResp);
     rpc UpdateUserByID (UpdateUserByIDReq) returns (UpdateUserByIDResp);
@@ -57,6 +58,16 @@ message CreateUserReq {
 message CreateUserResp {
     int32 Code = 1;
     string Message = 2;
+}
+
+message GetUserByPatternReq {
+    string Pattern = 1;
+}
+
+message GetUserByPatternResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated User Users = 3;
 }
 
 message GetUserByUsernamePassReq {

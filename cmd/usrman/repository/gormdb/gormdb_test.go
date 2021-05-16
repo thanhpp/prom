@@ -128,3 +128,19 @@ func TestRemoveMemberByID(t *testing.T) {
 		return
 	}
 }
+
+func TestGetUsersByPattern(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx     = context.Background()
+		pattern = "test"
+	)
+
+	users, err := gormdb.GetGormDB().GetUsersByPattern(ctx, pattern)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(users)
+}

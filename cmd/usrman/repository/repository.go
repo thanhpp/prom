@@ -12,6 +12,7 @@ type iDAO interface {
 	AutoMigrate(ctx context.Context, models ...interface{}) (err error)
 
 	CreateUser(ctx context.Context, usr *usrmanrpc.User) (err error)
+	GetUsersByPattern(ctx context.Context, pattern string) (users []*usrmanrpc.User, err error)
 	GetUserByID(ctx context.Context, usrID uint32) (usr *usrmanrpc.User, err error)
 	GetUserByUsernamePass(ctx context.Context, usrname string, hashpwd string) (usr *usrmanrpc.User, err error)
 	GetUserByTeamID(ctx context.Context, teamID uint32) (usrs []*usrmanrpc.User, err error)

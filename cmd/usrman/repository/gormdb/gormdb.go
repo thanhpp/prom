@@ -91,6 +91,20 @@ func (g *implGorm) CreateUser(ctx context.Context, usr *usrmanrpc.User) (err err
 	return nil
 }
 
+func (g *implGorm) GetUsersByPattern(ctx context.Context, pattern string) (users []*usrmanrpc.User, err error) {
+	rows, err := gDB.Model(usrModel).WithContext(ctx).Where(fmt.Sprintf("username LIKE '%%%s%%'", pattern)).Rows()
+	if err != nil {
+		return nil, err
+	}
+
+	users, err = scanUsers(gDB, rows)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
 func (g *implGorm) GetUserByID(ctx context.Context, usrID uint32) (usr *usrmanrpc.User, err error) {
 	usr = new(usrmanrpc.User)
 	if err = gDB.Model(usrModel).WithContext(ctx).Where("id = ?", usrID).Take(usr).Error; err != nil {

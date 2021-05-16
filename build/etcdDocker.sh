@@ -6,6 +6,7 @@ ETCDPORT="2379"
 rm -rf /tmp/etcd-data.tmp && mkdir -p /tmp/etcd-data.tmp && \
     docker rmi gcr.io/etcd-development/etcd:v3.2.32 || true && \
     docker run \
+    -d \
     -p $ETCDPORT:$ETCDPORT \
     -p 2380:2380 \
     --mount type=bind,source=/tmp/etcd-data.tmp,destination=/etcd-data \

@@ -4,7 +4,10 @@ import (
 	"context"
 	"time"
 
-	clientv3 "go.etcd.io/etcd/client/v3"
+	"google.golang.org/grpc/naming"
+
+	clientv3 "github.com/coreos/etcd/clientv3"
+	etcdnaming "go.etcd.io/etcd/clientv3/naming"
 )
 
 type ETCDClient struct {
@@ -36,6 +39,15 @@ func Get() *ETCDClient {
 	return ecli
 }
 
+func (ec *ETCDClient) AddEndpoints(ctx context.Context, service string, address string) (err error) {
+	r := &etcdnaming.GRPCResolver{Client: ec.client}
+	if err := r.Update(ctx, service, naming.Update{Op: naming.Add, Addr: address}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (ec *ETCDClient) SaveKeyValue(ctx context.Context, key string, val string) (err error) {
 	_, err = ec.client.Put(ctx, key, val)
 	if err != nil {
@@ -64,4 +76,8 @@ func (ec *ETCDClient) Close() (err error) {
 	}
 
 	return nil
+}
+
+func (ec *ETCDClient) Resolver() *etcdnaming.GRPCResolver {
+	return &etcdnaming.GRPCResolver{Client: ec.client}
 }

@@ -16,6 +16,37 @@ type usrManSrv struct{}
 // ------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- USER ----------------------------------------------------------
 
+func (u *usrManSrv) CreateUser(ctx context.Context, req *usrmanrpc.CreateUserReq) (resp *usrmanrpc.CreateUserResp, err error) {
+	if req == nil {
+		logger.Get().Errorf("CreateUser error: %v", errconst.RPCEmptyRequestErr)
+		return nil, status.Error(codes.Unavailable, "Empty request")
+	}
+
+	if err = repository.GetDAO().CreateUser(ctx, req.User); err != nil {
+		logger.Get().Errorf("CreateUser error: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("CreateUser OK")
+	return &usrmanrpc.CreateUserResp{Code: errconst.RPCSuccessCode}, nil
+}
+
+func (u *usrManSrv) GetUserByPattern(ctx context.Context, req *usrmanrpc.GetUserByPatternReq) (resp *usrmanrpc.GetUserByPatternResp, err error) {
+	if req == nil {
+		logger.Get().Errorf("GetUserByPattern error: %v", errconst.RPCEmptyRequestErr)
+		return nil, status.Error(codes.Unavailable, "Empty request")
+	}
+
+	users, err := repository.GetDAO().GetUsersByPattern(ctx, req.Pattern)
+	if err != nil {
+		logger.Get().Errorf("GetUserByPattern error: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("GetUserByPattern OK")
+	return &usrmanrpc.GetUserByPatternResp{Code: errconst.RPCSuccessCode, Users: users}, nil
+}
+
 func (u *usrManSrv) GetUserByID(ctx context.Context, req *usrmanrpc.GetUserByIDReq) (resp *usrmanrpc.GetUserByIDResp, err error) {
 	if req == nil {
 		logger.Get().Errorf("GetUserByID error: %v", errconst.RPCEmptyRequestErr)
@@ -30,21 +61,6 @@ func (u *usrManSrv) GetUserByID(ctx context.Context, req *usrmanrpc.GetUserByIDR
 
 	logger.Get().Info("GetUserByID OK")
 	return &usrmanrpc.GetUserByIDResp{Code: errconst.RPCSuccessCode, User: user}, nil
-}
-
-func (u *usrManSrv) CreateUser(ctx context.Context, req *usrmanrpc.CreateUserReq) (resp *usrmanrpc.CreateUserResp, err error) {
-	if req == nil {
-		logger.Get().Errorf("CreateUser error: %v", errconst.RPCEmptyRequestErr)
-		return nil, status.Error(codes.Unavailable, "Empty request")
-	}
-
-	if err = repository.GetDAO().CreateUser(ctx, req.User); err != nil {
-		logger.Get().Errorf("CreateUser error: %v", err)
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	logger.Get().Info("CreateUser OK")
-	return &usrmanrpc.CreateUserResp{Code: errconst.RPCSuccessCode}, nil
 }
 
 func (u *usrManSrv) GetUserByUsernamePass(ctx context.Context, req *usrmanrpc.GetUserByUsernamePassReq) (resp *usrmanrpc.GetUserByUsernamePassResp, err error) {

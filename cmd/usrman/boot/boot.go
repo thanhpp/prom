@@ -6,6 +6,7 @@ import (
 	"github.com/thanhpp/prom/cmd/usrman/core"
 	"github.com/thanhpp/prom/cmd/usrman/repository"
 	"github.com/thanhpp/prom/cmd/usrman/rpcserver"
+	"github.com/thanhpp/prom/pkg/etcdclient"
 	"github.com/thanhpp/prom/pkg/logger"
 )
 
@@ -26,6 +27,13 @@ func Boot() (err error) {
 	logger.Get().Info("CONNECTING TO DB")
 	if err := repository.GetDAO().InitDBConnection(core.GetConfig().DB.GenDBDSN(), core.GetConfig().DB.Log); err != nil {
 		return err
+	}
+
+	logger.Get().Info("CONNECTING TO ETCD ...")
+	etcdConf := core.GetConfig().ETCD
+	if err := etcdclient.Set(&etcdConf); err != nil {
+		logger.Get().Errorf("Connect etcd error: %v", err)
+		panic(err)
 	}
 
 	logger.Get().Info("STARTING GRPC SERVER")
