@@ -4,9 +4,12 @@ import (
 	"context"
 	"time"
 
+	"github.com/thanhpp/prom/pkg/etcdclient"
+
+	"google.golang.org/grpc"
+
 	"github.com/thanhpp/prom/pkg/errconst"
 	"github.com/thanhpp/prom/pkg/usrmanrpc"
-	"google.golang.org/grpc"
 )
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -35,6 +38,7 @@ func (us usrManSrv) error(err error) error {
 type iUsrManSrv interface {
 	// user
 	Login(ctx context.Context, username string, pass string) (user *usrmanrpc.User, err error)
+	GetUsersByPattern(ctx context.Context, pattern string) (users []*usrmanrpc.User, err error)
 	NewUser(ctx context.Context, username string, pass string) (err error)
 	UpdateUsername(ctx context.Context, userID uint32, username string) (err error)
 	UpdatePassword(ctx context.Context, userID uint32, password string) (err error)
@@ -61,7 +65,8 @@ func SetUsrManService(ctx context.Context, target string) (err error) {
 	newCtx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	conn, err := grpc.DialContext(newCtx, target, grpc.WithBlock(), grpc.WithInsecure())
+	b := grpc.RoundRobin(etcdclient.Get().Resolver())
+	conn, err := grpc.DialContext(newCtx, target, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithBalancer(b))
 	if err != nil {
 		cancel()
 		return err
@@ -118,6 +123,23 @@ func (uS *usrManSrv) NewUser(ctx context.Context, username string, pass string) 
 	}
 
 	return nil
+}
+
+func (uS *usrManSrv) GetUsersByPattern(ctx context.Context, pattern string) (users []*usrmanrpc.User, err error) {
+	if ctx.Err() != nil {
+		return nil, errconst.ServiceError{Srv: uS.name(), Err: ctx.Err(), Msg: "Context error"}
+	}
+
+	in := &usrmanrpc.GetUserByPatternReq{
+		Pattern: pattern,
+	}
+
+	resp, err := uS.client().GetUserByPattern(ctx, in)
+	if err != nil {
+		return nil, uS.error(err)
+	}
+
+	return resp.Users, nil
 }
 
 func (uS *usrManSrv) UpdateUsername(ctx context.Context, userID uint32, username string) (err error) {

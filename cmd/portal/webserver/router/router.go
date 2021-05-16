@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/thanhpp/prom/cmd/portal/webserver/controller"
+	"github.com/thanhpp/prom/cmd/portal/webserver/middleware"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
@@ -37,16 +40,20 @@ func NewRouter() (routers *gin.Engine) {
 	}))
 
 	// login/logout
-	routers.POST("/login")
-	routers.POST("/logout") // NOTE: JWT VALIDATE
+	authCtrl := new(controller.AuthCtrl)
+	authMw := new(middleware.AuthMw)
+
+	routers.POST("/login", authCtrl.Login)
+	routers.GET("/logout", authMw.ValidateToken(), authCtrl.Logout) // NOTE: JWT VALIDATE
 
 	// user
+	usrCtrl := new(controller.UserCtrl)
 	user := routers.Group("/user")
 	{
-		user.POST("")
-		// JWT VALIDATE
-		user.PATCH("")
-		user.GET("") // NOTE: query username
+		user.POST("", usrCtrl.CreateNewUser)
+		user.Use(authMw.ValidateToken())
+		user.PATCH("", usrCtrl.UpdateUser)
+		user.GET("", usrCtrl.GetUserName) // NOTE: query username
 	}
 
 	// JWT from here

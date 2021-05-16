@@ -22,11 +22,12 @@ type iJWTSrv interface {
 
 var iplmJWT = new(JWTSrv)
 
-func Get() iJWTSrv {
+func GetJWTSrv() iJWTSrv {
 	return iplmJWT
 }
 
-func Set(key string) {
+func SetJWTSrv(key string) {
+	iplmJWT.SigningMethod = jwt.SigningMethodHS256
 	iplmJWT.SecretKey = []byte(key)
 }
 
