@@ -18,3 +18,7 @@ Project Management. HUST_20202_DS
 ![SystemDesign](docs/drawio/prom_design.png)
 
 - NOTE: Nofications will be developed if there is enough time
+
+## DEVELOPMENT
+
+1. Postman Collection: https://www.getpostman.com/collections/654a270d5382abd97404

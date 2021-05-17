@@ -82,6 +82,10 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 		return err
 	}
 
+	if err := GetGormDB().AutoMigrate(context.Background(), usrmanrpc.User{}, usrmanrpc.Project{}, usrmanrpc.Team{}); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -289,7 +293,15 @@ func (g *implGorm) DeleteTeamByID(ctx context.Context, teamID uint32) (err error
 	return nil
 }
 
-// PROJECT
+// ---------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- PROJECT ----------------------------------------------------------
+
+func (g *implGorm) NextProjectID(ctx context.Context) (projectID uint32, err error) {
+	if err = gDB.Model(prjModel).Select("MAX(id) as max").Pluck("max", &projectID).Error; err != nil {
+		return 0, err
+	}
+	return projectID + 1, nil
+}
 
 func (g *implGorm) CreateProject(ctx context.Context, project *usrmanrpc.Project) (err error) {
 	if err = gDB.Model(prjModel).WithContext(ctx).Save(project).Error; err != nil {

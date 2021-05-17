@@ -3,7 +3,7 @@
 ETCDHOST="0.0.0.0"
 ETCDPORT="2379"
 
-rm -rf /tmp/etcd-data.tmp && mkdir -p /tmp/etcd-data.tmp && \
+sudo rm -rf /tmp/etcd-data.tmp && mkdir -p /tmp/etcd-data.tmp && \
     docker rmi gcr.io/etcd-development/etcd:v3.2.32 || true && \
     docker run \
     -d \

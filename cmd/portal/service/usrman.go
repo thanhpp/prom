@@ -53,7 +53,9 @@ type iUsrManSrv interface {
 	DeleteTeamByID(ctx context.Context, teamID uint32) (err error)
 
 	// project
+	GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error)
 	GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error)
+	NextProjectID(ctx context.Context) (id uint32, err error)
 	NewProject(ctx context.Context, project *usrmanrpc.Project) (err error)
 	UpdateProject(ctx context.Context, project *usrmanrpc.Project) (err error)
 	ReorderProjectColumns(ctx context.Context, projectID uint32, columnsIdx string) (err error)
@@ -311,6 +313,23 @@ func (uS *usrManSrv) DeleteTeamByID(ctx context.Context, teamID uint32) (err err
 // ----------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- PROJECT ----------------------------------------------------------
 
+func (uS *usrManSrv) GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error) {
+	if ctx.Err() != nil {
+		return nil, uS.error(ctx.Err())
+	}
+
+	in := &usrmanrpc.GetProjectByIDReq{
+		ProjectID: projectID,
+	}
+
+	resp, err := uS.client().GetProjectByID(ctx, in)
+	if err != nil {
+		return nil, uS.error(err)
+	}
+
+	return resp.Project, nil
+}
+
 func (uS *usrManSrv) GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error) {
 	if ctx.Err() != nil {
 		return nil, uS.error(ctx.Err())
@@ -326,6 +345,21 @@ func (uS *usrManSrv) GetProjectsByTeamID(ctx context.Context, teamID uint32) (pr
 	}
 
 	return resp.Projects, nil
+}
+
+func (uS *usrManSrv) NextProjectID(ctx context.Context) (id uint32, err error) {
+	if ctx.Err() != nil {
+		return 0, uS.error(ctx.Err())
+	}
+
+	in := &usrmanrpc.NextProjectIDReq{}
+
+	resp, err := uS.client().NextProjectID(ctx, in)
+	if err != nil {
+		return 0, uS.error(err)
+	}
+
+	return uint32(resp.NextID), nil
 }
 
 func (uS *usrManSrv) NewProject(ctx context.Context, project *usrmanrpc.Project) (err error) {

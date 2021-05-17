@@ -270,6 +270,17 @@ func (u *usrManSrv) DeleteTeamByID(ctx context.Context, req *usrmanrpc.DeleteTea
 // ---------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- PROJECT ----------------------------------------------------------
 
+func (u *usrManSrv) NextProjectID(ctx context.Context, req *usrmanrpc.NextProjectIDReq) (resp *usrmanrpc.NextProjectIDResp, err error) {
+	nextid, err := repository.GetDAO().NextProjectID(ctx)
+	if err != nil {
+		logger.Get().Errorf("NextProjectID error: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("NextProjectID OK")
+	return &usrmanrpc.NextProjectIDResp{Code: errconst.RPCSuccessCode, NextID: int32(nextid)}, nil
+}
+
 func (u *usrManSrv) CreateProject(ctx context.Context, req *usrmanrpc.CreateProjectReq) (resp *usrmanrpc.CreateProjectResp, err error) {
 	if req == nil {
 		logger.Get().Errorf("CreateProject error: %v", errconst.RPCEmptyRequestErr)

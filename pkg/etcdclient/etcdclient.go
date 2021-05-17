@@ -2,7 +2,11 @@ package etcdclient
 
 import (
 	"context"
+	"encoding/json"
+	"strings"
 	"time"
+
+	"google.golang.org/grpc"
 
 	"google.golang.org/grpc/naming"
 
@@ -25,6 +29,7 @@ func Set(econf *ETCDConfigs) (err error) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   econf.Endpoints,
 		DialTimeout: time.Second * time.Duration(econf.Timeout),
+		DialOptions: []grpc.DialOption{grpc.WithBlock()},
 	})
 	if err != nil {
 		return err
@@ -39,13 +44,48 @@ func Get() *ETCDClient {
 	return ecli
 }
 
+func (ec *ETCDClient) RemoveEndpoints(ctx context.Context, service string, address string) (err error) {
+	r := &etcdnaming.GRPCResolver{Client: ec.client}
+	if err := r.Update(ctx, service, naming.Update{Op: naming.Delete, Addr: address}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (ec *ETCDClient) AddEndpoints(ctx context.Context, service string, address string) (err error) {
 	r := &etcdnaming.GRPCResolver{Client: ec.client}
+	if err := r.Update(ctx, service, naming.Update{Op: naming.Delete, Addr: ""}); err != nil {
+		return err
+	}
 	if err := r.Update(ctx, service, naming.Update{Op: naming.Add, Addr: address}); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+type Service struct {
+	Name string `json:"-"`
+	Addr string `json:"addr"`
+}
+
+func (ec *ETCDClient) GetServices(ctx context.Context, servicePrefix string) (services []*Service, err error) {
+	resp, err := ec.client.Get(ctx, servicePrefix, clientv3.WithPrefix())
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range resp.Kvs {
+		srv := new(Service)
+		if err = json.Unmarshal(resp.Kvs[i].Value, srv); err != nil {
+			return nil, err
+		}
+		srv.Name = strings.Split(string(resp.Kvs[i].Key), "/")[0]
+		services = append(services, srv)
+	}
+
+	return services, nil
 }
 
 func (ec *ETCDClient) SaveKeyValue(ctx context.Context, key string, val string) (err error) {

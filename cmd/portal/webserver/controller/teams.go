@@ -1,9 +1,7 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/thanhpp/prom/pkg/usrmanrpc"
 
@@ -15,20 +13,6 @@ import (
 )
 
 type TeamCtrl struct{}
-
-func (t *TeamCtrl) getTeamIDFromParam(c *gin.Context) (teamID uint32, err error) {
-	teamIDStr := c.Param("teamID")
-	teamIDInt, err := strconv.Atoi(teamIDStr)
-	if err != nil {
-		return 0, err
-	}
-
-	if teamIDInt == 0 {
-		return 0, errors.New("Zero teamID")
-	}
-
-	return uint32(teamIDInt), nil
-}
 
 func (t *TeamCtrl) GetAllTeamByUserID(c *gin.Context) {
 	claims, err := getClaimsFromContext(c)
@@ -86,7 +70,7 @@ func (t *TeamCtrl) CreateNewTeam(c *gin.Context) {
 }
 
 func (t *TeamCtrl) GetTeamByID(c *gin.Context) {
-	teamID, err := t.getTeamIDFromParam(c)
+	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
 		logger.Get().Errorf("Team id error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
@@ -108,7 +92,7 @@ func (t *TeamCtrl) GetTeamByID(c *gin.Context) {
 }
 
 func (t *TeamCtrl) EditMember(c *gin.Context) {
-	teamID, err := t.getTeamIDFromParam(c)
+	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
 		logger.Get().Errorf("Team id error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
@@ -147,7 +131,7 @@ func (t *TeamCtrl) EditMember(c *gin.Context) {
 }
 
 func (t *TeamCtrl) DeleteTeam(c *gin.Context) {
-	teamID, err := t.getTeamIDFromParam(c)
+	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
 		logger.Get().Errorf("Team id error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())

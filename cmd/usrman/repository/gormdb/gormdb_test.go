@@ -144,3 +144,18 @@ func TestGetUsersByPattern(t *testing.T) {
 
 	fmt.Println(users)
 }
+
+func TestNextProjectID(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx = context.Background()
+	)
+
+	id, err := gormdb.GetGormDB().NextProjectID(ctx)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(id)
+}
