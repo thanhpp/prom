@@ -2,6 +2,10 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
+
+	"github.com/thanhpp/prom/pkg/ccmanrpc"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/prom/cmd/portal/service"
@@ -113,10 +117,32 @@ func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 		return
 	}
 
+	// sort columns
+	colIdx := strings.Split(project.Index, ",")
+	if len(colIdx) != len(columns) {
+		logger.Get().Errorf("Index not equals. Idx: %s. Cols: %d", project.Index, len(columns))
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Mismatch index length")
+		return
+	}
+	respCols := make([]*ccmanrpc.Column, 0, len(columns))
+	for i := range colIdx {
+		for k := range columns {
+			id, err := strconv.Atoi(colIdx[i])
+			if err != nil {
+				logger.Get().Errorf("Convert id error: %v", err.Error())
+				ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+				return
+			}
+			if columns[k].ID == uint32(id) {
+				respCols = append(respCols, columns[k])
+			}
+		}
+	}
+
 	resp := new(dto.Resp)
 	resp.SetCode(http.StatusOK).SetData(gin.H{
 		"project": project,
-		"columns": columns,
+		"columns": respCols,
 	})
 	c.JSON(http.StatusOK, resp)
 }

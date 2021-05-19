@@ -63,6 +63,7 @@ type iCCMan interface {
 	GetColumnsByProjectID(ctx context.Context, shardID int, projectID uint32) (cols []*ccmanrpc.Column, err error)
 	UpdateColumnByID(ctx context.Context, shardID int, colID uint32, col *ccmanrpc.Column) (err error)
 	DeleteColumnByID(ctx context.Context, shardID int, colID uint32) (err error)
+	DeleteColumnByIDAndMove(ctx context.Context, shardID int, colID uint32, newColID uint32) (err error)
 }
 
 var implCCManSrv = new(CCManSrv)
@@ -447,6 +448,30 @@ func (cS *CCManSrv) DeleteColumnByID(ctx context.Context, shardID int, colID uin
 		return fmt.Errorf("Client ID %d not found", shardID)
 	}
 	_, err = client.DeleteColumnByID(ctx, in)
+	if err != nil {
+		checkServiceFailError(shardID, err)
+		return cS.error(err)
+	}
+
+	return nil
+}
+
+func (cS *CCManSrv) DeleteColumnByIDAndMove(ctx context.Context, shardID int, colID uint32, newColID uint32) (err error) {
+	if ctx.Err() != nil {
+		return cS.error(ctx.Err())
+	}
+
+	in := &ccmanrpc.DeleteColumnByIDAndMoveReq{
+		ColumnID:    colID,
+		NewColumnID: newColID,
+	}
+
+	client, ok := cS.client(shardID)
+	if !ok {
+		return fmt.Errorf("DeleteColumnByIDAndMove %v", err)
+	}
+
+	_, err = client.DeleteColumnByIDAndMove(ctx, in)
 	if err != nil {
 		checkServiceFailError(shardID, err)
 		return cS.error(err)

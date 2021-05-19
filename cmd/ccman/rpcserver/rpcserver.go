@@ -34,6 +34,7 @@ type iCCManSv interface {
 	GetColumnsByProjectID(ctx context.Context, req *ccmanrpc.GetColumnsByProjectIDReq) (resp *ccmanrpc.GetColumnsByProjectIDResp, err error)
 	UpdateColumnByID(ctx context.Context, req *ccmanrpc.UpdateColumnByIDReq) (resp *ccmanrpc.UpdateColumnByIDResp, err error)
 	DeleteColumnByID(ctx context.Context, req *ccmanrpc.DeleteColumnByIDReq) (resp *ccmanrpc.DeleteColumnByIDResp, err error)
+	DeleteColumnByIDAndMove(ctx context.Context, req *ccmanrpc.DeleteColumnByIDAndMoveReq) (resp *ccmanrpc.DeleteColumnByIDAndMoveResp, err error)
 }
 
 var _ iCCManSv = (*ccManSv)(nil) //compile check
@@ -287,4 +288,19 @@ func (c *ccManSv) DeleteColumnByID(ctx context.Context, req *ccmanrpc.DeleteColu
 
 	logger.Get().Info("Delete column by ID OK")
 	return &ccmanrpc.DeleteColumnByIDResp{Code: errconst.RPCSuccessCode}, nil
+}
+
+func (c *ccManSv) DeleteColumnByIDAndMove(ctx context.Context, req *ccmanrpc.DeleteColumnByIDAndMoveReq) (resp *ccmanrpc.DeleteColumnByIDAndMoveResp, err error) {
+	if req == nil {
+		logger.Get().Errorf("Delete column by ID error : %v", errconst.RPCEmptyRequestErr)
+		return nil, status.Error(codes.Unavailable, "Empty request")
+	}
+
+	if err = repository.GetDAO().DeleteColumnByIDAndMove(ctx, req.ColumnID, req.NewColumnID); err != nil {
+		logger.Get().Errorf("Delete & move column error: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("DeleteColumnByIDAndMove OK")
+	return &ccmanrpc.DeleteColumnByIDAndMoveResp{Code: errconst.RPCSuccessCode}, nil
 }

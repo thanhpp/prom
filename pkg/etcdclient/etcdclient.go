@@ -55,7 +55,7 @@ func (ec *ETCDClient) RemoveEndpoints(ctx context.Context, service string, addre
 
 func (ec *ETCDClient) AddEndpoints(ctx context.Context, service string, address string) (err error) {
 	r := &etcdnaming.GRPCResolver{Client: ec.client}
-	if err := r.Update(ctx, service, naming.Update{Op: naming.Delete, Addr: ""}); err != nil {
+	if err := r.Update(ctx, service, naming.Update{Op: naming.Delete, Addr: address}); err != nil {
 		return err
 	}
 	if err := r.Update(ctx, service, naming.Update{Op: naming.Add, Addr: address}); err != nil {
