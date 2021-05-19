@@ -49,6 +49,7 @@ func (cs *CCManSrv) error(err error) error {
 
 type iCCMan interface {
 	ChooseShardIDFromInt(in int) (shardID int, err error)
+
 	CreateCard(ctx context.Context, shardID int, card *ccmanrpc.Card) (err error)
 	GetCardByID(ctx context.Context, shardID int, cardID uint32) (card *ccmanrpc.Card, err error)
 	GetCardsByDueDate(ctx context.Context, shardID int, duedate time.Time) (cards []*ccmanrpc.Card, err error)
@@ -57,6 +58,7 @@ type iCCMan interface {
 	GetCardsByColumnID(ctx context.Context, shardID int, colID uint32) (cards []*ccmanrpc.Card, err error)
 	UpdateCardByID(ctx context.Context, shardID int, cardID uint32, card *ccmanrpc.Card) (err error)
 	DeleteCardByID(ctx context.Context, shardID int, cardID uint32) (err error)
+
 	CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (err error)
 	GetColumnByID(ctx context.Context, shardID int, colID uint32) (col *ccmanrpc.Column, err error)
 	GetColumnsByTitle(ctx context.Context, shardID int, title string) (cols []*ccmanrpc.Column, err error)

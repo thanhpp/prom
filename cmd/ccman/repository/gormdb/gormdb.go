@@ -225,11 +225,28 @@ func (g *implGorm) MoveCardToCol(ctx context.Context, cardID uint32, newColID ui
 	return nil
 }
 
-// UpdateCardByID ...
+// UpdateCardByID implement move card between column if card.ColumnID != 0
 func (g *implGorm) UpdateCardByID(ctx context.Context, cardID uint32, card *ccmanrpc.Card) (err error) {
-	if err = gDB.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Updates(card).Error; err != nil {
-		return err
-	}
+	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if card.ColumnID > 0 {
+			dbCard := new(ccmanrpc.Card)
+			if err = tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Take(dbCard).Error; err != nil {
+				return err
+			}
+
+			if card.ColumnID != dbCard.ID {
+				if err = moveCardToColTransaction(tx, ctx, cardID, card.ColumnID); err != nil {
+					return err
+				}
+			}
+		}
+
+		if err = tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Updates(card).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 
 	return nil
 }

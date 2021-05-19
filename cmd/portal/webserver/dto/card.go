@@ -20,3 +20,8 @@ type UpdateCardInfoReq struct {
 		DueDate     uint32 `json:"duedate"`
 	} `json:"card"`
 }
+
+type ReorderCardOneColumnReq struct {
+	ColumnID  uint32   `json:"columnID"`
+	CardIndex []uint32 `json:"cardIndex"`
+}

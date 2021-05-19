@@ -73,11 +73,12 @@ func NewRouter() (routers *gin.Engine) {
 						columns.DELETE("", colCtrl.DeleteColumn)
 					}
 
+					cardCtrl := new(controller.CardCtrl)
 					cards := projectID.Group("/cards")
 					{
-						cards.POST("")
-						cards.POST("/reorder")
-						cards.PATCH("")
+						cards.POST("", cardCtrl.CreateNewCard)
+						cards.POST("/reorder", cardCtrl.ReorderCardInOneColumn)
+						cards.PATCH("", cardCtrl.UpdateCard)
 					}
 				}
 			}

@@ -1,0 +1,61 @@
+services:
+    etcd:
+        container_name: etcd
+        image: gcr.io/etcd-development/etcd:v3.2.32
+        entrypoint: /usr/local/bin/etcd
+        command:
+            - '--name=s1'
+            - '--data-dir=/etcd-data'
+            - '--listen-client-urls=http://0.0.0.0:2379'
+            - '--advertise-client-urls=http://0.0.0.0:2379'
+            - '--listen-peer-urls=http://0.0.0.0:2380'
+            - '--initial-advertise-peer-urls=http://0.0.0.0:2380'
+            - '--initial-cluster=s1=http://0.0.0.0:2380'
+            - '--initial-cluster-token=tkn'
+            - '--initial-cluster-state=new'
+        ports: 
+            - 2379:2379
+            - 2380:2380
+
+    redis:
+        container_name: redis
+        image: redis
+        ports: 
+            - 6379:6379
+        depends_on:
+            - etcd
+
+    pg1:
+        container_name: usermanagerdb
+        image: postgres
+        environment:
+            - POSTGRES_USER=thanhpp
+            - POSTGRES_PASSWORD=testthanhpp
+            - POSTGRES_MULTIPLE_DATABASES=prom,promuser
+        network_mode: host
+
+    usermanager:
+        container_name: usermanager
+        image: docker.pkg.github.com/thanhpp/prom/usermanager:latest
+        network_mode: host
+        depends_on:
+            - etcd
+            - pg1       
+
+    cardcolumnmanager:
+        container_name: cardcolumnmanager
+        image: docker.pkg.github.com/thanhpp/prom/cardcolumnmanager:latest
+        network_mode: host
+        depends_on:
+            - etcd
+            - pg1
+
+    portal:
+        container_name: portal
+        image: docker.pkg.github.com/thanhpp/prom/portal:latest
+        network_mode: host
+        depends_on:
+            - etcd
+            - redis
+            - usermanager
+            - cardcolumnmanager
