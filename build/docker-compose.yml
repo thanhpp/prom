@@ -28,9 +28,7 @@ services:
 
     pg1:
         container_name: usermanagerdb
-        image: postgres
-        volumes:
-            - .\docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+        image: docker.pkg.github.com/thanhpp/prom/prompostgres:latest
         environment:
             - POSTGRES_USER=thanhpp
             - POSTGRES_PASSWORD=testthanhpp
