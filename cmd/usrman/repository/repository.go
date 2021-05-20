@@ -29,6 +29,7 @@ type iDAO interface {
 	RemoveMemberByID(ctx context.Context, teamID uint32, usrID uint32) (err error)
 	DeleteTeamByID(ctx context.Context, teamID uint32) (err error)
 
+	NextProjectID(ctx context.Context) (projectID uint32, err error)
 	CreateProject(ctx context.Context, project *usrmanrpc.Project) (err error)
 	GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error)
 	GetProjtectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error)

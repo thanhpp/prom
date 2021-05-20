@@ -36,6 +36,7 @@ service CCManager {
     rpc GetColumnsByProjectID (GetColumnsByProjectIDReq) returns (GetColumnsByProjectIDResp);
     rpc UpdateColumnByID (UpdateColumnByIDReq) returns (UpdateColumnByIDResp);
     rpc DeleteColumnByID (DeleteColumnByIDReq) returns (DeleteColumnByIDResp);
+    rpc DeleteColumnByIDAndMove(DeleteColumnByIDAndMoveReq) returns (DeleteColumnByIDAndMoveResp);
 }
 
 // CARD
@@ -57,6 +58,7 @@ message CreateCardReq {
 message CreateCardResp {
     int32 Code = 1;
     string Message = 2;
+    uint32 CreatedID = 3;
 }
 
 message GetCardByIDReq {
@@ -138,6 +140,7 @@ message CreateColumnReq {
 message CreateColumnResp {
     int32 Code = 1;
     string Message = 2;
+    uint32 CreatedID = 3;
 }
 
 message GetColumnByIDReq {
@@ -189,3 +192,12 @@ message DeleteColumnByIDResp {
     string Message = 2;
 }
 
+message DeleteColumnByIDAndMoveReq {
+    uint32 ColumnID = 1;
+    uint32 NewColumnID = 2;
+}
+
+message DeleteColumnByIDAndMoveResp {
+    int32 Code = 1;
+    string Message = 2;
+}

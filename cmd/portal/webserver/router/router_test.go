@@ -41,7 +41,7 @@ func TestNewRouter(t *testing.T) {
 		}
 	)
 
-	if err := redisdb.Set(conf); err != nil {
+	if err := redisdb.Get().Set(conf); err != nil {
 		t.Error(err)
 		return
 	}

@@ -55,7 +55,14 @@ func Boot() {
 		panic(err)
 	}
 
-	// FIXME: init ccmanager
+	// init ccmanager
+	logger.Get().Info("CONNECTING TO CARD COLUMN MANAGER...")
+	ccManCtx, ccManCtxCancel := context.WithCancel(mainContext)
+	defer ccManCtxCancel()
+	if err := service.SetCCManSrv(ccManCtx); err != nil {
+		logger.Get().Errorf("Connect cards columns manager error: %v", err)
+		panic(err)
+	}
 
 	// jwt service
 	service.SetJWTSrv("SECREAT-KEY")

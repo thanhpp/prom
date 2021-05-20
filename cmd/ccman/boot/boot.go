@@ -3,6 +3,8 @@ package boot
 import (
 	"context"
 
+	"github.com/thanhpp/prom/pkg/etcdclient"
+
 	"github.com/thanhpp/prom/cmd/ccman/repository"
 
 	"github.com/thanhpp/prom/cmd/ccman/core"
@@ -10,13 +12,16 @@ import (
 	"github.com/thanhpp/prom/pkg/logger"
 )
 
-func Boot() (err error) {
+func Boot(shardID int64) (err error) {
 	var (
 		ctx = context.Background()
 	)
 
 	if err := core.SetMainConfig("dev.yml"); err != nil {
 		return err
+	}
+	if shardID > 0 {
+		core.GetConfig().ShardID = shardID
 	}
 
 	logConfig := core.GetConfig().Log
@@ -29,8 +34,14 @@ func Boot() (err error) {
 		return err
 	}
 
+	logger.Get().Info("CONENCTING TO ETCD")
+	etcdConf := &core.GetConfig().ETCD
+	if err := etcdclient.Set(etcdConf); err != nil {
+		return err
+	}
+
 	logger.Get().Info("STARTING GRPC SERVER")
-	gRPCdaemon, err := rpcserver.StartGRPC(&core.GetConfig().GRPC)
+	gRPCdaemon, err := rpcserver.StartGRPC(&core.GetConfig().GRPC, core.GetConfig().ShardID)
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/thanhpp/prom/cmd/portal/webserver/controller"
@@ -9,25 +8,12 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
-	"github.com/thanhpp/prom/pkg/logger"
 )
-
-func logRequest() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		t := time.Now()
-		c.Next()
-		str := fmt.Sprintf("IP: %v | Path: %v | Method: %v | Latency: %v | Status: %v", c.ClientIP(), c.Request.URL.Path+c.Request.URL.RawQuery, c.Request.Method, time.Since(t).Seconds(), c.Writer.Status())
-		if !(c.Request.URL.Path == "/health" && c.Writer.Status() == 200) {
-			logger.Get().Info(str)
-		}
-	}
-}
 
 func NewRouter() (routers *gin.Engine) {
 	routers = gin.New()
 	routers.Use(gin.Recovery())
-	routers.Use(logRequest())
+	routers.Use(middleware.LogRequest())
 
 	//CORS
 	routers.Use(cors.New(cors.Config{
@@ -57,38 +43,42 @@ func NewRouter() (routers *gin.Engine) {
 	}
 
 	// JWT from here
+	routers.Use(authMw.ValidateToken())
+	teamCtrl := new(controller.TeamCtrl)
 	teams := routers.Group("/teams")
 	{
-		teams.GET("")
-		teams.POST("")
+		teams.GET("", teamCtrl.GetAllTeamByUserID)
+		teams.POST("", teamCtrl.CreateNewTeam)
 		teamsID := teams.Group("/:teamID")
 		{
-			teamsID.GET("/:teamID")
-			teamsID.PUT("/:teamID")
-			teamsID.DELETE("/:teamID")
+			teamsID.GET("", teamCtrl.GetTeamByID)
+			teamsID.PUT("", teamCtrl.EditMember)
+			teamsID.DELETE("", teamCtrl.DeleteTeam)
 
+			prjCtrl := new(controller.ProjectCtrl)
 			projects := teamsID.Group("/projects")
 			{
-				projects.GET("")
-				projects.POST("")
+				projects.GET("", prjCtrl.GetAllProjectsFromTeamID)
+				projects.POST("", prjCtrl.CreateNewProject)
 
 				projectID := projects.Group("/:projectID")
 				{
-					projectID.GET("")
-					projectID.POST("")
+					projectID.GET("", prjCtrl.GetProjectDetails)
 
+					colCtrl := new(controller.ColumnCtrl)
 					columns := projectID.Group("/columns")
 					{
-						columns.POST("")
-						columns.PATCH("")
-						columns.DELETE("")
+						columns.POST("", colCtrl.CreateNewColumn)
+						columns.POST("/reorder", colCtrl.ReorderColumns)
+						columns.DELETE("", colCtrl.DeleteColumn)
 					}
 
+					cardCtrl := new(controller.CardCtrl)
 					cards := projectID.Group("/cards")
 					{
-						cards.POST("")
-						cards.PUT("")
-						cards.PATCH("")
+						cards.POST("", cardCtrl.CreateNewCard)
+						cards.POST("/reorder", cardCtrl.ReorderCardInOneColumn)
+						cards.PATCH("", cardCtrl.UpdateCard)
 					}
 				}
 			}

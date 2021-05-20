@@ -34,6 +34,7 @@ service UsrManSrv {
     rpc AddMemberByID (AddMemberByIDReq) returns (AddMemberByIDResp);
     rpc RemoveMemberByID (RemoveMemberByIDReq) returns (RemoveMemberByIDResp);
     rpc DeleteTeamByID (DeleteTeamByIDReq) returns (DeleteTeamByIDResp);
+    rpc NextProjectID (NextProjectIDReq) returns (NextProjectIDResp);
     rpc CreateProject (CreateProjectReq) returns (CreateProjectResp);
     rpc GetProjectByID (GetProjectByIDReq) returns (GetProjectByIDResp);
     rpc GetProjtectsByTeamID (GetProjtectsByTeamIDReq) returns (GetProjtectsByTeamIDResp);
@@ -196,6 +197,16 @@ message DeleteTeamByIDReq {
 message DeleteTeamByIDResp {
     int32 Code = 1;
     string Message = 2;
+}
+
+message NextProjectIDReq{
+
+}
+
+message NextProjectIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    int32 NextID = 3;
 }
 
 message CreateProjectReq {
