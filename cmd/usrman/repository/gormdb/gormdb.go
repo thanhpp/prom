@@ -82,7 +82,7 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 		return err
 	}
 
-	if err := GetGormDB().AutoMigrate(context.Background(), usrmanrpc.User{}, usrmanrpc.Project{}, usrmanrpc.Team{}); err != nil {
+	if err := GetGormDB().AutoMigrate(context.Background(), usrmanrpc.Team{}, usrmanrpc.Project{}, usrmanrpc.User{}); err != nil {
 		return err
 	}
 

@@ -1,3 +1,4 @@
+version: "3.9"
 services:
     etcd:
         container_name: etcd
@@ -28,24 +29,34 @@ services:
     pg1:
         container_name: usermanagerdb
         image: postgres
+        volumes:
+            - ./docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
         environment:
             - POSTGRES_USER=thanhpp
             - POSTGRES_PASSWORD=testthanhpp
-            - POSTGRES_MULTIPLE_DATABASES=prom,promuser
+            - POSTGRES_MULTIPLE_DATABASES=prom,thanhpp:promuser,thanhpp
         network_mode: host
 
     usermanager:
         container_name: usermanager
         image: docker.pkg.github.com/thanhpp/prom/usermanager:latest
         network_mode: host
+        deploy:
+            restart_policy:
+                condition: on-failure
+                max_attempts: 6
         depends_on:
             - etcd
-            - pg1       
+            - pg1
 
     cardcolumnmanager:
         container_name: cardcolumnmanager
         image: docker.pkg.github.com/thanhpp/prom/cardcolumnmanager:latest
         network_mode: host
+        deploy:
+            restart_policy:
+                condition: on-failure
+                max_attempts: 6
         depends_on:
             - etcd
             - pg1
@@ -54,6 +65,10 @@ services:
         container_name: portal
         image: docker.pkg.github.com/thanhpp/prom/portal:latest
         network_mode: host
+        deploy:
+            restart_policy:
+                condition: on-failure
+                max_attempts: 6
         depends_on:
             - etcd
             - redis
