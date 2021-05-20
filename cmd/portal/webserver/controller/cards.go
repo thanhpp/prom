@@ -47,7 +47,8 @@ func (cC *CardCtrl) CreateNewCard(c *gin.Context) {
 		ColumnID:    req.ColumnID,
 	}
 
-	if err = service.GetCCManSrv().CreateCard(c, int(project.ShardID), card); err != nil {
+	_, err = service.GetCCManSrv().CreateCard(c, int(project.ShardID), card)
+	if err != nil {
 		logger.Get().Errorf("Create card error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
@@ -103,6 +104,13 @@ func (cC *CardCtrl) UpdateCard(c *gin.Context) {
 		return
 	}
 
+	claim, err := getClaimsFromContext(c)
+	if err != nil {
+		logger.Get().Errorf("Context claims error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
 	req := new(dto.UpdateCardInfoReq)
 	if err = c.ShouldBindJSON(req); err != nil {
 		logger.Get().Errorf("Bind JSON error: %v", err)
@@ -122,6 +130,7 @@ func (cC *CardCtrl) UpdateCard(c *gin.Context) {
 		Description: req.Card.Description,
 		AssignedTo:  req.Card.AssignedTo,
 		DueDate:     timerpc.ToTimeRPC(time.Unix(int64(req.Card.DueDate), 0)),
+		CreatedBy:   claim.UserID,
 	}
 	if req.ColumnID > 0 {
 		card.ColumnID = req.ColumnID

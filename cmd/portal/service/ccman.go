@@ -49,8 +49,9 @@ func (cs *CCManSrv) error(err error) error {
 
 type iCCMan interface {
 	ChooseShardIDFromInt(in int) (shardID int, err error)
+	GetAllFromProjectID(ctx context.Context, shardID int, projectID uint32) (cols []*ccmanrpc.Column, err error)
 
-	CreateCard(ctx context.Context, shardID int, card *ccmanrpc.Card) (err error)
+	CreateCard(ctx context.Context, shardID int, card *ccmanrpc.Card) (createdID uint32, err error)
 	GetCardByID(ctx context.Context, shardID int, cardID uint32) (card *ccmanrpc.Card, err error)
 	GetCardsByDueDate(ctx context.Context, shardID int, duedate time.Time) (cards []*ccmanrpc.Card, err error)
 	GetCardsByAssignedToID(ctx context.Context, shardID int, userID uint32) (cards []*ccmanrpc.Card, err error)
@@ -59,7 +60,7 @@ type iCCMan interface {
 	UpdateCardByID(ctx context.Context, shardID int, cardID uint32, card *ccmanrpc.Card) (err error)
 	DeleteCardByID(ctx context.Context, shardID int, cardID uint32) (err error)
 
-	CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (err error)
+	CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (createdID uint32, err error)
 	GetColumnByID(ctx context.Context, shardID int, colID uint32) (col *ccmanrpc.Column, err error)
 	GetColumnsByTitle(ctx context.Context, shardID int, title string) (cols []*ccmanrpc.Column, err error)
 	GetColumnsByProjectID(ctx context.Context, shardID int, projectID uint32) (cols []*ccmanrpc.Column, err error)
@@ -146,9 +147,31 @@ func (cS *CCManSrv) ChooseShardIDFromInt(in int) (shardID int, err error) {
 
 }
 
-func (cS *CCManSrv) CreateCard(ctx context.Context, shardID int, card *ccmanrpc.Card) (err error) {
+func (cS *CCManSrv) GetAllFromProjectID(ctx context.Context, shardID int, projectID uint32) (cols []*ccmanrpc.Column, err error) {
 	if ctx.Err() != nil {
-		return cS.error(ctx.Err())
+		return nil, cS.error(ctx.Err())
+	}
+
+	in := &ccmanrpc.GetAllFromProjectIDReq{
+		ProjectID: projectID,
+	}
+
+	client, ok := cS.client(shardID)
+	if !ok {
+		return nil, fmt.Errorf("Client ID %d not found", shardID)
+	}
+	resp, err := client.GetAllFromProjectID(ctx, in)
+	if err != nil {
+		checkServiceFailError(shardID, err)
+		return nil, cS.error(err)
+	}
+
+	return resp.Columns, nil
+}
+
+func (cS *CCManSrv) CreateCard(ctx context.Context, shardID int, card *ccmanrpc.Card) (createdID uint32, err error) {
+	if ctx.Err() != nil {
+		return 0, cS.error(ctx.Err())
 	}
 
 	in := &ccmanrpc.CreateCardReq{
@@ -157,16 +180,15 @@ func (cS *CCManSrv) CreateCard(ctx context.Context, shardID int, card *ccmanrpc.
 
 	client, ok := cS.client(shardID)
 	if !ok {
-		return fmt.Errorf("Client ID %d not found", shardID)
+		return 0, fmt.Errorf("Client ID %d not found", shardID)
 	}
-	_, err = client.CreateCard(ctx, in)
+	resp, err := client.CreateCard(ctx, in)
 	if err != nil {
 		checkServiceFailError(shardID, err)
-		checkServiceFailError(shardID, err)
-		return cS.error(err)
+		return 0, cS.error(err)
 	}
 
-	return nil
+	return resp.CreatedID, nil
 }
 
 func (cS *CCManSrv) GetCardByID(ctx context.Context, shardID int, cardID uint32) (card *ccmanrpc.Card, err error) {
@@ -325,9 +347,9 @@ func (cS *CCManSrv) DeleteCardByID(ctx context.Context, shardID int, cardID uint
 	return nil
 }
 
-func (cS *CCManSrv) CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (err error) {
+func (cS *CCManSrv) CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (createdID uint32, err error) {
 	if ctx.Err() != nil {
-		return
+		return 0, cS.error(ctx.Err())
 	}
 
 	in := &ccmanrpc.CreateColumnReq{
@@ -336,15 +358,15 @@ func (cS *CCManSrv) CreateColumn(ctx context.Context, shardID int, column *ccman
 
 	client, ok := cS.client(shardID)
 	if !ok {
-		return fmt.Errorf("Client ID %d not found", shardID)
+		return 0, fmt.Errorf("Client ID %d not found", shardID)
 	}
-	_, err = client.CreateColumn(ctx, in)
+	resp, err := client.CreateColumn(ctx, in)
 	if err != nil {
 		checkServiceFailError(shardID, err)
-		return cS.error(err)
+		return 0, cS.error(err)
 	}
 
-	return nil
+	return resp.CreatedID, nil
 }
 
 func (cS *CCManSrv) GetColumnByID(ctx context.Context, shardID int, colID uint32) (col *ccmanrpc.Column, err error) {

@@ -91,6 +91,9 @@ func (g *implGorm) GetAllFromProjectID(ctx context.Context, projectID uint32) (c
 
 	for i := range cols {
 		index := strings.Split(strings.TrimRight(cols[i].Index, ","), ",")
+		if len(cols[i].Cards) == 0 {
+			continue
+		}
 		if len(index) != len(cols[i].Cards) {
 			return nil, errors.New("Mismatch index and cards len")
 		}
@@ -117,7 +120,7 @@ func (g *implGorm) GetAllFromProjectID(ctx context.Context, projectID uint32) (c
 const createCardColIndex = "UPDATE \"column\" SET index = ? || ',' || index  WHERE id = ?"
 
 // CreateCard ...
-func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (err error) {
+func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (createdID uint32, err error) {
 	err = gDB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.WithContext(ctx).Table("card").WithContext(ctx).Save(card).Error; err != nil {
 			return err
@@ -131,10 +134,10 @@ func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (err err
 	})
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return card.ID, nil
 }
 
 // GetCardByID ...
@@ -264,12 +267,12 @@ func (g *implGorm) DeleteCardByID(ctx context.Context, cardID uint32) (err error
 // -------------------------------------------------------- COLUMN ----------------------------------------------------------
 
 // CreateColumn ...
-func (g *implGorm) CreateColumn(ctx context.Context, column *ccmanrpc.Column) (err error) {
+func (g *implGorm) CreateColumn(ctx context.Context, column *ccmanrpc.Column) (createdID uint32, err error) {
 	if err = gDB.Model(columnModel).WithContext(ctx).Save(column).Error; err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return column.ID, nil
 }
 
 // GetColumnByID ...
@@ -414,7 +417,7 @@ func moveCardToColTransaction(tx *gorm.DB, ctx context.Context, cardID uint32, n
 	}
 
 	column.Index = strings.Replace(column.Index, fmt.Sprintf("%d,", card.ID), "", 1)
-	if len(column.Index) > 0 && column.Index[len(column.Index)] != ',' {
+	if len(column.Index) > 0 && column.Index[len(column.Index)-1] != ',' {
 		column.Index += ","
 	}
 

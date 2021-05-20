@@ -14,7 +14,7 @@ type iDao interface {
 
 	GetAllFromProjectID(ctx context.Context, projectID uint32) (cols []*ccmanrpc.Column, err error)
 
-	CreateCard(ctx context.Context, card *ccmanrpc.Card) (err error)
+	CreateCard(ctx context.Context, card *ccmanrpc.Card) (createdID uint32, err error)
 	GetCardByID(ctx context.Context, cardID uint32) (card *ccmanrpc.Card, err error)
 	GetCardsByDueDate(ctx context.Context, dueDate time.Time) (cards []*ccmanrpc.Card, err error)
 	GetCardsByAssignedToID(ctx context.Context, assignedTo uint32) (cards []*ccmanrpc.Card, err error)
@@ -24,7 +24,7 @@ type iDao interface {
 	MoveCardToCol(ctx context.Context, cardID uint32, newColID uint32) (err error)
 	DeleteCardByID(ctx context.Context, cardID uint32) (err error)
 
-	CreateColumn(ctx context.Context, column *ccmanrpc.Column) (err error)
+	CreateColumn(ctx context.Context, column *ccmanrpc.Column) (createdID uint32, err error)
 	GetColumnByID(ctx context.Context, columnID uint32) (column *ccmanrpc.Column, err error)
 	GetColumnsByTitle(ctx context.Context, title string) (columns []*ccmanrpc.Column, err error)
 	GetColumnsByProjectID(ctx context.Context, projectID uint32) (columns []*ccmanrpc.Column, err error)

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -110,7 +111,7 @@ func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 	}
 
 	// choose shard
-	columns, err := service.GetCCManSrv().GetColumnsByProjectID(c, int(project.ShardID), projectID)
+	columns, err := service.GetCCManSrv().GetAllFromProjectID(c, int(project.ShardID), projectID)
 	if err != nil {
 		logger.Get().Errorf("Get columns error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
@@ -118,23 +119,26 @@ func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 	}
 
 	// sort columns
-	colIdx := strings.Split(project.Index, ",")
-	if len(colIdx) != len(columns) {
-		logger.Get().Errorf("Index not equals. Idx: %s. Cols: %d", project.Index, len(columns))
-		ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Mismatch index length")
-		return
-	}
 	respCols := make([]*ccmanrpc.Column, 0, len(columns))
-	for i := range colIdx {
-		for k := range columns {
-			id, err := strconv.Atoi(colIdx[i])
-			if err != nil {
-				logger.Get().Errorf("Convert id error: %v", err.Error())
-				ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
-				return
-			}
-			if columns[k].ID == uint32(id) {
-				respCols = append(respCols, columns[k])
+	if len(columns) > 0 {
+		colIdx := strings.Split(project.Index, ",") // empty string returns slice length 1
+		fmt.Println(colIdx)
+		if len(colIdx)-1 != len(columns) {
+			logger.Get().Errorf("Index not equals. Idx: %s. Cols: %d", project.Index, len(columns))
+			ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Mismatch index length")
+			return
+		}
+		for i := 0; i < len(colIdx)-1; i++ {
+			for k := range columns {
+				id, err := strconv.Atoi(colIdx[i])
+				if err != nil {
+					logger.Get().Errorf("Convert id error: %v", err.Error())
+					ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+					return
+				}
+				if columns[k].ID == uint32(id) {
+					respCols = append(respCols, columns[k])
+				}
 			}
 		}
 	}

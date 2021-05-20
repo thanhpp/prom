@@ -25,14 +25,14 @@ services:
         depends_on:
             - etcd
 
-    pg1:
-        container_name: usermanagerdb
-        image: postgres
-        environment:
-            - POSTGRES_USER=thanhpp
-            - POSTGRES_PASSWORD=testthanhpp
-            - POSTGRES_MULTIPLE_DATABASES=prom,promuser
-        network_mode: host
+    # pg1:
+    #     container_name: usermanagerdb
+    #     image: postgres
+    #     environment:
+    #         - POSTGRES_USER=thanhpp
+    #         - POSTGRES_PASSWORD=testthanhpp
+    #         - POSTGRES_MULTIPLE_DATABASES=prom,promuser
+    #     network_mode: host
 
     usermanager:
         container_name: usermanager
@@ -40,7 +40,7 @@ services:
         network_mode: host
         depends_on:
             - etcd
-            - pg1       
+            # - pg1       
 
     cardcolumnmanager:
         container_name: cardcolumnmanager
@@ -48,7 +48,7 @@ services:
         network_mode: host
         depends_on:
             - etcd
-            - pg1
+            # - pg1
 
     portal:
         container_name: portal

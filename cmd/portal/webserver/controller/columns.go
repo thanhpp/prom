@@ -24,6 +24,13 @@ func (cC *ColumnCtrl) CreateNewColumn(c *gin.Context) {
 		return
 	}
 
+	claim, err := getClaimsFromContext(c)
+	if err != nil {
+		logger.Get().Errorf("Context claims error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
 	req := new(dto.CreateNewColumnReq)
 	if err = c.ShouldBindJSON(req); err != nil {
 		logger.Get().Errorf("Bind JSON error: %v", err)
@@ -39,10 +46,21 @@ func (cC *ColumnCtrl) CreateNewColumn(c *gin.Context) {
 	}
 
 	column := &ccmanrpc.Column{
-		Title: req.ColumnName,
+		ProjectID: prjID,
+		Title:     req.ColumnName,
+		CreatedBy: claim.UserID,
 	}
-	if err = service.GetCCManSrv().CreateColumn(c, int(project.ShardID), column); err != nil {
+	id, err := service.GetCCManSrv().CreateColumn(c, int(project.ShardID), column)
+	if err != nil {
 		logger.Get().Errorf("Create column error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// update project index
+	project.Index += fmt.Sprintf("%d,", id)
+	if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
+		logger.Get().Errorf("Update project index error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -69,7 +87,7 @@ func (cC *ColumnCtrl) ReorderColumns(c *gin.Context) {
 
 	project := &usrmanrpc.Project{
 		ID:    prjID,
-		Index: strings.Trim(strings.Replace(fmt.Sprint(req.ColumnIndex), " ", ",", -1), "[]"),
+		Index: strings.Trim(strings.Replace(fmt.Sprint(req.ColumnIndex), " ", ",", -1), "[]") + ",",
 	}
 	if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
 		logger.Get().Errorf("Update project index error: %v", err)
@@ -116,6 +134,15 @@ func (cC *ColumnCtrl) DeleteColumn(c *gin.Context) {
 			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 			return
 		}
+	}
+
+	// update project index
+	project.Index = strings.ReplaceAll(project.Index, fmt.Sprintf("%d,", req.ColumnID), "")
+	fmt.Println(project.Index)
+	if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
+		logger.Get().Errorf("Update project index error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	resp := new(dto.Resp)

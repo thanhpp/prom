@@ -58,6 +58,7 @@ message CreateCardReq {
 message CreateCardResp {
     int32 Code = 1;
     string Message = 2;
+    uint32 CreatedID = 3;
 }
 
 message GetCardByIDReq {
@@ -139,6 +140,7 @@ message CreateColumnReq {
 message CreateColumnResp {
     int32 Code = 1;
     string Message = 2;
+    uint32 CreatedID = 3;
 }
 
 message GetColumnByIDReq {

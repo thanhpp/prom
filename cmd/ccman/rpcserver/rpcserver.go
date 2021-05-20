@@ -50,7 +50,15 @@ func (c *ccManSv) GetAllFromProjectID(ctx context.Context, req *ccmanrpc.GetAllF
 		return nil, status.Error(codes.Unavailable, "Empty request")
 	}
 
-	return resp, nil
+	cols, err := repository.GetDAO().GetAllFromProjectID(ctx, req.ProjectID)
+	if err != nil {
+		logger.Get().Errorf("GetAllFromProjectID error: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("GetAllFromProjectID OK")
+
+	return &ccmanrpc.GetAllFromProjectIDResp{Code: errconst.RPCSuccessCode, Columns: cols}, nil
 }
 
 // CARD
@@ -62,13 +70,14 @@ func (c *ccManSv) CreateCard(ctx context.Context, req *ccmanrpc.CreateCardReq) (
 		return nil, status.Error(codes.Unavailable, "Empty request")
 	}
 
-	if err := repository.GetDAO().CreateCard(ctx, req.CreateCard); err != nil {
+	id, err := repository.GetDAO().CreateCard(ctx, req.CreateCard)
+	if err != nil {
 		logger.Get().Errorf("Create card error: %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	logger.Get().Info("Create card OK")
-	return &ccmanrpc.CreateCardResp{Code: errconst.RPCSuccessCode}, nil
+	return &ccmanrpc.CreateCardResp{Code: errconst.RPCSuccessCode, CreatedID: id}, nil
 }
 
 func (c *ccManSv) GetCardByID(ctx context.Context, req *ccmanrpc.GetCardByIDReq) (resp *ccmanrpc.GetCardByIDResp, err error) {
@@ -198,13 +207,14 @@ func (c *ccManSv) CreateColumn(ctx context.Context, req *ccmanrpc.CreateColumnRe
 		return nil, status.Error(codes.Unavailable, "Empty request")
 	}
 
-	if err := repository.GetDAO().CreateColumn(ctx, req.CreateColumn); err != nil {
+	id, err := repository.GetDAO().CreateColumn(ctx, req.CreateColumn)
+	if err != nil {
 		logger.Get().Errorf("Create column error : %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	logger.Get().Info("Create column OK")
-	return &ccmanrpc.CreateColumnResp{Code: errconst.RPCSuccessCode}, nil
+	return &ccmanrpc.CreateColumnResp{Code: errconst.RPCSuccessCode, CreatedID: id}, nil
 }
 
 func (c *ccManSv) GetColumnByID(ctx context.Context, req *ccmanrpc.GetColumnByIDReq) (resp *ccmanrpc.GetColumnByIDResp, err error) {
