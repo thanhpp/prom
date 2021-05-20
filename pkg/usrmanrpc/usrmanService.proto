@@ -1,0 +1,258 @@
+syntax = "proto3";
+
+package usrmanrpc;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/thanhpp/prom/pkg/usrmanrpc/usrmanEntity.proto";
+
+option go_package = "github.com/thanhpp/prom/pkg/usrmanrpc";
+
+option (gogoproto.gostring_all) = true;
+option (gogoproto.equal_all) = true;
+option (gogoproto.verbose_equal_all) = true;
+option (gogoproto.populate_all) = true;
+option (gogoproto.testgen_all) = true;
+option (gogoproto.benchgen_all) = false;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+
+service UsrManSrv {
+    rpc GetUserByID (GetUserByIDReq) returns (GetUserByIDResp);
+    rpc CreateUser (CreateUserReq) returns (CreateUserResp);
+    rpc GetUserByPattern (GetUserByPatternReq) returns (GetUserByPatternResp);
+    rpc GetUserByUsernamePass (GetUserByUsernamePassReq) returns (GetUserByUsernamePassResp);
+    rpc GetUserByTeamID (GetUserByTeamIDReq) returns (GetUserByTeamIDResp);
+    rpc UpdateUserByID (UpdateUserByIDReq) returns (UpdateUserByIDResp);
+    rpc DeleteUserByID (DeleteUserByIDReq) returns (DeleteUserByIDResp);
+    rpc CreateTeam (CreateTeamReq) returns (CreateTeamResp);
+    rpc GetTeamByID (GetTeamByIDReq) returns (GetTeamByIDResp);
+    rpc GetTeamsByUserID (GetTeamsByUserIDReq) returns (GetTeamsByUserIDResp);
+    rpc GetTeamsByCreatorID (GetTeamsByCreatorIDReq) returns (GetTeamsByCreatorIDResp);
+    rpc GetTeamByName (GetTeamByNameReq) returns (GetTeamByNameResp);
+    rpc UpdateTeamByID (UpdateTeamByIDReq) returns (UpdateTeamByIDResp);
+    rpc AddMemberByID (AddMemberByIDReq) returns (AddMemberByIDResp);
+    rpc RemoveMemberByID (RemoveMemberByIDReq) returns (RemoveMemberByIDResp);
+    rpc DeleteTeamByID (DeleteTeamByIDReq) returns (DeleteTeamByIDResp);
+    rpc NextProjectID (NextProjectIDReq) returns (NextProjectIDResp);
+    rpc CreateProject (CreateProjectReq) returns (CreateProjectResp);
+    rpc GetProjectByID (GetProjectByIDReq) returns (GetProjectByIDResp);
+    rpc GetProjtectsByTeamID (GetProjtectsByTeamIDReq) returns (GetProjtectsByTeamIDResp);
+    rpc UpdateProjectByID (UpdateProjectByIDReq) returns (UpdateProjectByIDResp);
+    rpc DeleteProjectByID (DeleteProjectByIDReq) returns (DeleteProjectByIDResp);
+}
+
+message GetUserByIDReq {
+    uint32 UserID = 1;
+}
+
+message GetUserByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    User User = 3;
+}
+
+message CreateUserReq {
+    User User = 1;
+}
+
+message CreateUserResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetUserByPatternReq {
+    string Pattern = 1;
+}
+
+message GetUserByPatternResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated User Users = 3;
+}
+
+message GetUserByUsernamePassReq {
+    string Username = 1;
+    string Pass = 2;
+}
+
+message GetUserByUsernamePassResp {
+    int32 Code = 1;
+    string Message = 2;
+    User User = 3;
+}
+
+message GetUserByTeamIDReq {
+    uint32 TeamID = 1;
+}
+
+message GetUserByTeamIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated User Users = 3;
+}
+
+message UpdateUserByIDReq {
+    uint32 UserID = 1;
+    User User = 2;
+}
+
+message UpdateUserByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteUserByIDReq {
+    uint32 UserID = 1;
+}
+
+message DeleteUserByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message CreateTeamReq {
+    Team Team = 1;
+}
+
+message CreateTeamResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetTeamByIDReq {
+    uint32 TeamID = 1;
+}
+
+message GetTeamByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    Team Team = 3;
+}
+
+message GetTeamsByUserIDReq {
+    uint32 UserID = 1;
+}
+
+message GetTeamsByUserIDResp {
+    int32 Code = 1; 
+    string Message = 2;
+    repeated Team Teams = 3;
+}
+
+message GetTeamsByCreatorIDReq {
+    uint32 CreatorID = 1;
+}
+
+message GetTeamsByCreatorIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Team Teams = 3;
+}
+
+message GetTeamByNameReq {
+    string TeamName = 1;
+}
+
+message GetTeamByNameResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Team Teams = 3;
+}
+
+message UpdateTeamByIDReq {
+    uint32 TeamID = 1;
+    Team Team = 2;
+}
+
+message UpdateTeamByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message AddMemberByIDReq {
+    uint32 TeamID = 1;
+    uint32 UserID = 2;
+}
+
+message AddMemberByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message RemoveMemberByIDReq {
+    uint32 TeamID = 1;
+    uint32 UserID = 2;
+}
+
+message RemoveMemberByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteTeamByIDReq {
+    uint32 TeamID = 1;
+}
+
+message DeleteTeamByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message NextProjectIDReq{
+
+}
+
+message NextProjectIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    int32 NextID = 3;
+}
+
+message CreateProjectReq {
+    Project Project = 1;
+}
+
+message CreateProjectResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message GetProjectByIDReq {
+    uint32 ProjectID = 1;
+}
+
+message GetProjectByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    Project Project = 3;
+}
+
+message GetProjtectsByTeamIDReq {
+    uint32 TeamID = 1;
+}
+
+message GetProjtectsByTeamIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Project Projects = 3;
+}
+
+message UpdateProjectByIDReq {
+    uint32 ProjectID = 1;
+    Project Project = 2;
+}
+
+message UpdateProjectByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message DeleteProjectByIDReq {
+    uint32 ProjectID = 1;
+}
+
+message DeleteProjectByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}

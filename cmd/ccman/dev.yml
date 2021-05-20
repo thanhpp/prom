@@ -1,0 +1,24 @@
+database:
+  host: "127.0.0.1"
+  port: "5432"
+  user: "thanhpp"
+  pass: "testthanhpp"
+  name: "prom"
+  log: "INFO"
+
+log:
+  level: "DEBUG"
+  color: true
+
+etcd:
+  endpoints:
+    - "127.0.0.1:2379"
+  timeout: 10
+
+grpc:
+  name: "cardscolumnsmanager"
+  publichost: "0.0.0.0"
+  port: "8080"
+  maxconnections: 100
+
+shardID: 1
