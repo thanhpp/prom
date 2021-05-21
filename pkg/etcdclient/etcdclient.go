@@ -3,6 +3,7 @@ package etcdclient
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -55,6 +56,7 @@ func (ec *ETCDClient) RemoveEndpoints(ctx context.Context, service string, addre
 
 func (ec *ETCDClient) AddEndpoints(ctx context.Context, service string, address string) (err error) {
 	r := &etcdnaming.GRPCResolver{Client: ec.client}
+	fmt.Printf("Srv: %s. Addr: %s", service, address)
 	if err := r.Update(ctx, service, naming.Update{Op: naming.Delete, Addr: address}); err != nil {
 		return err
 	}

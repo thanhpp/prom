@@ -5,6 +5,8 @@ func SetMainConfig(path string) (err error) {
 		return err
 	}
 
+	setConfigFromENV()
+
 	return nil
 }
 

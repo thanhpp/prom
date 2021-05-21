@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"os"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -49,4 +50,27 @@ func readConfigFromFile(filepath string) (err error) {
 	}
 
 	return
+}
+
+func setConfigFromENV() {
+	etcdEndpoints := os.Getenv("ETCDENDPOINT")
+	if len(etcdEndpoints) > 0 {
+		strs := strings.Split(etcdEndpoints, ",")
+		mainConfig.ETCD.Endpoints = strs
+	}
+
+	redisAddr := os.Getenv("REDISADDR")
+	if len(redisAddr) > 0 {
+		mainConfig.Redis.Addr = redisAddr
+	}
+
+	webHost := os.Getenv("WEBHOST")
+	if len(webHost) > 0 {
+		mainConfig.WebServer.Host = webHost
+	}
+
+	webPort := os.Getenv("WEBPORT")
+	if len(webPort) > 0 {
+		mainConfig.WebServer.Port = webPort
+	}
 }

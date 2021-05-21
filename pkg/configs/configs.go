@@ -4,6 +4,7 @@ package configs
 import "fmt"
 
 type GRPCConfig struct {
+	DockerMode bool   `mapstructure:"docker"`
 	Name       string `mapstructure:"name"`
 	PublicHost string `mapstructure:"publichost"`
 	Port       string `mapstructure:"port"`

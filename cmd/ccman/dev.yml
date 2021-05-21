@@ -16,6 +16,7 @@ etcd:
   timeout: 10
 
 grpc:
+  docker: false
   name: "cardscolumnsmanager"
   publichost: "0.0.0.0"
   port: "8080"

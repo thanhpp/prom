@@ -27,5 +27,7 @@ func SetMainConfig(configPath string) (err error) {
 		return err
 	}
 
+	setConfigFromENV()
+
 	return nil
 }

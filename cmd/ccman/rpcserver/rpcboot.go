@@ -12,8 +12,14 @@ import (
 )
 
 func StartGRPC(c *configs.GRPCConfig, shardID int64) (daemon booting.Daemon, err error) {
-	if err := etcdclient.Get().AddEndpoints(context.Background(), fmt.Sprintf("%s-%d", c.Name, shardID), fmt.Sprintf("%s:%s", c.PublicHost, c.Port)); err != nil {
-		return nil, err
+	if c.DockerMode {
+		if err := etcdclient.Get().AddEndpoints(context.Background(), fmt.Sprintf("%s-%d", c.Name, shardID), fmt.Sprintf("%s:%s", c.Name, c.Port)); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := etcdclient.Get().AddEndpoints(context.Background(), fmt.Sprintf("%s-%d", c.Name, shardID), fmt.Sprintf("%s:%s", c.PublicHost, c.Port)); err != nil {
+			return nil, err
+		}
 	}
 
 	daemon, err = booting.NewGRPCDaemon(c,
