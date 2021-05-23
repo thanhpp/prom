@@ -10,14 +10,14 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="../node_modules/jqvmap/dist/jqvmap.min.css">
-  <link rel="stylesheet" href="../node_modules/summernote/dist/summernote-bs4.css">
-  <link rel="stylesheet" href="../node_modules/owl.carousel/dist/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="../node_modules/owl.carousel/dist/assets/owl.theme.default.min.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/components.css">
+  <link href="path/to/jkanban.min.css">
+  <link rel="stylesheet" href="../assets/css/project.css">
+
+
 </head>
 
 <body>
@@ -126,59 +126,21 @@
      <div class="main-content">
       <section class="section">
         <div class="section-header">
-          <h1>Home</h1>
-        </div>
-<section class ="section">
-  <div class="row">
-    <div class="col-12 mb-4">
-      <div class="hero text-white bg-primary"">
-        <div class="hero-inner">
-          <h2>Welcome back, <span>Tran Dinh Vu</span>!</h2>
-          <p class="lead">What's your plan for today?</p>
-          <div class="mt-4">
-            <a href="#" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="fas fa-plus"></i>New project...</a>
-          </div>
-        </div>
-      </div>
-    </div>
-</section>
-        <div class="section-body">
-          <h2 class="section-title">Your Projects</h2>
-        </div>
-        <div class="row">
-          <div class="col-12 col-sm-6 col-md-3 col-lg-2">
-            <article class="article">
-              <a href="#">
-              <div class="article-header text-white">
-                <div class="article-image" data-background="../assets/img/news/img08.jpg">
-                </div>
-                <div class="article-title">
-                  <h2>Birthday Party</h2>
-                </div>
-              </div>
-            </a>
-            </article>
-          </div>
+          <h1>Projects Name</h1>
         </div>
         <div class="section-body">
-          <h2 class="section-title">Recent activites</h2>
-        </div>
-        <div class="row" style="height:80%; overflow:hidden;">
-          <div class="col-lg-12 col-md-12 col-12 col-sm-12">
-            <div class="card">
-              <div class="card-body">
-                <ul class="list-unstyled list-unstyled-border">
-                  <li class="media">
-                    <img class="mr-3 rounded-circle" width="50" src="../assets/img/avatar/avatar-1.png" alt="avatar">
-                    <div class="media-body">
-                      <div class="float-right text-primary">Now</div>
-                      <div class="media-title">Nguyen Ba Nam</div>
-                      <span class="text-small text-muted">Add a new column to Birthday Party projects</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <div class="row">
+            <div id="myKanban" class="col-12">
+          </div>
+          </div>
+          <div class="row">
+            <button id="addDefault">Add "Default" board</button>
+              <br />
+              <button id="addToDo">Add element in "To Do" Board</button>
+              <br />
+              <button id="removeBoard">Remove "Done" Board</button>
+              <br />
+              <button id="removeElement">Remove "My Task Test"</button>
           </div>
         </div>
       </section>
@@ -196,17 +158,15 @@
   <script src="../assets/js/stisla.js"></script>
 
   <!-- JS Libraies -->
-  <script src="../node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
-  <script src="../node_modules/chart.js/dist/Chart.min.js"></script>
-  <script src="../node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
-  <script src="../node_modules/summernote/dist/summernote-bs4.js"></script>
-  <script src="../node_modules/chocolat/dist/js/jquery.chocolat.min.js"></script>
+
 
   <!-- Template JS File -->
   <script src="../assets/js/scripts.js"></script>
   <script src="../assets/js/custom.js"></script>
 
   <!-- Page Specific JS File -->
-  <script src="../assets/js/page/index.js"></script>
+  <script src="../assets/js/jkanban.js"></script>
+  <script src="../assets/js/project.js"></script>
+
 </body>
 </html>
