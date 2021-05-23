@@ -1,5 +1,31 @@
-#myKanban{
+#myKanban {
   overflow: auto;
   white-space: nowrap;
 }
-
+.kanban-drag {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.kanban-item {
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;
+  width: 100%;
+  flex: 0;
+  vertical-align: top;
+  height:70px;
+}
+.kanban-board-header {
+  cursor: pointer;
+  justify-content: space-between;
+}
+.kanban-board{
+  flex-grow: 1;
+}
+.new-card{
+  float: right;
+}

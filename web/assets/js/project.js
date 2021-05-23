@@ -1,10 +1,10 @@
 var KanbanTest = new jKanban({
   element: "#myKanban",
   gutter: "10px",
-  widthBoard: "450px",
+  widthBoard: "300px",
   responsivePercentage: false,
   itemHandleOptions: {
-    enabled: true,
+    enabled: false,
   },
   click: function (el) {
     console.log("Trigger on all items click!");
@@ -33,6 +33,7 @@ var KanbanTest = new jKanban({
         title: text,
       });
       formItem.parentNode.removeChild(formItem);
+      addClassToNewBoard();
     });
     document.getElementById("CancelBtn").onclick = function () {
       formItem.parentNode.removeChild(formItem);
@@ -40,15 +41,15 @@ var KanbanTest = new jKanban({
   },
   itemAddOptions: {
     enabled: true,
-    content: "+ Add New Card",
-    class: "custom-button",
-    footer: true,
+    content: "+",
+    class: "new-card btn btn-outline-primary",
+    footer: false,
   },
   boards: [
     {
       id: "_todo",
-      title: "To Do (Can drop item only in working)",
-      class: "info,good,card",
+      title: "To Do ",
+      class: "info,good",
       dragTo: ["_working"],
       item: [
         {
@@ -78,8 +79,8 @@ var KanbanTest = new jKanban({
     },
     {
       id: "_working",
-      title: "Working (Try drag me too)",
-      class: "warning,card",
+      title: "Working ",
+      class: "warning",
       item: [
         {
           title: "Do Something!",
@@ -91,12 +92,18 @@ var KanbanTest = new jKanban({
     },
     {
       id: "_done",
-      title: "Done (Can drop item only in working)",
-      class: "success,card",
+      title: "Done",
+      class: "success",
       dragTo: ["_working"],
       item: [
         {
           title: "All right",
+        },
+        {
+          title: "Ok!",
+        },
+        {
+          title: "Ok!",
         },
         {
           title: "Ok!",
@@ -118,20 +125,11 @@ addBoardDefault.addEventListener("click", function () {
   KanbanTest.addBoards([
     {
       id: "_default",
-      title: "Kanban Default",
-      item: [
-        {
-          title: "Default Item",
-        },
-        {
-          title: "Default Item 2",
-        },
-        {
-          title: "Default Item 3",
-        },
-      ],
+      title: "New Board",
+      item: [],
     },
   ]);
+  addClassToNewBoard();
 });
 
 var removeBoard = document.getElementById("removeBoard");
@@ -150,18 +148,35 @@ allEle.forEach(function (item, index) {
 });
 $(document).ready(function () {
   console.log("ready!");
-  addClassToContainer();
+  addClassToNewBoard();
 });
 
-function addClassToContainer() {
-  console.log("aaaaaa");
+function addClassToNewBoard() {
   var containerElements = document.getElementsByClassName("kanban-container");
   for (i = 0; i < containerElements.length; i++) {
     containerElements[i].classList.add("row");
+
   }
 
   var boardElements = document.getElementsByClassName("kanban-board");
   for (i = 0; i < boardElements.length; i++) {
-    boardElements[i].classList.add("col");
+    boardElements[i].classList.add("col","card");
   }
+  
+  var boardHeaderElements = document.getElementsByClassName("kanban-board-header");
+  for (i = 0; i < boardHeaderElements.length; i++) {
+    boardHeaderElements[i].classList.add("card-header");
+  }
+
+   
+  var boardBodyElements = document.getElementsByClassName("kanban-drag");
+  for (i = 0; i < boardBodyElements.length; i++) {
+    boardBodyElements[i].classList.add("card-body", "row");
+  }
+
+  var kanbanItems = document.getElementsByClassName("kanban-item");
+  for (i = 0; i < kanbanItems.length; i++) {
+    kanbanItems[i].classList.add("btn", "btn-primary",);
+  }
+  
 }
