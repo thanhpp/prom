@@ -51,3 +51,8 @@
 .itemform .new-item .new-item-text{
   height:57px;
 }
+.new-item{
+margin-bottom: 10px;}
+.new-item-button{
+  margin-left: 10px;
+}

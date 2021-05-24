@@ -23,7 +23,7 @@ var KanbanTest = new jKanban({
     var formItem = document.createElement("form");
     formItem.setAttribute("class", "itemform");
     formItem.innerHTML =
-      '<div class="new-item form-group"><input type="text" class="form-control new-item-text" rows="2" autofocus><input style="display: none; visibility: hidden; position: absolute;" type="submit" value></input></div><div class="form-group"><button type="button" id="CancelBtn" class="btn btn-default btn-xs pull-right">Cancel</button></div>';
+      '<div class="new-item form-group"><input type="text" class="form-control new-item-text" rows="2" autofocus><input style="display: none; visibility: hidden; position: absolute;" type="submit" value></input></div><div class="form-group text-right"><button type="submit" id="submit" class="btn btn-success new-item-button">Add</button><button type="button" id="CancelBtn" class="btn btn-outline-danger pull-right new-item-button">Cancel</button></div>';
 
     KanbanTest.addForm(boardId, formItem);
     formItem.addEventListener("submit", function (e) {
