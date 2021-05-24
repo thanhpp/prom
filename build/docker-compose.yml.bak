@@ -7,8 +7,6 @@ services:
             - POSTGRES_USER=thanhpp
             - POSTGRES_PASSWORD=testthanhpp
             - POSTGRES_MULTIPLE_DATABASES=prom,thanhpp:promuser,thanhpp
-        networks: 
-            - dev-network
 
     etcd:
         container_name: etcd
@@ -24,16 +22,12 @@ services:
             - '--initial-cluster=s1=http://0.0.0.0:2380'
             - '--initial-cluster-token=tkn'
             - '--initial-cluster-state=new'
-        networks: 
-            - dev-network
 
     redis:
         container_name: redis
         image: redis
         depends_on:
             - etcd
-        networks: 
-            - dev-network
 
     usermanager:
         container_name: usermanager
@@ -46,8 +40,9 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
-        networks: 
-            - dev-network
+        links: 
+            - "etcd:etcd"
+            - "db:db"
         depends_on:
             - etcd
             - db
@@ -63,8 +58,9 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
-        networks: 
-            - dev-network
+        links: 
+            - "etcd:etcd"
+            - "db:db"
         depends_on:
             - etcd
             - db
@@ -74,8 +70,11 @@ services:
         image: docker.pkg.github.com/thanhpp/prom/portal:latest
         ports: 
             - '12345:12345'
-        networks: 
-            - dev-network
+        links: 
+            - "etcd:etcd"
+            - "redis:redis"
+            - "usermanager:usermanager"
+            - "cardscolumnsmanager:cardscolumnsmanager"
         environment: 
             - 'ETCDENDPOINT=etcd:2379'
             - 'REDISADDR=redis:6379'
@@ -88,7 +87,3 @@ services:
             - redis
             - usermanager
             - cardscolumnsmanager
-
-networks: 
-    dev-network:
-        driver: bridge

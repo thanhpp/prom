@@ -17,6 +17,7 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/uuid v1.2.0
 	github.com/spf13/viper v1.7.1
+	github.com/streadway/amqp v1.0.0
 	go.etcd.io/etcd v3.3.25+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
