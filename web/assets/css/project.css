@@ -9,7 +9,7 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
-.kanban-item {
+.kanban-drag .kanban-item {
   cursor: pointer;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -19,9 +19,15 @@
   vertical-align: top;
   height:70px;
 }
-.kanban-board-header {
+.kanban-board .kanban-board-header{
+  justify-content: space-between;
+  cursor:grab;
+}
+.kanban-container .kanban-board-header {
   cursor: pointer;
   justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .kanban-board{
   flex-grow: 1;

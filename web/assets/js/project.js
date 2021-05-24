@@ -146,17 +146,24 @@ var allEle = KanbanTest.getBoardElements("_todo");
 allEle.forEach(function (item, index) {
   //console.log(item);
 });
+
+var test = document.getElementById("test");
+test.addEventListener("click", function () {
+var board = KanbanTest.findBoard("_done");
+console.log(board);
+});
+
 $(document).ready(function () {
   console.log("ready!");
   addClassToNewBoard();
 });
 
 function addClassToNewBoard() {
-  var containerElements = document.getElementsByClassName("kanban-container");
-  for (i = 0; i < containerElements.length; i++) {
-    containerElements[i].classList.add("row");
+  // var containerElements = document.getElementsByClassName("kanban-container");
+  // for (i = 0; i < containerElements.length; i++) {
+  //   containerElements[i].classList.add("row");
 
-  }
+  // }
 
   var boardElements = document.getElementsByClassName("kanban-board");
   for (i = 0; i < boardElements.length; i++) {
