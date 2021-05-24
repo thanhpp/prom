@@ -35,3 +35,19 @@
 .new-card{
   float: right;
 }
+.kanban-item{
+  text-align: left;
+}
+
+.itemform{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;
+  width: 100%;
+  flex: 0;
+  vertical-align: top;
+  height:70px;
+}
+.itemform .new-item .new-item-text{
+  height:57px;
+}

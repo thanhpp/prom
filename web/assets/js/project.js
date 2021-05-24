@@ -23,7 +23,7 @@ var KanbanTest = new jKanban({
     var formItem = document.createElement("form");
     formItem.setAttribute("class", "itemform");
     formItem.innerHTML =
-      '<div class="form-group"><textarea class="form-control" rows="2" autofocus></textarea></div><div class="form-group"><button type="submit" class="btn btn-primary btn-xs pull-right">Submit</button><button type="button" id="CancelBtn" class="btn btn-default btn-xs pull-right">Cancel</button></div>';
+      '<div class="new-item form-group"><input type="text" class="form-control new-item-text" rows="2" autofocus><input style="display: none; visibility: hidden; position: absolute;" type="submit" value></input></div><div class="form-group"><button type="button" id="CancelBtn" class="btn btn-default btn-xs pull-right">Cancel</button></div>';
 
     KanbanTest.addForm(boardId, formItem);
     formItem.addEventListener("submit", function (e) {
@@ -41,7 +41,7 @@ var KanbanTest = new jKanban({
   },
   itemAddOptions: {
     enabled: true,
-    content: "+",
+    content: "+ New Item",
     class: "new-card btn btn-outline-primary",
     footer: false,
   },
@@ -118,6 +118,7 @@ toDoButton.addEventListener("click", function () {
   KanbanTest.addElement("_todo", {
     title: "Test Add",
   });
+  addClassToNewBoard();
 });
 
 var addBoardDefault = document.getElementById("addDefault");
