@@ -113,46 +113,46 @@ var KanbanTest = new jKanban({
   ],
 });
 
-var toDoButton = document.getElementById("addToDo");
-toDoButton.addEventListener("click", function () {
-  KanbanTest.addElement("_todo", {
-    title: "Test Add",
-  });
-  addClassToNewBoard();
-});
+// var toDoButton = document.getElementById("addToDo");
+// toDoButton.addEventListener("click", function () {
+//   KanbanTest.addElement("_todo", {
+//     title: "Test Add",
+//   });
+//   addClassToNewBoard();
+// });
 
-var addBoardDefault = document.getElementById("addDefault");
-addBoardDefault.addEventListener("click", function () {
-  KanbanTest.addBoards([
-    {
-      id: "_default",
-      title: "New Board",
-      item: [],
-    },
-  ]);
-  addClassToNewBoard();
-});
+// var addBoardDefault = document.getElementById("addDefault");
+// addBoardDefault.addEventListener("click", function () {
+//   KanbanTest.addBoards([
+//     {
+//       id: "_default",
+//       title: "New Board",
+//       item: [],
+//     },
+//   ]);
+//   addClassToNewBoard();
+// });
 
-var removeBoard = document.getElementById("removeBoard");
-removeBoard.addEventListener("click", function () {
-  KanbanTest.removeBoard("_done");
-});
+// var removeBoard = document.getElementById("removeBoard");
+// removeBoard.addEventListener("click", function () {
+//   KanbanTest.removeBoard("_done");
+// });
 
-var removeElement = document.getElementById("removeElement");
-removeElement.addEventListener("click", function () {
-  KanbanTest.removeElement("_test_delete");
-});
+// var removeElement = document.getElementById("removeElement");
+// removeElement.addEventListener("click", function () {
+//   KanbanTest.removeElement("_test_delete");
+// });
 
-var allEle = KanbanTest.getBoardElements("_todo");
-allEle.forEach(function (item, index) {
-  //console.log(item);
-});
+// var allEle = KanbanTest.getBoardElements("_todo");
+// allEle.forEach(function (item, index) {
+//   //console.log(item);
+// });
 
-var test = document.getElementById("test");
-test.addEventListener("click", function () {
-var board = KanbanTest.findBoard("_done");
-console.log(board);
-});
+// var test = document.getElementById("test");
+// test.addEventListener("click", function () {
+// var board = KanbanTest.findBoard("_done");
+// console.log(board);
+// });
 
 $(document).ready(function () {
   console.log("ready!");
