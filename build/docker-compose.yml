@@ -7,6 +7,8 @@ services:
             - POSTGRES_USER=thanhpp
             - POSTGRES_PASSWORD=testthanhpp
             - POSTGRES_MULTIPLE_DATABASES=prom,thanhpp:promuser,thanhpp
+        volumes: 
+            - ./postgres-data:/var/lib/postgresql
         networks: 
             - dev-network
 
