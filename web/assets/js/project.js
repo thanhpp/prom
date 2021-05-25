@@ -45,6 +45,20 @@ var KanbanTest = new jKanban({
     class: "new-card btn btn-outline-primary",
     footer: false,
   },
+  click: function (el) {
+    console.log(KanbanTest.options.boardsjfe)
+  },
+  context: function (el, e) {
+    alert("right-click at (" + `${e.pageX}` + "," + `${e.pageX}` + ")");
+  },
+  dropEl: function (el, target, source, sibling) {
+    console.log("a");
+    console.log(el.dataset);
+    console.log(target.children[0].dataset);
+    console.log(target.children[1].dataset);
+    console.log(source.dataset);
+    console.log(sibling);
+  },
   boards: [
     {
       id: "_todo",
@@ -53,34 +67,31 @@ var KanbanTest = new jKanban({
       dragTo: ["_working"],
       item: [
         {
-          id: "_test_delete",
-          title: "Try drag this (Look the console)",
-          drag: function (el, source) {
-            console.log("START DRAG: " + el.dataset.eid);
-          },
-          dragend: function (el) {
-            console.log("END DRAG: " + el.dataset.eid);
-          },
-          drop: function (el) {
-            console.log("DROPPED: " + el.dataset.eid);
-          },
+          id: "1",
+          title: "1",
+          num:"1",
+          // drag: function (el, source) {
+          //   console.log("START DRAG: " + el.dataset.eid);
+          //   console.log(source);
+          // },
+          // dragend: function (el) {
+          //   console.log("END DRAG: " + el.dataset.eid);
+          // },
+          // drop: function (el) {
+          //   console.log("DROPPED: " + el.dataset.eid);
+          // },
         },
         {
-          title: "Try Click This!",
-          click: function (el) {
-            alert("click");
-          },
-          context: function (el, e) {
-            alert("right-click at (" + `${e.pageX}` + "," + `${e.pageX}` + ")");
-          },
-          class: ["peppe", "bello"],
+          title: "2",
+          id: "2",
+         num:"2",
         },
       ],
     },
     {
       id: "_working",
       title: "Working ",
-      class: "warning",
+      class: "",
       item: [
         {
           title: "Do Something!",
@@ -93,8 +104,8 @@ var KanbanTest = new jKanban({
     {
       id: "_done",
       title: "Done",
-      class: "success",
-      dragTo: ["_working"],
+      class: "",
+      dragTo: [],
       item: [
         {
           title: "All right",

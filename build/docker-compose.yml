@@ -7,6 +7,10 @@ services:
             - POSTGRES_USER=thanhpp
             - POSTGRES_PASSWORD=testthanhpp
             - POSTGRES_MULTIPLE_DATABASES=prom,thanhpp:promuser,thanhpp
+        volumes: 
+            - ./postgres-data:/var/lib/postgresql
+        networks: 
+            - dev-network
 
     etcd:
         container_name: etcd
@@ -22,12 +26,16 @@ services:
             - '--initial-cluster=s1=http://0.0.0.0:2380'
             - '--initial-cluster-token=tkn'
             - '--initial-cluster-state=new'
+        networks: 
+            - dev-network
 
     redis:
         container_name: redis
         image: redis
         depends_on:
             - etcd
+        networks: 
+            - dev-network
 
     usermanager:
         container_name: usermanager
@@ -40,15 +48,14 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
-        links: 
-            - "etcd:etcd"
-            - "db:db"
+        networks: 
+            - dev-network
         depends_on:
             - etcd
             - db
 
-    cardcolumnmanager:
-        container_name: cardcolumnmanager
+    cardscolumnsmanager:
+        container_name: cardscolumnsmanager
         image: docker.pkg.github.com/thanhpp/prom/cardcolumnmanager:latest
         deploy:
             restart_policy:
@@ -58,9 +65,8 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
-        links: 
-            - "etcd:etcd"
-            - "db:db"
+        networks: 
+            - dev-network
         depends_on:
             - etcd
             - db
@@ -70,11 +76,8 @@ services:
         image: docker.pkg.github.com/thanhpp/prom/portal:latest
         ports: 
             - '12345:12345'
-        links: 
-            - "etcd:etcd"
-            - "redis:redis"
-            - "usermanager:usermanager"
-            - "cardcolumnmanager:cardscolumnsmanager"
+        networks: 
+            - dev-network
         environment: 
             - 'ETCDENDPOINT=etcd:2379'
             - 'REDISADDR=redis:6379'
@@ -86,4 +89,8 @@ services:
             - etcd
             - redis
             - usermanager
-            - cardcolumnmanager
+            - cardscolumnsmanager
+
+networks: 
+    dev-network:
+        driver: bridge
