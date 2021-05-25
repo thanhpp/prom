@@ -14,8 +14,8 @@ func ginAbortWithCodeMsg(c *gin.Context, code int, message string) {
 	c.AbortWithStatusJSON(code, resp)
 }
 
-func getUserIDFromParam(c *gin.Context) (id int, err error) {
-	userIDStr := c.Param("userID")
+func getUserIDFromQuery(c *gin.Context) (id int, err error) {
+	userIDStr := c.Query("userID")
 	userIDInt, err := strconv.Atoi(userIDStr)
 	if err != nil {
 		return 0, err
@@ -28,8 +28,8 @@ func getUserIDFromParam(c *gin.Context) (id int, err error) {
 	return userIDInt, nil
 }
 
-func getCardIDFromParam(c *gin.Context) (id int, err error) {
-	cardIDStr := c.Param("cardID")
+func getCardIDFromQuery(c *gin.Context) (id int, err error) {
+	cardIDStr := c.Query("cardID")
 	cardIDInt, err := strconv.Atoi(cardIDStr)
 	if err != nil {
 		return 0, err
@@ -42,26 +42,31 @@ func getCardIDFromParam(c *gin.Context) (id int, err error) {
 	return cardIDInt, nil
 }
 
-func getPageAndSizeFromParam(c *gin.Context) (page int, size int, err error) {
-	pageStr := c.Param("page")
-	pageInt, err := strconv.Atoi(pageStr)
-	if err != nil {
-		return 0, 0, err
+func getPageAndSizeFromQuery(c *gin.Context) (page int, size int, err error) {
+	page = 1
+	pageStr := c.Query("page")
+	if len(pageStr) > 0 {
+		page, err = strconv.Atoi(pageStr)
+		if err != nil {
+			return 0, 0, err
+		}
+		if page <= 0 {
+			return 0, 0, errors.New("Zero page")
+		}
 	}
 
-	if pageInt == 0 {
-		return 0, 0, errors.New("Zero page")
+	size = 1
+	sizeStr := c.Query("size")
+	if len(sizeStr) > 0 {
+		size, err := strconv.Atoi(sizeStr)
+		if err != nil {
+			return 0, 0, err
+		}
+
+		if size <= 0 {
+			return 0, 0, errors.New("Zero size")
+		}
 	}
 
-	sizeStr := c.Param("size")
-	sizeInt, err := strconv.Atoi(sizeStr)
-	if err != nil {
-		return 0, 0, err
-	}
-
-	if sizeInt == 0 {
-		return 0, 0, errors.New("Zero size")
-	}
-
-	return pageInt, sizeInt, nil
+	return page, size, nil
 }

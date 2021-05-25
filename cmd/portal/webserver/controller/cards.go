@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/thanhpp/prom/pkg/rabbitmq"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/thanhpp/prom/cmd/portal/service"
@@ -32,6 +34,13 @@ func (cC *CardCtrl) CreateNewCard(c *gin.Context) {
 		return
 	}
 
+	claims, err := getClaimsFromContext(c)
+	if err != nil {
+		logger.Get().Errorf("Context claims error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Context claims error")
+		return
+	}
+
 	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
 	if err != nil {
 		logger.Get().Errorf("Get project error: %v", err)
@@ -44,14 +53,37 @@ func (cC *CardCtrl) CreateNewCard(c *gin.Context) {
 		Description: req.Card.Description,
 		AssignedTo:  req.Card.AssignedTo,
 		DueDate:     timerpc.ToTimeRPC(time.Unix(int64(req.Card.DueDate), 0)),
+		CreatedBy:   claims.UserID,
 		ColumnID:    req.ColumnID,
 	}
 
-	_, err = service.GetCCManSrv().CreateCard(c, int(project.ShardID), card)
+	id, err := service.GetCCManSrv().CreateCard(c, int(project.ShardID), card)
 	if err != nil {
 		logger.Get().Errorf("Create card error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
+	}
+
+	msg := &rabbitmq.NewNotificationMsg{
+		CardID:  int(id),
+		UserIDs: []int{int(card.AssignedTo)},
+		Content: fmt.Sprintf("Card @card:%d is created by @user:%d", card.ID, card.CreatedBy),
+	}
+
+	if err := service.GetRabbitMQ().SendNewNotiMsg(msg); err != nil {
+		logger.Get().Errorf("Send new noti error: %v", err)
+	}
+
+	if card.AssignedTo != 0 {
+		msg := &rabbitmq.NewNotificationMsg{
+			CardID:  int(id),
+			UserIDs: []int{int(card.AssignedTo)},
+			Content: fmt.Sprintf("Card @card:%d is assigned to @user:%d by @user:%d", card.ID, card.AssignedTo, card.CreatedBy),
+		}
+
+		if err := service.GetRabbitMQ().SendNewNotiMsg(msg); err != nil {
+			logger.Get().Errorf("Send new noti error: %v", err)
+		}
 	}
 
 	resp := new(dto.Resp)
@@ -130,7 +162,6 @@ func (cC *CardCtrl) UpdateCard(c *gin.Context) {
 		Description: req.Card.Description,
 		AssignedTo:  req.Card.AssignedTo,
 		DueDate:     timerpc.ToTimeRPC(time.Unix(int64(req.Card.DueDate), 0)),
-		CreatedBy:   claim.UserID,
 	}
 	if req.ColumnID > 0 {
 		card.ColumnID = req.ColumnID
@@ -140,6 +171,15 @@ func (cC *CardCtrl) UpdateCard(c *gin.Context) {
 		logger.Get().Errorf("Update card by id error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
+	}
+
+	msg := &rabbitmq.NewNotificationMsg{
+		CardID:  int(card.ID),
+		Content: fmt.Sprintf("Card @card:%d is updated by @user:%d", req.Card.ID, claim.UserID),
+	}
+
+	if err := service.GetRabbitMQ().SendNewNotiMsg(msg); err != nil {
+		logger.Get().Errorf("Send new noti error: %v", err)
 	}
 
 	resp := new(dto.Resp)

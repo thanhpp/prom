@@ -8,6 +8,8 @@ import (
 )
 
 type iDAO interface {
+	InitDBConnection(dsn string, logLevel string) (err error)
+	AutoMigrate(ctx context.Context, models ...interface{}) (err error)
 	CreateNotification(ctx context.Context, noti *entity.Notification, users []int) (err error)
 	GetNotiByUserID(ctx context.Context, userID int, page int, size int) (notis []*entity.Notification, err error)
 	GetNotiByCardID(ctx context.Context, cardID int, page int, size int) (notis []*entity.Notification, err error)

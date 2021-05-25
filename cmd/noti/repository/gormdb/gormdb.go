@@ -58,6 +58,10 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 		return err
 	}
 
+	if err = gDB.AutoMigrate(&entity.Notification{}, &entity.UserNoti{}); err != nil {
+		return err
+	}
+
 	return nil
 }
 

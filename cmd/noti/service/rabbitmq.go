@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/thanhpp/prom/cmd/noti/repository"
@@ -31,6 +32,14 @@ func (r *RabbitMQService) Connect(serverURL string) (err error) {
 }
 
 func (r *RabbitMQService) CreateMsgDaemon(ctx context.Context) (daemon booting.Daemon, err error) {
+	if r.srv == nil {
+		return nil, errors.New("Empty service")
+	}
+
+	if err = r.srv.CreateQueue(rabbitmq.NotificationQueue); err != nil {
+		return nil, err
+	}
+
 	daemon = func(ctx context.Context) (start func() error, stop func()) {
 		start = func() error {
 			msgq, err := r.srv.GetConsumerChan(rabbitmq.NotificationQueue)
@@ -42,7 +51,7 @@ func (r *RabbitMQService) CreateMsgDaemon(ctx context.Context) (daemon booting.D
 				select {
 				case msg := <-msgq:
 					if err := r.handleCreateMsg(ctx, msg.Body); err != nil {
-						return err
+						logger.Get().Errorf("Handle message error: %v", err)
 					}
 				case <-ctx.Done():
 					return r.srvError("Context done", ctx.Err())
@@ -63,6 +72,10 @@ func (r *RabbitMQService) CreateMsgDaemon(ctx context.Context) (daemon booting.D
 func (r *RabbitMQService) handleCreateMsg(ctx context.Context, msg []byte) (err error) {
 	if ctx.Err() != nil {
 		return r.srvError("context check", err)
+	}
+
+	if msg == nil {
+		return nil
 	}
 
 	newNotiMsg := new(rabbitmq.NewNotificationMsg)

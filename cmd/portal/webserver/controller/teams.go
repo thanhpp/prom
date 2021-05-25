@@ -1,15 +1,16 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/thanhpp/prom/pkg/usrmanrpc"
+	"github.com/gin-gonic/gin"
 
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
-
-	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/prom/pkg/logger"
+	"github.com/thanhpp/prom/pkg/rabbitmq"
+	"github.com/thanhpp/prom/pkg/usrmanrpc"
 )
 
 type TeamCtrl struct{}
@@ -106,6 +107,13 @@ func (t *TeamCtrl) EditMember(c *gin.Context) {
 		return
 	}
 
+	claims, err := getClaimsFromContext(c)
+	if err != nil {
+		logger.Get().Errorf("Context claims error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
 	switch req.Op {
 	case "add":
 		if err := service.GetUsrManService().AddMemberByID(c, teamID, req.MemberID); err != nil {
@@ -113,12 +121,32 @@ func (t *TeamCtrl) EditMember(c *gin.Context) {
 			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 			return
 		}
+
+		msg := &rabbitmq.NewNotificationMsg{
+			UserIDs: []int{int(req.MemberID)},
+			Content: fmt.Sprintf("You were added to @team:%d by @user:%d", int(teamID), claims.UserID),
+		}
+
+		if err := service.GetRabbitMQ().SendNewNotiMsg(msg); err != nil {
+			logger.Get().Errorf("Send new noti error: %v", err)
+		}
+
 	case "remove":
 		if err := service.GetUsrManService().RemoveMemberByID(c, teamID, req.MemberID); err != nil {
 			logger.Get().Errorf("Remove member error: %v", err)
 			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 			return
 		}
+
+		msg := &rabbitmq.NewNotificationMsg{
+			UserIDs: []int{int(req.MemberID)},
+			Content: fmt.Sprintf("You were removed from @team:%d by @user:%d", int(teamID), claims.UserID),
+		}
+
+		if err := service.GetRabbitMQ().SendNewNotiMsg(msg); err != nil {
+			logger.Get().Errorf("Send new noti error: %v", err)
+		}
+
 	default:
 		logger.Get().Errorf("Invalid option: %s", req.Op)
 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, "Invalid option")
