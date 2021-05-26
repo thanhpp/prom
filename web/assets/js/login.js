@@ -52,8 +52,6 @@ $(document).ready(function () {
         }
       })
       .catch((error) => {
-        console.log("Không kết nối được tới máy chủ", error);
-        alert("Không kết nối được tới máy chủ");
       });
   }
 

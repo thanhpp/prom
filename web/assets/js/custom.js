@@ -21,4 +21,6 @@ $(document).ready(function () {
   $("#logoutButton").on("click", function () {
     logoutRequest();
   });
+
+  $(".name").text(String(sessionStorage.getItem("username")));
 });
