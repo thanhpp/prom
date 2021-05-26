@@ -3,7 +3,9 @@
   box-sizing: border-box;
   width: auto;
 }
-
+#myKanban{
+  padding-left: 5px;
+}
 .kanban-container * {
   box-sizing: border-box;
 }
@@ -17,7 +19,7 @@
 .kanban-board {
   position: relative;
   float: left;
-  background: #e2e4e6;
+  background: #ffffff;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -62,15 +64,16 @@
 }
 
 .kanban-item {
-  background: #fff;
+  background: #6777ef;
   padding: 15px;
   margin-bottom: 20px;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .kanban-item:hover {
-  cursor: move;
+  cursor: grabbing;
 }
+
 
 .kanban-item:last-child {
   margin: 0;

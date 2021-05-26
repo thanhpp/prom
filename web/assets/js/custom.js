@@ -1,8 +1,24 @@
-/**
- *
- * You can write your JS code here, DO NOT touch the default style file
- * because it will make it harder for you to update.
- *
- */
+$(document).ready(function () {
+  function logoutRequest() {
+    var token = sessionStorage.getItem("token");
 
-"use strict";
+    var logoutOptions = {
+      method: "GET",
+      credentials: "omit",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "text/plain",
+      },
+      redirect: "follow",
+    };
+
+    fetch("http://127.0.0.1:12345/logout", logoutOptions)
+      .then(() =>{
+        window.location.href = "../../../web/pages/login.html";
+      });
+  }
+  
+  $("#logoutButton").on("click", function () {
+    logoutRequest();
+  });
+});
