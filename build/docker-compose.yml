@@ -41,6 +41,9 @@ services:
     redis:
         container_name: redis
         image: redis
+        environment: 
+            - 'WAIT_HOSTS=etcd:2379'
+            - 'WAIT_AFTER=10'
         depends_on:
             - etcd
         networks: 
@@ -57,6 +60,8 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
+            - 'WAIT_HOSTS=etcd:2379, db:5432'
+            - 'WAIT_AFTER=10'
         networks: 
             - dev-network
         depends_on:
@@ -74,6 +79,8 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
+            - 'WAIT_HOSTS=etcd:2379, db:5432'
+            - 'WAIT_AFTER=10'
         networks: 
             - dev-network
         depends_on:
@@ -94,6 +101,8 @@ services:
         environment: 
             - 'DBHOST=db'
             - 'RABBITMQURL=amqp://guest:guest@messagebroker:5672/'
+            - 'WAIT_HOSTS=messagebroker:5672'
+            - 'WAIT_AFTER=10'
 
     portal:
         container_name: portal
@@ -106,6 +115,8 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'REDISADDR=redis:6379'
             - 'RABBITMQURL=amqp://guest:guest@messagebroker:5672/'
+            - 'WAIT_HOSTS=etcd:2379, redis:6379, messagebroker:5672'
+            - 'WAIT_AFTER=10'
         deploy:
             restart_policy:
                 condition: on-failure

@@ -30,4 +30,8 @@ COPY --from=builder ["/build/cmd/usrman/dev.yml", "dev.yml"]
 
 EXPOSE 8090
 
-CMD ["./usrman"]
+ENV WAIT_VERSION 2.9.0
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
+RUN chmod +x /wait
+
+CMD ./wait && ./usrman

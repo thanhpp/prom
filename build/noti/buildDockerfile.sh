@@ -1,4 +1,8 @@
-docker build -t noti -f ./Dockerfile ../.. && \
-docker tag noti:latest docker.pkg.github.com/thanhpp/prom/noti:latest \
-# && docker push docker.pkg.github.com/thanhpp/prom/noti:latest \
-# && docker run --name=noti --network=host noti:latest
+#! /bin/sh
+CONTAINERNAME="noti"
+TAG="dev"
+
+docker build -t $CONTAINERNAME -f ./Dockerfile ../.. && \
+docker tag $CONTAINERNAME:latest docker.pkg.github.com/thanhpp/prom/$CONTAINERNAME:$TAG \
+&& docker push docker.pkg.github.com/thanhpp/prom/$CONTAINERNAME:$TAG \
+# && docker run --name=$CONTAINERNAME --network=host docker.pkg.github.com/thanhpp/prom/$CONTAINERNAME:$TAG

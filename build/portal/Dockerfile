@@ -30,4 +30,8 @@ COPY --from=builder ["/build/cmd/portal/dev.yml", "dev.yml"]
 
 EXPOSE 12345
 
-CMD ["./portal"]
+ENV WAIT_VERSION 2.9.0
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
+RUN chmod +x /wait
+
+CMD ./wait && ./portal
