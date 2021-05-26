@@ -6,11 +6,7 @@ services:
         environment:
             - POSTGRES_USER=thanhpp
             - POSTGRES_PASSWORD=testthanhpp
-            - POSTGRES_MULTIPLE_DATABASES=prom,thanhpp:promuser,thanhpp:promnoti,thanhpp
-        volumes: 
-            - ./postgres-data/data:/var/lib/postgresql/data
-        networks: 
-            - dev-network
+            - POSTGRES_MULTIPLE_DATABASES=prom,thanhpp:promuser,thanhpp
 
     etcd:
         container_name: etcd
@@ -26,28 +22,12 @@ services:
             - '--initial-cluster=s1=http://0.0.0.0:2380'
             - '--initial-cluster-token=tkn'
             - '--initial-cluster-state=new'
-        networks: 
-            - dev-network
-    
-    messagebroker:
-        image: rabbitmq:3-management-alpine
-        container_name: messagebroker
-        ports:
-            - 15672:15672 # for serve RabbitMQ GUI
-        restart: always
-        networks:
-            - dev-network
 
     redis:
         container_name: redis
         image: redis
-        environment: 
-            - 'WAIT_HOSTS=etcd:2379'
-            - 'WAIT_AFTER=10'
         depends_on:
             - etcd
-        networks: 
-            - dev-network
 
     usermanager:
         container_name: usermanager
@@ -60,10 +40,9 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
-            - 'WAIT_HOSTS=etcd:2379, db:5432'
-            - 'WAIT_AFTER=10'
-        networks: 
-            - dev-network
+        links: 
+            - "etcd:etcd"
+            - "db:db"
         depends_on:
             - etcd
             - db
@@ -79,44 +58,26 @@ services:
             - 'ETCDENDPOINT=etcd:2379'
             - 'DBHOST=db'
             - 'DOCKERMODE=true'
-            - 'WAIT_HOSTS=etcd:2379, db:5432'
-            - 'WAIT_AFTER=10'
-        networks: 
-            - dev-network
+        links: 
+            - "etcd:etcd"
+            - "db:db"
         depends_on:
             - etcd
             - db
-
-    noti:
-        container_name: noti
-        image: docker.pkg.github.com/thanhpp/prom/noti:latest
-        restart: always
-        ports: 
-            - '23456:23456'
-        networks: 
-            - dev-network
-        depends_on: 
-            - db
-            - messagebroker
-        environment: 
-            - 'DBHOST=db'
-            - 'RABBITMQURL=amqp://guest:guest@messagebroker:5672/'
-            - 'WAIT_HOSTS=messagebroker:5672'
-            - 'WAIT_AFTER=10'
 
     portal:
         container_name: portal
         image: docker.pkg.github.com/thanhpp/prom/portal:latest
         ports: 
             - '12345:12345'
-        networks: 
-            - dev-network
+        links: 
+            - "etcd:etcd"
+            - "redis:redis"
+            - "usermanager:usermanager"
+            - "cardscolumnsmanager:cardscolumnsmanager"
         environment: 
             - 'ETCDENDPOINT=etcd:2379'
             - 'REDISADDR=redis:6379'
-            - 'RABBITMQURL=amqp://guest:guest@messagebroker:5672/'
-            - 'WAIT_HOSTS=etcd:2379, redis:6379, messagebroker:5672'
-            - 'WAIT_AFTER=10'
         deploy:
             restart_policy:
                 condition: on-failure
@@ -124,11 +85,5 @@ services:
         depends_on:
             - etcd
             - redis
-            - messagebroker
             - usermanager
-            - noti
             - cardscolumnsmanager
-
-networks: 
-    dev-network:
-        driver: bridge

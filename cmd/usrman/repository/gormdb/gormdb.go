@@ -297,7 +297,16 @@ func (g *implGorm) DeleteTeamByID(ctx context.Context, teamID uint32) (err error
 // -------------------------------------------------------- PROJECT ----------------------------------------------------------
 
 func (g *implGorm) NextProjectID(ctx context.Context) (projectID uint32, err error) {
-	if err = gDB.Model(prjModel).Select("MAX(id) as max").Pluck("max", &projectID).Error; err != nil {
+	var count int64 = -1
+	if err = gDB.Model(prjModel).Select("MAX(id) AS max").Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	if count == 0 {
+		return 1, nil
+	}
+
+	if err = gDB.Model(prjModel).Select("MAX(id) AS max").Pluck("max", &projectID).Error; err != nil {
 		return 0, err
 	}
 	return projectID + 1, nil

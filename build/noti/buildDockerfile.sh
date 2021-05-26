@@ -1,5 +1,5 @@
 #! /bin/sh
-CONTAINERNAME="usermanager"
+CONTAINERNAME="noti"
 TAG="dev"
 
 docker build -t $CONTAINERNAME -f ./Dockerfile ../.. && \

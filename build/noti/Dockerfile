@@ -15,9 +15,9 @@ RUN go mod download
 
 COPY [".", "."]
 
-WORKDIR /build/cmd/usrman
+WORKDIR /build/cmd/noti
 
-RUN go build -v -o usrman .
+RUN go build -v -o noti .
 
 # RUN
 
@@ -25,13 +25,13 @@ FROM alpine
 
 WORKDIR /run
 
-COPY --from=builder ["/build/cmd/usrman/usrman", "usrman"]
-COPY --from=builder ["/build/cmd/usrman/dev.yml", "dev.yml"]
+COPY --from=builder ["/build/cmd/noti/noti", "noti"]
+COPY --from=builder ["/build/cmd/noti/dev.yml", "dev.yml"]
 
-EXPOSE 8090
+EXPOSE 23456
 
 ENV WAIT_VERSION 2.9.0
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
 RUN chmod +x /wait
 
-CMD ./wait && ./usrman
+CMD ./wait && ./noti

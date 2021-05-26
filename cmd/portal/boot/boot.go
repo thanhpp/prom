@@ -6,12 +6,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/thanhpp/prom/cmd/portal/repository"
-
-	"github.com/thanhpp/prom/cmd/portal/webserver"
-
 	"github.com/thanhpp/prom/cmd/portal/core"
+	"github.com/thanhpp/prom/cmd/portal/repository"
 	"github.com/thanhpp/prom/cmd/portal/service"
+	"github.com/thanhpp/prom/cmd/portal/webserver"
 	"github.com/thanhpp/prom/pkg/etcdclient"
 	"github.com/thanhpp/prom/pkg/logger"
 )
@@ -61,6 +59,12 @@ func Boot() {
 	defer ccManCtxCancel()
 	if err := service.SetCCManSrv(ccManCtx); err != nil {
 		logger.Get().Errorf("Connect cards columns manager error: %v", err)
+		panic(err)
+	}
+
+	// rabbitmq
+	logger.Get().Info("SETTING UP RABBITMQ...")
+	if err := service.SetRabbitMQ(core.GetMainConfig().RabbitMQURL); err != nil {
 		panic(err)
 	}
 

@@ -26,7 +26,7 @@ func TestAutoMigrate(t *testing.T) {
 	TestInitConnection(t)
 	var (
 		ctx    = context.Background()
-		models = []interface{}{ccmanrpc.Column{}, ccmanrpc.Card{}}
+		models = []interface{}{&ccmanrpc.Column{}, &ccmanrpc.Card{}}
 	)
 
 	if err := gormdb.GetGormDB().AutoMigrate(ctx, models...); err != nil {
@@ -50,7 +50,7 @@ func TestCreateCard(t *testing.T) {
 		}
 	)
 
-	if err := gormdb.GetGormDB().CreateCard(ctx, card); err != nil {
+	if _, err := gormdb.GetGormDB().CreateCard(ctx, card); err != nil {
 		t.Error(err)
 		return
 	}
@@ -105,7 +105,7 @@ func TestCreateColumn(t *testing.T) {
 		}
 	)
 
-	if err := gormdb.GetGormDB().CreateColumn(ctx, column); err != nil {
+	if _, err := gormdb.GetGormDB().CreateColumn(ctx, column); err != nil {
 		t.Error(err)
 		return
 	}

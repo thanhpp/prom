@@ -1,0 +1,1 @@
+SELECT noti.ID, noti.CardID, noti.Content, user_noti.Status FROM ( SELECT * FROM user_noti WHERE user_noti.user_id = 1) AS userid_noti JOIN notification AS noti ON userid_noti.noti_id = noti.ID;

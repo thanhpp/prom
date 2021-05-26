@@ -18,6 +18,7 @@ type MainConfig struct {
 	ETCD        etcdclient.ETCDConfigs `mapstructure:"etcd"`
 	Redis       redisdb.RedisConfig    `mapstructure:"redis"`
 	WebServer   WebServerConfig        `mapstructure:"webserver"`
+	RabbitMQURL string                 `mapstructure:"rabbitmqurl"`
 }
 
 type WebServerConfig struct {
@@ -72,5 +73,10 @@ func setConfigFromENV() {
 	webPort := os.Getenv("WEBPORT")
 	if len(webPort) > 0 {
 		mainConfig.WebServer.Port = webPort
+	}
+
+	rabbitMQURL := os.Getenv("RABBITMQURL")
+	if len(rabbitMQURL) > 0 {
+		mainConfig.RabbitMQURL = rabbitMQURL
 	}
 }

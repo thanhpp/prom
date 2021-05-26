@@ -1,0 +1,20 @@
+servicename: "noti service"
+environment: "development"
+
+log:
+  level: "DEBUG"
+  color: true
+
+database:
+  host: "127.0.0.1"
+  port: "5432"
+  user: "thanhpp"
+  pass: "testthanhpp"
+  name: "promnoti"
+  log: "INFO"
+
+webserver:
+  host: "0.0.0.0"
+  port: "23456"
+
+rabbitmqurl: "amqp://guest:guest@localhost:5672/"

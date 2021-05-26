@@ -66,6 +66,10 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 		return err
 	}
 
+	if err = gDB.AutoMigrate(&ccmanrpc.Column{}, &ccmanrpc.Card{}); err != nil {
+		return err
+	}
+
 	return nil
 }
 
