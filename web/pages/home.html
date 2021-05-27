@@ -106,15 +106,20 @@
                 <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
               </li>
               <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-                <a href="" class="btn btn-primary btn-lg btn-block btn-icon-split">
+                <a href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newProjectModal">
                   <i class="fas fa-plus"></i> Create a new project
                 </a>
               </div>
               <li id="personalProjects" class="menu-header">Personal Projects</li>
               <!-- li cua header va item deu phai active -->
-             
+              <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+                <a href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newTeamModal">
+                  <i class="fas fa-plus"></i> Create a new team
+                </a>
+              </div>
               <li id="teams" class="menu-header">Teams</li>
               <!-- li cua header va item deu phai active -->
+            
         </aside>
       </div>
 
@@ -169,7 +174,45 @@
     </div>
   </div>
 </div>
+<div class="modal fade" tabindex="-1" role="document" id="newProjectModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewProjectButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="modal fade" tabindex="-1" role="document" id="newTeamModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new team</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewTeamButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- General JS Scripts -->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
