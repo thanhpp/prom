@@ -41,7 +41,7 @@ func TestCreateCard(t *testing.T) {
 	var (
 		ctx  = context.Background()
 		card = &ccmanrpc.Card{
-			Title:       "test1",
+			Title:       "test4",
 			Description: "null",
 			ColumnID:    1,
 			AssignedTo:  1,
@@ -100,7 +100,7 @@ func TestCreateColumn(t *testing.T) {
 		ctx    = context.Background()
 		column = &ccmanrpc.Column{
 			ProjectID: 1,
-			Title:     "test2",
+			Title:     "test3",
 			Index:     "",
 		}
 	)
@@ -155,6 +155,35 @@ func TestDeleteColumnByIDAndMove(t *testing.T) {
 	)
 
 	if err := gormdb.GetGormDB().DeleteColumnByIDAndMove(ctx, colID, newColID); err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func TestMoveCardToColv2(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx           = context.Background()
+		cardID uint32 = 2
+		colID  uint32 = 1
+		index  uint32 = 1
+	)
+
+	if err := gormdb.GetGormDB().MoveCardToColv2(ctx, cardID, colID, index); err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func TestReorderCard(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx           = context.Background()
+		cardID uint32 = 2
+		newIdx uint32 = 2
+	)
+
+	if err := gormdb.GetGormDB().ReorderCard(ctx, cardID, newIdx); err != nil {
 		t.Error(err)
 		return
 	}

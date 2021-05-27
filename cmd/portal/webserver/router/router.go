@@ -77,7 +77,7 @@ func NewRouter() (routers *gin.Engine) {
 					cards := projectID.Group("/cards")
 					{
 						cards.POST("", cardCtrl.CreateNewCard)
-						cards.POST("/reorder", cardCtrl.ReorderCardInOneColumn)
+						cards.POST("/reorder", cardCtrl.ReorderCard)
 						cards.PATCH("", cardCtrl.UpdateCard)
 					}
 				}

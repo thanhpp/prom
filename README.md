@@ -22,3 +22,13 @@ Project Management. HUST_20202_DS
 ## DEVELOPMENT
 
 1. Postman Collection: https://www.getpostman.com/collections/654a270d5382abd97404
+
+2. Reorder cards
+   1. Reorder in 1 column
+      - Specify card id(1)
+      - index of card(2) that you want to set card(1) above of it.
+  
+   2. Reorder card between column
+      - Specify card id(1)
+      - Specify column id that you want to move card(1) to.
+      - index of card(2) that you want to set card(1) above of it.

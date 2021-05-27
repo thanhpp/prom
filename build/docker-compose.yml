@@ -41,9 +41,6 @@ services:
     redis:
         container_name: redis
         image: redis
-        environment: 
-            - 'WAIT_HOSTS=etcd:2379'
-            - 'WAIT_AFTER=10'
         depends_on:
             - etcd
         networks: 

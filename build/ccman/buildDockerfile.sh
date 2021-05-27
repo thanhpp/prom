@@ -1,6 +1,6 @@
 #! /bin/sh
 CONTAINERNAME="cardcolumnmanager"
-TAG="dev"
+TAG="latest"
 
 docker build -t $CONTAINERNAME -f ./Dockerfile ../.. && \
 docker tag $CONTAINERNAME:latest docker.pkg.github.com/thanhpp/prom/$CONTAINERNAME:$TAG \

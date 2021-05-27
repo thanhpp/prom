@@ -28,6 +28,7 @@ service CCManager {
     rpc GetCardsByCreatorID (GetCardsByCreatorIDReq) returns (GetCardsByCreatorIDResp);
     rpc GetCardsByColumnID (GetCardsByColumnIDReq) returns (GetCardsByColumnIDResp);
     rpc UpdateCardByID (UpdateCardByIDReq) returns (UpdateCardByIDResp);
+    rpc MoveCardToCol(MoveCardToColReq) returns (MoveCardToColResp);
     rpc DeleteCardByID (DeleteCardByIDReq) returns (DeleteCardByIDResp);
 
     rpc CreateColumn (CreateColumnReq) returns (CreateColumnResp);
@@ -35,6 +36,7 @@ service CCManager {
     rpc GetColumnsByTitle (GetColumnsByTitleReq) returns (GetColumnsByTitleResp);
     rpc GetColumnsByProjectID (GetColumnsByProjectIDReq) returns (GetColumnsByProjectIDResp);
     rpc UpdateColumnByID (UpdateColumnByIDReq) returns (UpdateColumnByIDResp);
+    rpc ReorderCard(ReorderCardReq) returns (ReorderCardResp);
     rpc DeleteColumnByID (DeleteColumnByIDReq) returns (DeleteColumnByIDResp);
     rpc DeleteColumnByIDAndMove(DeleteColumnByIDAndMoveReq) returns (DeleteColumnByIDAndMoveResp);
 }
@@ -121,6 +123,17 @@ message UpdateCardByIDResp {
     string Message = 2;
 }
 
+message MoveCardToColReq {
+    uint32 CardID = 1;
+    uint32 NewColID = 2;
+    uint32 AboveOf = 3;
+}
+
+message MoveCardToColResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
 message DeleteCardByIDReq {
     uint32 CardID = 1;
 }
@@ -179,6 +192,16 @@ message UpdateColumnByIDReq {
 }
 
 message UpdateColumnByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message ReorderCardReq {
+    uint32 CardID = 1;
+    uint32 AboveIdx = 2;
+}
+
+message ReorderCardResp {
     int32 Code = 1;
     string Message = 2;
 }

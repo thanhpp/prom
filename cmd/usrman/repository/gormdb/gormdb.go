@@ -99,7 +99,28 @@ func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err 
 }
 
 func (g *implGorm) CreateUser(ctx context.Context, usr *usrmanrpc.User) (err error) {
-	if err = gDB.Model(usrModel).WithContext(ctx).Save(usr).Error; err != nil {
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(usrModel).WithContext(ctx).Save(usr).Error; err != nil {
+			return err
+		}
+
+		personalTeam := &usrmanrpc.Team{
+			CreatorID: usr.ID,
+			Name:      "Personal Team",
+		}
+
+		if err := tx.Model(teamModel).WithContext(ctx).Save(personalTeam).Error; err != nil {
+			return err
+		}
+
+		if err := tx.WithContext(ctx).Exec(stmtAddMemberByID, personalTeam.ID, usr.ID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		return err
 	}
 

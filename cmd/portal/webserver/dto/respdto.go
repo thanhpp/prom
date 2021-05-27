@@ -2,7 +2,7 @@ package dto
 
 type Resp struct {
 	Error RespError   `json:"error"`
-	Data  interface{} `json:"data"`
+	Data  interface{} `json:"data,omitempty"`
 }
 
 func (r *Resp) SetCodeMsg(code int, msg string) *Resp {

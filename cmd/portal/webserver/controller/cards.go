@@ -117,10 +117,51 @@ func (cC *CardCtrl) ReorderCardInOneColumn(c *gin.Context) {
 		Index: strings.Trim(strings.Replace(fmt.Sprint(req.CardIndex), " ", ",", -1), "[]"),
 	}
 
-	if err = service.GetCCManSrv().UpdateColumnByID(c, int(project.ID), req.ColumnID, column); err != nil {
+	if err = service.GetCCManSrv().UpdateColumnByID(c, int(project.ShardID), req.ColumnID, column); err != nil {
 		logger.Get().Errorf("Update column index error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
+	}
+
+	resp := new(dto.Resp)
+	resp.SetCode(http.StatusOK)
+	c.JSON(http.StatusOK, resp)
+}
+
+func (cC *CardCtrl) ReorderCard(c *gin.Context) {
+	prjID, err := getProjectIDFromParam(c)
+	if err != nil {
+		logger.Get().Errorf("Project ID from param error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
+	req := new(dto.ReorderCard)
+	if err = c.ShouldBindJSON(req); err != nil {
+		logger.Get().Errorf("Bind JSON error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
+	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
+	if err != nil {
+		logger.Get().Errorf("Get project error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if req.ColID == 0 {
+		if err = service.GetCCManSrv().ReorderCard(c, int(project.ShardID), req.CardID, req.AboveIdx); err != nil {
+			logger.Get().Errorf("Reorcard error: %v", err)
+			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+	} else {
+		if err = service.GetCCManSrv().MoveCardToCol(c, int(project.ShardID), req.CardID, req.ColID, req.AboveIdx); err != nil {
+			logger.Get().Errorf("MoveCardToCol error: %v", err)
+			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 
 	resp := new(dto.Resp)
