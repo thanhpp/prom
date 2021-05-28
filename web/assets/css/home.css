@@ -4,3 +4,9 @@
   margin-right: 15px;
   max-width: 200px;
 }
+.modal-body{
+  margin-bottom: 0px;
+}
+.section .section-title{
+  font-size: 15px;
+}

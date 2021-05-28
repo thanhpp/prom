@@ -106,14 +106,14 @@
                 <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
               </li>
               <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-                <a href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newProjectModal">
+                <a id="navBarNewProject" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newProjectModal">
                   <i class="fas fa-plus"></i> Create a new project
                 </a>
               </div>
               <li id="personalProjects" class="menu-header">Personal Projects</li>
               <!-- li cua header va item deu phai active -->
               <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-                <a href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newTeamModal">
+                <a id="navBarNewTeam" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newTeamModal">
                   <i class="fas fa-plus"></i> Create a new team
                 </a>
               </div>
@@ -175,7 +175,7 @@
   </div>
 </div>
 <div class="modal fade" tabindex="-1" role="document" id="newProjectModal">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Create a new project</h5>
@@ -183,8 +183,39 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
+      <div class="card modal-body">
+        <div class="section">
+        <div class="section-title mt-0">Project</div>
+        <div class="form-group">
+          <label>Project Name</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <i class="fas fa-briefcase"></i>
+              </div>
+            </div>
+            <input id="createProjectName" type="text" class="form-control phone-number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="createProjectDescription" class="form-control"></textarea>
+        </div>
+        <div class="section-title mt-0">Team</div>
+        <div class="form-group">
+          <label>Assign a team</label>
+          <select id="createSelectTeam" class="form-control">
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <input id="createNewTeamName" type="text" class="form-control" placeholder="Type name for your new team" aria-label="">
+            <div class="input-group-append">
+              <button id="createNewTeamButton" class="btn btn-primary" type="button">Create new team</button>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
       <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -195,7 +226,7 @@
 </div>
 
 <div class="modal fade" tabindex="-1" role="document" id="newTeamModal">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Create a new team</h5>

@@ -1,14 +1,14 @@
 var token = sessionStorage.getItem("token");
 var teams;
 
-getTeamsRequest(token);
+getTeamsRequest();
 
-function getTeamsRequest(tokenString) {
-  var getTeamOptions = {
+function getTeamsRequest() {
+  let getTeamOptions = {
     method: "GET",
     credentials: "omit",
     headers: {
-      Authorization: "Bearer " + tokenString,
+      Authorization: "Bearer " + token,
       "Content-Type": "text/plain",
     },
     redirect: "follow",
@@ -19,7 +19,6 @@ function getTeamsRequest(tokenString) {
     .then((result) => {
       if (result.error.code == 200) {
         teams = result.data.teams;
-
         getPersonalProjects(teams[0].id);
         assignTeamsHTML();
         assignRecentProjects();
@@ -47,7 +46,7 @@ function getPersonalProjects(teamID) {
     .then((result) => {
       if (result.error.code == 200) {
         personalProjects = result.data.projects;
-        console.log(personalProjects);
+
         for (i = personalProjects.length - 1; i >= 0; i--) {
           let projectName = personalProjects[i].name;
           let projectID = personalProjects[i].id;
@@ -122,8 +121,8 @@ function assignRecentProjects() {
     .then((result) => {
       if (result.error.code == 200) {
         projects = result.data.projects;
-        console.log(projects);
-        for (i = projects.length - 1; i >= 0; i--) {
+
+        for (var i = projects.length - 1; i >= 0; i--) {
           let projectName = projects[i].name;
           let projectID = projects[i].id;
 
@@ -131,6 +130,7 @@ function assignRecentProjects() {
           let li = document.createElement("article");
           li.setAttribute("class", "article col-12 col-sm-6 col-md-3");
           li.setAttribute("project-id", projectID);
+
           let projectURL = new URL(
             "http://127.0.0.1:5501/web/pages/project.html"
           );
@@ -152,3 +152,139 @@ function assignRecentProjects() {
       }
     });
 }
+$("#navBarNewProject").on("click", function () {
+  updateChooseTeam(teams);
+});
+
+$("#createNewTeamButton").on("click", function () {
+  let createNewTeamName = $("#createNewTeamName").val();
+
+  makeNewTeamQuick(createNewTeamName);
+});
+
+function makeNewTeamQuick(teamName) {
+  let myHeaders = new Headers();
+  myHeaders.append("Content-Type", "text/plain");
+
+  let raw = '{\n  "teamName" : "' + teamName.toString() + '"\n}';
+
+  let newTeamOptions = {
+    method: "POST",
+    credentials: "omit",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "text/plain",
+    },
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch("http://127.0.0.1:12345/teams", newTeamOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.error.code == 200) {
+        let newTeams;
+
+        let getTeamOptions = {
+          method: "GET",
+          credentials: "omit",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "text/plain",
+          },
+          redirect: "follow",
+        };
+
+        fetch("http://127.0.0.1:12345/teams", getTeamOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.error.code == 200) {
+              newTeams = result.data.teams;
+              updateChooseTeam(newTeams);
+              document.getElementById("createNewTeamName").value = "";
+              alert("Add team " + teamName + " successfully!");
+            }
+          });
+      }
+    });
+}
+
+function updateChooseTeam(teams) {
+  let teamSelectParent = document.getElementById("createSelectTeam");
+  teamSelectParent.innerHTML = "";
+
+  for (let i = 0; i < teams.length; i++) {
+    let teamID = teams[i].id;
+    let teamName = teams[i].name;
+
+    let option = document.createElement("option");
+    option.setAttribute("value", teamID);
+    option.text = teamName;
+    teamSelectParent.append(option);
+  }
+}
+
+$("#createNewProjectButton").on("click", function () {
+  let projectName = $("#createProjectName").val();
+  let assignedTeam = parseInt($("#createSelectTeam").val());
+  console.log(assignedTeam);
+
+  let myHeaders = new Headers();
+  myHeaders.append("Content-Type", "text/plain");
+
+  let raw = '{\n  "projectName" : "' + projectName.toString() + '"\n}';
+
+  let newProjectOptions = {
+    method: "POST",
+    credentials: "omit",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "text/plain",
+    },
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch(
+    "http://127.0.0.1:12345/teams/" + assignedTeam + "/projects",
+    newProjectOptions
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.error.code == 200) {
+        let teamProjects;
+        let teamProjectsOptions = {
+          method: "GET",
+          credentials: "omit",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "text/plain",
+          },
+          redirect: "follow",
+        };
+
+        fetch(
+          "http://127.0.0.1:12345/teams/" + assignedTeam + "/projects",
+          teamProjectsOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.error.code == 200) {
+              teamProjects = result.data.projects;
+              let newProjectID = teamProjects[teamProjects.length-1].id;
+              let projectURL = new URL(
+                "http://127.0.0.1:5501/web/pages/project.html"
+              );
+      
+              let projectURLSearchParams = projectURL.searchParams;
+      
+              projectURLSearchParams.set("id", newProjectID.toString());
+              alert(projectURL);
+              // window.location.href = projectURL;
+            }
+          });
+
+      
+      }
+    });
+});
