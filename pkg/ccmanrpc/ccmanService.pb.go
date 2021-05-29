@@ -862,6 +862,118 @@ func (m *UpdateCardByIDResp) GetMessage() string {
 	return ""
 }
 
+type MoveCardToColReq struct {
+	CardID   uint32 `protobuf:"varint,1,opt,name=CardID,proto3" json:"CardID,omitempty"`
+	NewColID uint32 `protobuf:"varint,2,opt,name=NewColID,proto3" json:"NewColID,omitempty"`
+	AboveOf  uint32 `protobuf:"varint,3,opt,name=AboveOf,proto3" json:"AboveOf,omitempty"`
+}
+
+func (m *MoveCardToColReq) Reset()         { *m = MoveCardToColReq{} }
+func (m *MoveCardToColReq) String() string { return proto.CompactTextString(m) }
+func (*MoveCardToColReq) ProtoMessage()    {}
+func (*MoveCardToColReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8de712ab1145d6aa, []int{16}
+}
+func (m *MoveCardToColReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MoveCardToColReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MoveCardToColReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MoveCardToColReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MoveCardToColReq.Merge(m, src)
+}
+func (m *MoveCardToColReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *MoveCardToColReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_MoveCardToColReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MoveCardToColReq proto.InternalMessageInfo
+
+func (m *MoveCardToColReq) GetCardID() uint32 {
+	if m != nil {
+		return m.CardID
+	}
+	return 0
+}
+
+func (m *MoveCardToColReq) GetNewColID() uint32 {
+	if m != nil {
+		return m.NewColID
+	}
+	return 0
+}
+
+func (m *MoveCardToColReq) GetAboveOf() uint32 {
+	if m != nil {
+		return m.AboveOf
+	}
+	return 0
+}
+
+type MoveCardToColResp struct {
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+}
+
+func (m *MoveCardToColResp) Reset()         { *m = MoveCardToColResp{} }
+func (m *MoveCardToColResp) String() string { return proto.CompactTextString(m) }
+func (*MoveCardToColResp) ProtoMessage()    {}
+func (*MoveCardToColResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8de712ab1145d6aa, []int{17}
+}
+func (m *MoveCardToColResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MoveCardToColResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MoveCardToColResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MoveCardToColResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MoveCardToColResp.Merge(m, src)
+}
+func (m *MoveCardToColResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *MoveCardToColResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_MoveCardToColResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MoveCardToColResp proto.InternalMessageInfo
+
+func (m *MoveCardToColResp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *MoveCardToColResp) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
 type DeleteCardByIDReq struct {
 	CardID uint32 `protobuf:"varint,1,opt,name=CardID,proto3" json:"CardID,omitempty"`
 }
@@ -870,7 +982,7 @@ func (m *DeleteCardByIDReq) Reset()         { *m = DeleteCardByIDReq{} }
 func (m *DeleteCardByIDReq) String() string { return proto.CompactTextString(m) }
 func (*DeleteCardByIDReq) ProtoMessage()    {}
 func (*DeleteCardByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{16}
+	return fileDescriptor_8de712ab1145d6aa, []int{18}
 }
 func (m *DeleteCardByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -915,7 +1027,7 @@ func (m *DeleteCardByIDResp) Reset()         { *m = DeleteCardByIDResp{} }
 func (m *DeleteCardByIDResp) String() string { return proto.CompactTextString(m) }
 func (*DeleteCardByIDResp) ProtoMessage()    {}
 func (*DeleteCardByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{17}
+	return fileDescriptor_8de712ab1145d6aa, []int{19}
 }
 func (m *DeleteCardByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -966,7 +1078,7 @@ func (m *CreateColumnReq) Reset()         { *m = CreateColumnReq{} }
 func (m *CreateColumnReq) String() string { return proto.CompactTextString(m) }
 func (*CreateColumnReq) ProtoMessage()    {}
 func (*CreateColumnReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{18}
+	return fileDescriptor_8de712ab1145d6aa, []int{20}
 }
 func (m *CreateColumnReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1012,7 +1124,7 @@ func (m *CreateColumnResp) Reset()         { *m = CreateColumnResp{} }
 func (m *CreateColumnResp) String() string { return proto.CompactTextString(m) }
 func (*CreateColumnResp) ProtoMessage()    {}
 func (*CreateColumnResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{19}
+	return fileDescriptor_8de712ab1145d6aa, []int{21}
 }
 func (m *CreateColumnResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1070,7 +1182,7 @@ func (m *GetColumnByIDReq) Reset()         { *m = GetColumnByIDReq{} }
 func (m *GetColumnByIDReq) String() string { return proto.CompactTextString(m) }
 func (*GetColumnByIDReq) ProtoMessage()    {}
 func (*GetColumnByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{20}
+	return fileDescriptor_8de712ab1145d6aa, []int{22}
 }
 func (m *GetColumnByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1116,7 +1228,7 @@ func (m *GetColumnByIDResp) Reset()         { *m = GetColumnByIDResp{} }
 func (m *GetColumnByIDResp) String() string { return proto.CompactTextString(m) }
 func (*GetColumnByIDResp) ProtoMessage()    {}
 func (*GetColumnByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{21}
+	return fileDescriptor_8de712ab1145d6aa, []int{23}
 }
 func (m *GetColumnByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1174,7 +1286,7 @@ func (m *GetColumnsByTitleReq) Reset()         { *m = GetColumnsByTitleReq{} }
 func (m *GetColumnsByTitleReq) String() string { return proto.CompactTextString(m) }
 func (*GetColumnsByTitleReq) ProtoMessage()    {}
 func (*GetColumnsByTitleReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{22}
+	return fileDescriptor_8de712ab1145d6aa, []int{24}
 }
 func (m *GetColumnsByTitleReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1220,7 +1332,7 @@ func (m *GetColumnsByTitleResp) Reset()         { *m = GetColumnsByTitleResp{} }
 func (m *GetColumnsByTitleResp) String() string { return proto.CompactTextString(m) }
 func (*GetColumnsByTitleResp) ProtoMessage()    {}
 func (*GetColumnsByTitleResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{23}
+	return fileDescriptor_8de712ab1145d6aa, []int{25}
 }
 func (m *GetColumnsByTitleResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1278,7 +1390,7 @@ func (m *GetColumnsByProjectIDReq) Reset()         { *m = GetColumnsByProjectIDR
 func (m *GetColumnsByProjectIDReq) String() string { return proto.CompactTextString(m) }
 func (*GetColumnsByProjectIDReq) ProtoMessage()    {}
 func (*GetColumnsByProjectIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{24}
+	return fileDescriptor_8de712ab1145d6aa, []int{26}
 }
 func (m *GetColumnsByProjectIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1324,7 +1436,7 @@ func (m *GetColumnsByProjectIDResp) Reset()         { *m = GetColumnsByProjectID
 func (m *GetColumnsByProjectIDResp) String() string { return proto.CompactTextString(m) }
 func (*GetColumnsByProjectIDResp) ProtoMessage()    {}
 func (*GetColumnsByProjectIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{25}
+	return fileDescriptor_8de712ab1145d6aa, []int{27}
 }
 func (m *GetColumnsByProjectIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1383,7 +1495,7 @@ func (m *UpdateColumnByIDReq) Reset()         { *m = UpdateColumnByIDReq{} }
 func (m *UpdateColumnByIDReq) String() string { return proto.CompactTextString(m) }
 func (*UpdateColumnByIDReq) ProtoMessage()    {}
 func (*UpdateColumnByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{26}
+	return fileDescriptor_8de712ab1145d6aa, []int{28}
 }
 func (m *UpdateColumnByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1435,7 +1547,7 @@ func (m *UpdateColumnByIDResp) Reset()         { *m = UpdateColumnByIDResp{} }
 func (m *UpdateColumnByIDResp) String() string { return proto.CompactTextString(m) }
 func (*UpdateColumnByIDResp) ProtoMessage()    {}
 func (*UpdateColumnByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{27}
+	return fileDescriptor_8de712ab1145d6aa, []int{29}
 }
 func (m *UpdateColumnByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1478,6 +1590,214 @@ func (m *UpdateColumnByIDResp) GetMessage() string {
 	return ""
 }
 
+type ReorderColumnReq struct {
+	ColumnID  uint32 `protobuf:"varint,1,opt,name=ColumnID,proto3" json:"ColumnID,omitempty"`
+	NextOfIdx uint32 `protobuf:"varint,2,opt,name=NextOfIdx,proto3" json:"NextOfIdx,omitempty"`
+}
+
+func (m *ReorderColumnReq) Reset()         { *m = ReorderColumnReq{} }
+func (m *ReorderColumnReq) String() string { return proto.CompactTextString(m) }
+func (*ReorderColumnReq) ProtoMessage()    {}
+func (*ReorderColumnReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8de712ab1145d6aa, []int{30}
+}
+func (m *ReorderColumnReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReorderColumnReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReorderColumnReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReorderColumnReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReorderColumnReq.Merge(m, src)
+}
+func (m *ReorderColumnReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReorderColumnReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReorderColumnReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReorderColumnReq proto.InternalMessageInfo
+
+func (m *ReorderColumnReq) GetColumnID() uint32 {
+	if m != nil {
+		return m.ColumnID
+	}
+	return 0
+}
+
+func (m *ReorderColumnReq) GetNextOfIdx() uint32 {
+	if m != nil {
+		return m.NextOfIdx
+	}
+	return 0
+}
+
+type ReorderColumnResp struct {
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+}
+
+func (m *ReorderColumnResp) Reset()         { *m = ReorderColumnResp{} }
+func (m *ReorderColumnResp) String() string { return proto.CompactTextString(m) }
+func (*ReorderColumnResp) ProtoMessage()    {}
+func (*ReorderColumnResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8de712ab1145d6aa, []int{31}
+}
+func (m *ReorderColumnResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReorderColumnResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReorderColumnResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReorderColumnResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReorderColumnResp.Merge(m, src)
+}
+func (m *ReorderColumnResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReorderColumnResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReorderColumnResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReorderColumnResp proto.InternalMessageInfo
+
+func (m *ReorderColumnResp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *ReorderColumnResp) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+type ReorderCardReq struct {
+	CardID   uint32 `protobuf:"varint,1,opt,name=CardID,proto3" json:"CardID,omitempty"`
+	AboveIdx uint32 `protobuf:"varint,2,opt,name=AboveIdx,proto3" json:"AboveIdx,omitempty"`
+}
+
+func (m *ReorderCardReq) Reset()         { *m = ReorderCardReq{} }
+func (m *ReorderCardReq) String() string { return proto.CompactTextString(m) }
+func (*ReorderCardReq) ProtoMessage()    {}
+func (*ReorderCardReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8de712ab1145d6aa, []int{32}
+}
+func (m *ReorderCardReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReorderCardReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReorderCardReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReorderCardReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReorderCardReq.Merge(m, src)
+}
+func (m *ReorderCardReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReorderCardReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReorderCardReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReorderCardReq proto.InternalMessageInfo
+
+func (m *ReorderCardReq) GetCardID() uint32 {
+	if m != nil {
+		return m.CardID
+	}
+	return 0
+}
+
+func (m *ReorderCardReq) GetAboveIdx() uint32 {
+	if m != nil {
+		return m.AboveIdx
+	}
+	return 0
+}
+
+type ReorderCardResp struct {
+	Code    int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+}
+
+func (m *ReorderCardResp) Reset()         { *m = ReorderCardResp{} }
+func (m *ReorderCardResp) String() string { return proto.CompactTextString(m) }
+func (*ReorderCardResp) ProtoMessage()    {}
+func (*ReorderCardResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8de712ab1145d6aa, []int{33}
+}
+func (m *ReorderCardResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReorderCardResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReorderCardResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReorderCardResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReorderCardResp.Merge(m, src)
+}
+func (m *ReorderCardResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReorderCardResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReorderCardResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReorderCardResp proto.InternalMessageInfo
+
+func (m *ReorderCardResp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *ReorderCardResp) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
 type DeleteColumnByIDReq struct {
 	ColumnID uint32 `protobuf:"varint,1,opt,name=ColumnID,proto3" json:"ColumnID,omitempty"`
 }
@@ -1486,7 +1806,7 @@ func (m *DeleteColumnByIDReq) Reset()         { *m = DeleteColumnByIDReq{} }
 func (m *DeleteColumnByIDReq) String() string { return proto.CompactTextString(m) }
 func (*DeleteColumnByIDReq) ProtoMessage()    {}
 func (*DeleteColumnByIDReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{28}
+	return fileDescriptor_8de712ab1145d6aa, []int{34}
 }
 func (m *DeleteColumnByIDReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1531,7 +1851,7 @@ func (m *DeleteColumnByIDResp) Reset()         { *m = DeleteColumnByIDResp{} }
 func (m *DeleteColumnByIDResp) String() string { return proto.CompactTextString(m) }
 func (*DeleteColumnByIDResp) ProtoMessage()    {}
 func (*DeleteColumnByIDResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{29}
+	return fileDescriptor_8de712ab1145d6aa, []int{35}
 }
 func (m *DeleteColumnByIDResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1583,7 +1903,7 @@ func (m *DeleteColumnByIDAndMoveReq) Reset()         { *m = DeleteColumnByIDAndM
 func (m *DeleteColumnByIDAndMoveReq) String() string { return proto.CompactTextString(m) }
 func (*DeleteColumnByIDAndMoveReq) ProtoMessage()    {}
 func (*DeleteColumnByIDAndMoveReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{30}
+	return fileDescriptor_8de712ab1145d6aa, []int{36}
 }
 func (m *DeleteColumnByIDAndMoveReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1635,7 +1955,7 @@ func (m *DeleteColumnByIDAndMoveResp) Reset()         { *m = DeleteColumnByIDAnd
 func (m *DeleteColumnByIDAndMoveResp) String() string { return proto.CompactTextString(m) }
 func (*DeleteColumnByIDAndMoveResp) ProtoMessage()    {}
 func (*DeleteColumnByIDAndMoveResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8de712ab1145d6aa, []int{31}
+	return fileDescriptor_8de712ab1145d6aa, []int{37}
 }
 func (m *DeleteColumnByIDAndMoveResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1695,6 +2015,8 @@ func init() {
 	proto.RegisterType((*GetCardsByColumnIDResp)(nil), "ccmanrpc.GetCardsByColumnIDResp")
 	proto.RegisterType((*UpdateCardByIDReq)(nil), "ccmanrpc.UpdateCardByIDReq")
 	proto.RegisterType((*UpdateCardByIDResp)(nil), "ccmanrpc.UpdateCardByIDResp")
+	proto.RegisterType((*MoveCardToColReq)(nil), "ccmanrpc.MoveCardToColReq")
+	proto.RegisterType((*MoveCardToColResp)(nil), "ccmanrpc.MoveCardToColResp")
 	proto.RegisterType((*DeleteCardByIDReq)(nil), "ccmanrpc.DeleteCardByIDReq")
 	proto.RegisterType((*DeleteCardByIDResp)(nil), "ccmanrpc.DeleteCardByIDResp")
 	proto.RegisterType((*CreateColumnReq)(nil), "ccmanrpc.CreateColumnReq")
@@ -1707,6 +2029,10 @@ func init() {
 	proto.RegisterType((*GetColumnsByProjectIDResp)(nil), "ccmanrpc.GetColumnsByProjectIDResp")
 	proto.RegisterType((*UpdateColumnByIDReq)(nil), "ccmanrpc.UpdateColumnByIDReq")
 	proto.RegisterType((*UpdateColumnByIDResp)(nil), "ccmanrpc.UpdateColumnByIDResp")
+	proto.RegisterType((*ReorderColumnReq)(nil), "ccmanrpc.ReorderColumnReq")
+	proto.RegisterType((*ReorderColumnResp)(nil), "ccmanrpc.ReorderColumnResp")
+	proto.RegisterType((*ReorderCardReq)(nil), "ccmanrpc.ReorderCardReq")
+	proto.RegisterType((*ReorderCardResp)(nil), "ccmanrpc.ReorderCardResp")
 	proto.RegisterType((*DeleteColumnByIDReq)(nil), "ccmanrpc.DeleteColumnByIDReq")
 	proto.RegisterType((*DeleteColumnByIDResp)(nil), "ccmanrpc.DeleteColumnByIDResp")
 	proto.RegisterType((*DeleteColumnByIDAndMoveReq)(nil), "ccmanrpc.DeleteColumnByIDAndMoveReq")
@@ -1718,72 +2044,81 @@ func init() {
 }
 
 var fileDescriptor_8de712ab1145d6aa = []byte{
-	// 1029 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x57, 0xcd, 0x6e, 0x23, 0x45,
-	0x10, 0xce, 0x24, 0x24, 0x59, 0x57, 0x36, 0xd9, 0xa4, 0x13, 0x36, 0xce, 0x24, 0x0c, 0xa6, 0x37,
-	0x08, 0x8b, 0x9f, 0xb1, 0xc8, 0xa2, 0x85, 0x5b, 0x14, 0xdb, 0x4b, 0x58, 0xad, 0x82, 0xc0, 0x04,
-	0x90, 0xb2, 0x08, 0xe1, 0xd8, 0xbd, 0x8e, 0x89, 0xed, 0xe9, 0x4c, 0x8f, 0x17, 0xe5, 0x2d, 0x78,
-	0x0c, 0x1e, 0x81, 0x23, 0x47, 0x2e, 0x48, 0x7b, 0xe4, 0xb8, 0x71, 0x5e, 0x80, 0x23, 0x47, 0x34,
-	0xdd, 0x3d, 0x33, 0xdd, 0xf3, 0x63, 0x7b, 0xd0, 0xfa, 0xe4, 0xa9, 0xae, 0xaa, 0xaf, 0xaa, 0xab,
-	0xba, 0x7e, 0x0c, 0x9f, 0x76, 0xba, 0xde, 0xc5, 0xf0, 0xdc, 0x6e, 0x39, 0xfd, 0x8a, 0x77, 0xd1,
-	0x1c, 0x5c, 0x50, 0x5a, 0xa1, 0xae, 0xd3, 0xaf, 0xd0, 0xcb, 0x4e, 0xa5, 0xd5, 0xea, 0x37, 0x07,
-	0x2e, 0x6d, 0x89, 0x8f, 0x6f, 0x88, 0xfb, 0xa2, 0xdb, 0x22, 0x36, 0x75, 0x1d, 0xcf, 0x41, 0x77,
-	0x02, 0xa6, 0xf9, 0x91, 0x02, 0xd1, 0x71, 0x3a, 0x4e, 0x85, 0x0b, 0x9c, 0x0f, 0x9f, 0x73, 0x8a,
-	0x13, 0xfc, 0x4b, 0x28, 0x9a, 0xf6, 0x38, 0x8b, 0x5e, 0xb7, 0x4f, 0x7c, 0x83, 0xfe, 0xaf, 0x94,
-	0x7f, 0x34, 0xbd, 0x87, 0x8f, 0x07, 0x5e, 0xd7, 0xbb, 0x16, 0x7a, 0xf8, 0x11, 0xdc, 0x3f, 0x26,
-	0xde, 0x51, 0xaf, 0xf7, 0xb9, 0xeb, 0xf4, 0xbf, 0x72, 0x9d, 0x9f, 0x49, 0xcb, 0x7b, 0x52, 0x6f,
-	0x90, 0x2b, 0xb4, 0x07, 0x85, 0x90, 0x2e, 0x1a, 0x25, 0xa3, 0xbc, 0xda, 0x88, 0x0e, 0x30, 0x83,
-	0xed, 0x54, 0x3d, 0x46, 0x11, 0x82, 0x37, 0x6a, 0x4e, 0x9b, 0x70, 0x9d, 0xc5, 0x06, 0xff, 0x46,
-	0x45, 0x58, 0x3e, 0x21, 0x8c, 0x35, 0x3b, 0xa4, 0x38, 0x5f, 0x32, 0xca, 0x85, 0x46, 0x40, 0xa2,
-	0xf7, 0x61, 0xb9, 0xe6, 0xf4, 0x86, 0xfd, 0x01, 0x2b, 0x2e, 0x94, 0x16, 0xca, 0x2b, 0x07, 0xeb,
-	0x76, 0xe0, 0xae, 0x2d, 0x18, 0x8d, 0x40, 0x00, 0x1f, 0xc2, 0x6a, 0xcd, 0x25, 0x4d, 0x8f, 0xd4,
-	0x9a, 0x6e, 0xdb, 0xf7, 0xd1, 0x06, 0x88, 0x0e, 0xb8, 0xc1, 0x95, 0x83, 0x35, 0x45, 0xdf, 0x17,
-	0x53, 0x24, 0xf0, 0x0f, 0xb0, 0xa6, 0x02, 0xe4, 0x76, 0x76, 0x0f, 0x0a, 0x42, 0xbf, 0xfd, 0xa4,
-	0x5e, 0x5c, 0x10, 0x31, 0x09, 0x0f, 0x70, 0x19, 0xd6, 0x8e, 0x89, 0xe7, 0x43, 0x57, 0xaf, 0x45,
-	0x0c, 0xef, 0xc3, 0x92, 0x4f, 0x86, 0x01, 0x94, 0x14, 0xee, 0xc2, 0x3d, 0x4d, 0x32, 0xb7, 0x23,
-	0x65, 0x58, 0x6e, 0x10, 0xc6, 0x6f, 0xbd, 0x90, 0x7a, 0xeb, 0x80, 0x8d, 0x0f, 0x61, 0x4b, 0x9a,
-	0x62, 0xd5, 0xeb, 0xfa, 0x90, 0xd4, 0x9b, 0x1e, 0xf1, 0x5d, 0x7b, 0x0f, 0x96, 0x25, 0x25, 0xe3,
-	0xb6, 0x6a, 0xcb, 0x67, 0x65, 0x9f, 0x76, 0xfb, 0xa4, 0x11, 0x70, 0xf1, 0x25, 0xbc, 0x99, 0x02,
-	0x90, 0xdb, 0xe3, 0x7d, 0x58, 0xe4, 0x18, 0x32, 0xcb, 0x71, 0x7f, 0x05, 0x13, 0x1f, 0xc2, 0x4e,
-	0x64, 0xec, 0x88, 0xb1, 0x6e, 0x67, 0x40, 0xda, 0xa7, 0x8e, 0x88, 0x26, 0x86, 0xbb, 0xea, 0x91,
-	0x8c, 0xa9, 0x76, 0x86, 0x29, 0x98, 0x59, 0x00, 0x33, 0x72, 0x59, 0x54, 0x90, 0xb4, 0xc8, 0x1f,
-	0x83, 0xe3, 0x86, 0x15, 0x14, 0xd2, 0x41, 0x05, 0x85, 0x07, 0xb8, 0xcf, 0x2b, 0x28, 0xa9, 0x37,
-	0x23, 0x37, 0x1f, 0xaa, 0x69, 0x14, 0x05, 0x25, 0xbc, 0x34, 0xe1, 0x4e, 0x40, 0x4a, 0x27, 0x43,
-	0x1a, 0xf7, 0xb4, 0xbb, 0x85, 0x4a, 0x33, 0x72, 0xf1, 0x19, 0x6c, 0x7c, 0x4b, 0xdb, 0xb2, 0x3a,
-	0x27, 0x94, 0x90, 0x5f, 0xfa, 0x91, 0x30, 0xb7, 0x97, 0x52, 0xfa, 0x91, 0x04, 0xae, 0x02, 0x8a,
-	0x83, 0xe7, 0xbd, 0x06, 0xfe, 0x00, 0x36, 0xea, 0xa4, 0x47, 0xa6, 0x72, 0xd0, 0x37, 0x18, 0x17,
-	0xce, 0x6d, 0xf0, 0x18, 0xee, 0xc9, 0x7e, 0x25, 0x3a, 0x21, 0xb9, 0x42, 0x9f, 0xc0, 0x5d, 0xf5,
-	0x48, 0x16, 0x6f, 0xb2, 0x69, 0x6a, 0x52, 0xf8, 0x47, 0x58, 0xd7, 0x81, 0x5e, 0x73, 0xeb, 0xb3,
-	0x61, 0xdd, 0x7f, 0x28, 0x1c, 0x3c, 0x08, 0xcc, 0xb8, 0x87, 0x75, 0x09, 0x1b, 0x31, 0xf9, 0xff,
-	0xd1, 0x02, 0x97, 0x64, 0x08, 0x16, 0x32, 0x42, 0x20, 0xf9, 0xf8, 0x43, 0xd1, 0x02, 0xc5, 0x10,
-	0xa9, 0x5e, 0x9f, 0x76, 0xbd, 0x1e, 0x6f, 0x81, 0x5b, 0xb0, 0xc8, 0xbf, 0xb9, 0xc1, 0x42, 0x43,
-	0x10, 0xf8, 0x4a, 0x14, 0x4a, 0x4c, 0x7a, 0xa6, 0x73, 0xed, 0x33, 0x28, 0xaa, 0x26, 0x73, 0x8c,
-	0xe1, 0xa1, 0xe8, 0x97, 0x29, 0x9a, 0x33, 0x75, 0xf8, 0x19, 0x6c, 0xca, 0x62, 0x9a, 0x36, 0xe3,
-	0x4a, 0xba, 0xe6, 0x27, 0xa4, 0xab, 0x0e, 0x5b, 0x49, 0xf0, 0xdc, 0xa5, 0xf3, 0x31, 0x6c, 0xca,
-	0xf2, 0x9b, 0xfa, 0x51, 0xd6, 0x61, 0x2b, 0xa9, 0x92, 0xdb, 0xf0, 0x19, 0x98, 0x71, 0x94, 0xa3,
-	0x41, 0xfb, 0xc4, 0x79, 0x41, 0x26, 0x85, 0xa8, 0x04, 0x2b, 0x5f, 0x92, 0x5f, 0x42, 0xf6, 0x3c,
-	0x67, 0xab, 0x47, 0xf8, 0x29, 0xec, 0x66, 0x62, 0xe7, 0x75, 0xf4, 0xe0, 0x2f, 0x80, 0x42, 0xad,
-	0x76, 0xd2, 0x1c, 0x34, 0x3b, 0xc4, 0x45, 0x67, 0xb0, 0x99, 0xb2, 0xd0, 0xa1, 0x52, 0x94, 0xa6,
-	0xf4, 0x3d, 0xd1, 0x7c, 0x67, 0x82, 0x04, 0xa3, 0xe8, 0x50, 0x5d, 0xd3, 0xd0, 0xb6, 0x92, 0x79,
-	0x75, 0x9b, 0x33, 0x8b, 0xe9, 0x0c, 0x46, 0x51, 0x15, 0x56, 0x94, 0x7d, 0x09, 0x15, 0x35, 0x93,
-	0x4a, 0x33, 0x36, 0x77, 0x32, 0x38, 0x8c, 0xa2, 0x53, 0xd1, 0x72, 0xb4, 0x3d, 0x06, 0x59, 0x09,
-	0x79, 0x6d, 0x4b, 0x32, 0xdf, 0x1e, 0xcb, 0x67, 0x14, 0xb5, 0xd4, 0x09, 0xa9, 0xee, 0x1b, 0xe8,
-	0x41, 0x9a, 0x6a, 0x6c, 0xa5, 0x31, 0xf7, 0x27, 0x0b, 0x31, 0x2a, 0x73, 0x13, 0x5f, 0x15, 0x62,
-	0xb9, 0x49, 0xd9, 0x40, 0x62, 0xb9, 0x49, 0xdd, 0x35, 0xbe, 0x07, 0x94, 0x1c, 0xf1, 0x28, 0xf5,
-	0xde, 0xca, 0xd6, 0x60, 0x96, 0xc6, 0x0b, 0x30, 0x8a, 0x9e, 0xc2, 0x9a, 0x3e, 0x70, 0xd1, 0x6e,
-	0xa4, 0x93, 0x98, 0xf3, 0xe6, 0x5e, 0x36, 0x53, 0x80, 0xe9, 0xc3, 0x54, 0x05, 0x4b, 0xcc, 0x64,
-	0x15, 0x2c, 0x65, 0x06, 0x3f, 0xd6, 0x47, 0x28, 0xda, 0x49, 0xbc, 0xbb, 0x60, 0xda, 0x9a, 0x66,
-	0x16, 0x8b, 0x51, 0xf4, 0x05, 0xac, 0x6a, 0x33, 0x0c, 0x99, 0x7a, 0x4c, 0xd4, 0xbe, 0x63, 0xee,
-	0x66, 0xf2, 0xa2, 0xa7, 0xa9, 0x8d, 0x9c, 0xf8, 0xd3, 0x8c, 0x4f, 0xaf, 0xf8, 0xd3, 0x4c, 0xce,
-	0xab, 0x9f, 0xf4, 0x41, 0x16, 0xd5, 0x34, 0x4e, 0xd7, 0xd4, 0xaa, 0xfa, 0xc1, 0x44, 0x19, 0x46,
-	0xd1, 0xd7, 0xb0, 0x1e, 0xef, 0xd4, 0xe8, 0xad, 0x44, 0x1e, 0xb5, 0x38, 0x58, 0xe3, 0xd8, 0x02,
-	0x32, 0xde, 0xe1, 0x54, 0xc8, 0x94, 0x96, 0xae, 0x42, 0xa6, 0xb6, 0xef, 0xe7, 0xb0, 0x9d, 0xd1,
-	0x34, 0xd1, 0x7e, 0xb6, 0x6a, 0xd4, 0xb3, 0xcd, 0x77, 0xa7, 0x90, 0x62, 0xb4, 0xfa, 0xdd, 0xab,
-	0x1b, 0xcb, 0xf8, 0xe7, 0xc6, 0x32, 0xfe, 0xbd, 0xb1, 0x8c, 0xdf, 0x46, 0x96, 0xf1, 0xfb, 0xc8,
-	0x32, 0xfe, 0x18, 0x59, 0x73, 0x7f, 0x8e, 0x2c, 0xe3, 0xe5, 0xc8, 0x32, 0x5e, 0x8d, 0x2c, 0xe3,
-	0xd7, 0x5b, 0x6b, 0xee, 0xe5, 0xad, 0x35, 0xf7, 0xf7, 0xad, 0x35, 0x77, 0xb6, 0x3f, 0xcd, 0x9f,
-	0xf6, 0xf3, 0x25, 0xfe, 0x4f, 0xfd, 0xe1, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x51, 0x43, 0x2d,
-	0x60, 0x85, 0x10, 0x00, 0x00,
+	// 1182 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0xcb, 0x53, 0x23, 0x45,
+	0x18, 0x67, 0x16, 0x79, 0xe4, 0x83, 0x40, 0x68, 0x70, 0x09, 0x03, 0x3b, 0xc6, 0x5e, 0x2c, 0x29,
+	0x1f, 0xa1, 0x64, 0xad, 0xd5, 0x1b, 0x95, 0xc7, 0xca, 0x52, 0x2b, 0xbb, 0x1a, 0xa3, 0x56, 0x81,
+	0x65, 0x6d, 0x48, 0x9a, 0x10, 0x49, 0x32, 0xc3, 0xcc, 0x80, 0xcb, 0x7f, 0xe1, 0x9f, 0xe1, 0xcd,
+	0xab, 0x47, 0x8f, 0x1e, 0xf7, 0xe8, 0x71, 0x09, 0xff, 0x80, 0x47, 0x8f, 0xd6, 0x74, 0xf7, 0xcc,
+	0x74, 0xf7, 0xcc, 0x24, 0x19, 0xcb, 0x9c, 0x32, 0x5f, 0x7f, 0xcf, 0x7e, 0x7c, 0xbf, 0xef, 0x57,
+	0x81, 0xcf, 0xda, 0x1d, 0xf7, 0xfc, 0xea, 0xb4, 0xd8, 0x34, 0x7b, 0xbb, 0xee, 0x79, 0xa3, 0x7f,
+	0x6e, 0x59, 0xbb, 0x96, 0x6d, 0xf6, 0x76, 0xad, 0x8b, 0xf6, 0x6e, 0xb3, 0xd9, 0x6b, 0xf4, 0x6d,
+	0xab, 0xc9, 0x3e, 0xbe, 0x21, 0xf6, 0x75, 0xa7, 0x49, 0x8a, 0x96, 0x6d, 0xba, 0x26, 0x9a, 0xf7,
+	0x95, 0xfa, 0xc7, 0x42, 0x88, 0xb6, 0xd9, 0x36, 0x77, 0xa9, 0xc1, 0xe9, 0xd5, 0x19, 0x95, 0xa8,
+	0x40, 0xbf, 0x98, 0xa3, 0x5e, 0x1c, 0x96, 0xd1, 0xed, 0xf4, 0x88, 0x97, 0xd0, 0xfb, 0xe5, 0xf6,
+	0x8f, 0xc7, 0xaf, 0xf0, 0x49, 0xdf, 0xed, 0xb8, 0x37, 0xcc, 0x0f, 0x3f, 0x86, 0xfb, 0x07, 0xc4,
+	0x2d, 0x75, 0xbb, 0x5f, 0xd8, 0x66, 0xef, 0x2b, 0xdb, 0xfc, 0x89, 0x34, 0xdd, 0xc3, 0x6a, 0x8d,
+	0x5c, 0xa2, 0x2d, 0xc8, 0x04, 0x72, 0x5e, 0x2b, 0x68, 0x3b, 0xd9, 0x5a, 0xb8, 0x80, 0x1d, 0x58,
+	0x8f, 0xf5, 0x73, 0x2c, 0x84, 0xe0, 0xad, 0x8a, 0xd9, 0x22, 0xd4, 0x67, 0xa6, 0x46, 0xbf, 0x51,
+	0x1e, 0xe6, 0x8e, 0x88, 0xe3, 0x34, 0xda, 0x24, 0x7f, 0xaf, 0xa0, 0xed, 0x64, 0x6a, 0xbe, 0x88,
+	0x3e, 0x80, 0xb9, 0x8a, 0xd9, 0xbd, 0xea, 0xf5, 0x9d, 0xfc, 0x74, 0x61, 0x7a, 0x67, 0x61, 0x2f,
+	0x57, 0xf4, 0xcb, 0x2d, 0x32, 0x45, 0xcd, 0x37, 0xc0, 0xfb, 0x90, 0xad, 0xd8, 0xa4, 0xe1, 0x92,
+	0x4a, 0xc3, 0x6e, 0x79, 0x35, 0x16, 0x01, 0xc2, 0x05, 0x9a, 0x70, 0x61, 0x6f, 0x49, 0xf0, 0xf7,
+	0xcc, 0x04, 0x0b, 0xfc, 0x03, 0x2c, 0x89, 0x01, 0x52, 0x17, 0xbb, 0x05, 0x19, 0xe6, 0xdf, 0x3a,
+	0xac, 0xe6, 0xa7, 0xd9, 0x99, 0x04, 0x0b, 0x78, 0x07, 0x96, 0x0e, 0x88, 0xeb, 0x85, 0x2e, 0xdf,
+	0xb0, 0x33, 0xbc, 0x0f, 0xb3, 0x9e, 0x18, 0x1c, 0x20, 0x97, 0x70, 0x07, 0x96, 0x25, 0xcb, 0xd4,
+	0x85, 0xec, 0xc0, 0x5c, 0x8d, 0x38, 0x74, 0xd7, 0xd3, 0xb1, 0xbb, 0xf6, 0xd5, 0x78, 0x1f, 0xd6,
+	0x78, 0x2a, 0xa7, 0x7c, 0x53, 0xbd, 0x22, 0xd5, 0x86, 0x4b, 0xbc, 0xd2, 0xde, 0x87, 0x39, 0x2e,
+	0xf1, 0x73, 0xcb, 0x16, 0xf9, 0xb3, 0x2a, 0xd6, 0x3b, 0x3d, 0x52, 0xf3, 0xb5, 0xf8, 0x02, 0xde,
+	0x8e, 0x09, 0x90, 0xba, 0xe2, 0x6d, 0x98, 0xa1, 0x31, 0xf8, 0x2d, 0xab, 0xf5, 0x32, 0x25, 0xde,
+	0x87, 0x8d, 0x30, 0x59, 0xc9, 0x71, 0x3a, 0xed, 0x3e, 0x69, 0xd5, 0x4d, 0x76, 0x9a, 0x18, 0x16,
+	0xc5, 0x25, 0x7e, 0xa6, 0xd2, 0x1a, 0xb6, 0x40, 0x4f, 0x0a, 0x30, 0xa1, 0x92, 0x59, 0x07, 0xf1,
+	0x8c, 0xf4, 0x31, 0x98, 0x76, 0xd0, 0x41, 0x81, 0xec, 0x77, 0x50, 0xb0, 0x80, 0x7b, 0xb4, 0x83,
+	0xa2, 0x7e, 0x13, 0x2a, 0xf3, 0x91, 0x78, 0x8d, 0xac, 0xa1, 0x58, 0x95, 0x3a, 0xcc, 0xfb, 0x22,
+	0x2f, 0x32, 0x90, 0x71, 0x57, 0xda, 0x5b, 0xe0, 0x34, 0xa1, 0x12, 0x4f, 0x60, 0xe5, 0x5b, 0xab,
+	0xc5, 0xbb, 0x73, 0x44, 0x0b, 0x79, 0xad, 0x1f, 0x1a, 0xd3, 0x7c, 0x31, 0xad, 0x1f, 0x5a, 0xe0,
+	0x32, 0x20, 0x35, 0x78, 0xda, 0x6d, 0xe0, 0x97, 0x90, 0x3b, 0x32, 0xaf, 0x69, 0x84, 0xba, 0x59,
+	0x31, 0xbb, 0xc3, 0xea, 0xd3, 0x61, 0xfe, 0x39, 0xf9, 0xb9, 0x62, 0x76, 0x0f, 0xab, 0x34, 0x4c,
+	0xb6, 0x16, 0xc8, 0x5e, 0x86, 0xd2, 0xa9, 0x79, 0x4d, 0x5e, 0x9c, 0x71, 0x10, 0xf1, 0x45, 0x5c,
+	0x82, 0x15, 0x25, 0x43, 0xea, 0x22, 0x3f, 0x84, 0x95, 0x2a, 0xe9, 0x92, 0xb1, 0x4e, 0xd1, 0x3b,
+	0x15, 0xd5, 0x38, 0x75, 0xc2, 0x03, 0x58, 0xe6, 0xa0, 0xca, 0xe0, 0x9a, 0x5c, 0xa2, 0x4f, 0x61,
+	0x51, 0x5c, 0xe2, 0x08, 0x13, 0x45, 0x76, 0xc9, 0x0a, 0xff, 0x08, 0x39, 0x39, 0xd0, 0xff, 0x8c,
+	0xcf, 0x45, 0xc8, 0x79, 0xaf, 0x99, 0x06, 0xf7, 0x0f, 0x66, 0xd8, 0xeb, 0xbf, 0x80, 0x15, 0xc5,
+	0xfe, 0x3f, 0xe0, 0xf4, 0x2c, 0x3f, 0x82, 0xe9, 0x84, 0x23, 0xe0, 0x7a, 0xfc, 0x11, 0xc3, 0x69,
+	0x36, 0xe9, 0xca, 0x37, 0xf5, 0x8e, 0xdb, 0xa5, 0x38, 0xbd, 0x06, 0x33, 0xf4, 0x9b, 0x26, 0xcc,
+	0xd4, 0x98, 0x80, 0x2f, 0x59, 0x37, 0x2b, 0xd6, 0x13, 0x1d, 0xbe, 0x9f, 0x43, 0x5e, 0x4c, 0x99,
+	0x82, 0x2b, 0x5c, 0x31, 0x50, 0x8f, 0xf1, 0x9c, 0x68, 0xc1, 0x27, 0xb0, 0xca, 0x3b, 0x7e, 0xdc,
+	0x1b, 0x17, 0xae, 0xeb, 0xde, 0x88, 0xeb, 0xaa, 0xc2, 0x5a, 0x34, 0x78, 0xea, 0xd6, 0xf9, 0x12,
+	0x72, 0x35, 0x62, 0xda, 0x2d, 0x62, 0x87, 0xbd, 0x33, 0xac, 0xbe, 0x2d, 0xc8, 0x3c, 0x27, 0xaf,
+	0xdc, 0x17, 0x67, 0x87, 0xad, 0x57, 0x1c, 0x55, 0xc2, 0x05, 0x0f, 0x3c, 0x94, 0x68, 0xa9, 0x0b,
+	0xaa, 0xc2, 0x92, 0x1f, 0x82, 0x53, 0xac, 0x21, 0xf8, 0x46, 0x41, 0x2b, 0xac, 0x24, 0x90, 0xf1,
+	0x3e, 0x2c, 0x4b, 0x51, 0x52, 0x97, 0xf1, 0x09, 0xac, 0x72, 0x58, 0x1a, 0xbb, 0x59, 0xab, 0xb0,
+	0x16, 0x75, 0x49, 0x9d, 0xf8, 0x18, 0x74, 0x35, 0x4a, 0xa9, 0xdf, 0xf2, 0x20, 0x79, 0xd4, 0xd5,
+	0x14, 0x60, 0x81, 0xe1, 0x3b, 0x53, 0xb3, 0x23, 0x11, 0x97, 0xf0, 0x33, 0xd8, 0x4c, 0x8c, 0x9d,
+	0xb6, 0xd0, 0xbd, 0xdf, 0x16, 0x21, 0x53, 0xa9, 0x1c, 0x35, 0xfa, 0x8d, 0x36, 0xb1, 0xd1, 0x31,
+	0xac, 0xc6, 0xb0, 0x71, 0x54, 0x08, 0x9f, 0x6f, 0x3c, 0xc9, 0xd7, 0xdf, 0x1d, 0x61, 0xe1, 0x58,
+	0x68, 0x5f, 0xe4, 0xd8, 0x68, 0x5d, 0xe8, 0x08, 0x91, 0x8a, 0xeb, 0xf9, 0x78, 0x85, 0x63, 0xa1,
+	0x32, 0x2c, 0x08, 0x64, 0x17, 0xe5, 0xa5, 0x94, 0xc2, 0x90, 0xd2, 0x37, 0x12, 0x34, 0x8e, 0x85,
+	0xea, 0x0c, 0x8a, 0x25, 0x12, 0x8a, 0x8c, 0x88, 0xbd, 0x44, 0x71, 0xf5, 0x77, 0x86, 0xea, 0x1d,
+	0x0b, 0x35, 0x45, 0x7a, 0x23, 0x92, 0x45, 0xf4, 0x30, 0xce, 0x55, 0xe1, 0xa3, 0xfa, 0xf6, 0x68,
+	0x23, 0xc7, 0xe2, 0x77, 0xa3, 0xf2, 0x3c, 0xe5, 0x6e, 0x62, 0xe8, 0xa3, 0x72, 0x37, 0xb1, 0x44,
+	0xf1, 0x7b, 0x40, 0x51, 0x7e, 0x86, 0x62, 0xf7, 0x2d, 0x50, 0x3e, 0xbd, 0x30, 0xdc, 0xc0, 0xb1,
+	0xd0, 0x33, 0x58, 0x92, 0xd9, 0x12, 0xda, 0x0c, 0x7d, 0x22, 0x24, 0x4d, 0xdf, 0x4a, 0x56, 0x3a,
+	0x16, 0x7a, 0x0a, 0x59, 0x89, 0xd4, 0x20, 0x3d, 0x34, 0x57, 0xf9, 0x94, 0xbe, 0x99, 0xa8, 0x63,
+	0x65, 0xc9, 0x74, 0x45, 0x2c, 0x2b, 0xc2, 0x7a, 0xc4, 0xb2, 0x62, 0x58, 0xce, 0x13, 0x99, 0xa4,
+	0xa0, 0x8d, 0xc8, 0x0b, 0xf6, 0x31, 0x59, 0xd7, 0x93, 0x54, 0x6c, 0x77, 0x12, 0x4b, 0x10, 0x77,
+	0xa7, 0xd2, 0x0d, 0x71, 0x77, 0x51, 0x6a, 0x51, 0x17, 0xf8, 0x86, 0x3f, 0xd4, 0xd5, 0x47, 0xae,
+	0xf2, 0x03, 0xf5, 0x91, 0x47, 0x19, 0xc1, 0x4b, 0x99, 0x2a, 0x84, 0xe8, 0x80, 0xe3, 0x3d, 0x25,
+	0x7c, 0x78, 0x38, 0xd2, 0xc6, 0xb1, 0xd0, 0xd7, 0x90, 0x53, 0x67, 0x21, 0x7a, 0x10, 0x79, 0x11,
+	0xd2, 0x39, 0x18, 0xc3, 0xd4, 0x0c, 0x33, 0x84, 0x09, 0x22, 0x62, 0x86, 0x3c, 0x9e, 0x44, 0xcc,
+	0x50, 0x47, 0xce, 0x53, 0xc8, 0x4a, 0xe3, 0x50, 0xbc, 0x18, 0x75, 0xea, 0x8a, 0x17, 0x13, 0x9d,
+	0xa1, 0x27, 0xf2, 0x54, 0x28, 0xf5, 0x5b, 0xa5, 0x6e, 0x37, 0x78, 0x82, 0x0f, 0x22, 0xaf, 0x2c,
+	0x69, 0xab, 0xb1, 0x03, 0xea, 0x0c, 0xd6, 0x13, 0xc6, 0x02, 0xda, 0x4e, 0x76, 0x0d, 0xa7, 0x92,
+	0xfe, 0xde, 0x18, 0x56, 0x8e, 0x55, 0xfe, 0xee, 0xcd, 0xad, 0xa1, 0xfd, 0x7d, 0x6b, 0x68, 0xff,
+	0xdc, 0x1a, 0xda, 0xaf, 0x03, 0x43, 0xfb, 0x7d, 0x60, 0x68, 0x7f, 0x0c, 0x8c, 0xa9, 0x3f, 0x07,
+	0x86, 0xf6, 0x7a, 0x60, 0x68, 0x6f, 0x06, 0x86, 0xf6, 0xcb, 0x9d, 0x31, 0xf5, 0xfa, 0xce, 0x98,
+	0xfa, 0xeb, 0xce, 0x98, 0x3a, 0xde, 0x1e, 0xe7, 0x3f, 0xa5, 0xd3, 0x59, 0xfa, 0x47, 0xd2, 0xa3,
+	0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x95, 0xdf, 0xa9, 0x4a, 0x24, 0x13, 0x00, 0x00,
 }
 
 func (this *GetAllFromProjectIDReq) VerboseEqual(that interface{}) error {
@@ -2796,6 +3131,132 @@ func (this *UpdateCardByIDResp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *MoveCardToColReq) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*MoveCardToColReq)
+	if !ok {
+		that2, ok := that.(MoveCardToColReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *MoveCardToColReq")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *MoveCardToColReq but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *MoveCardToColReq but is not nil && this == nil")
+	}
+	if this.CardID != that1.CardID {
+		return fmt.Errorf("CardID this(%v) Not Equal that(%v)", this.CardID, that1.CardID)
+	}
+	if this.NewColID != that1.NewColID {
+		return fmt.Errorf("NewColID this(%v) Not Equal that(%v)", this.NewColID, that1.NewColID)
+	}
+	if this.AboveOf != that1.AboveOf {
+		return fmt.Errorf("AboveOf this(%v) Not Equal that(%v)", this.AboveOf, that1.AboveOf)
+	}
+	return nil
+}
+func (this *MoveCardToColReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MoveCardToColReq)
+	if !ok {
+		that2, ok := that.(MoveCardToColReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CardID != that1.CardID {
+		return false
+	}
+	if this.NewColID != that1.NewColID {
+		return false
+	}
+	if this.AboveOf != that1.AboveOf {
+		return false
+	}
+	return true
+}
+func (this *MoveCardToColResp) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*MoveCardToColResp)
+	if !ok {
+		that2, ok := that.(MoveCardToColResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *MoveCardToColResp")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *MoveCardToColResp but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *MoveCardToColResp but is not nil && this == nil")
+	}
+	if this.Code != that1.Code {
+		return fmt.Errorf("Code this(%v) Not Equal that(%v)", this.Code, that1.Code)
+	}
+	if this.Message != that1.Message {
+		return fmt.Errorf("Message this(%v) Not Equal that(%v)", this.Message, that1.Message)
+	}
+	return nil
+}
+func (this *MoveCardToColResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MoveCardToColResp)
+	if !ok {
+		that2, ok := that.(MoveCardToColResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Code != that1.Code {
+		return false
+	}
+	if this.Message != that1.Message {
+		return false
+	}
+	return true
+}
 func (this *DeleteCardByIDReq) VerboseEqual(that interface{}) error {
 	if that == nil {
 		if this == nil {
@@ -3530,6 +3991,246 @@ func (this *UpdateColumnByIDResp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReorderColumnReq) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*ReorderColumnReq)
+	if !ok {
+		that2, ok := that.(ReorderColumnReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *ReorderColumnReq")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *ReorderColumnReq but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *ReorderColumnReq but is not nil && this == nil")
+	}
+	if this.ColumnID != that1.ColumnID {
+		return fmt.Errorf("ColumnID this(%v) Not Equal that(%v)", this.ColumnID, that1.ColumnID)
+	}
+	if this.NextOfIdx != that1.NextOfIdx {
+		return fmt.Errorf("NextOfIdx this(%v) Not Equal that(%v)", this.NextOfIdx, that1.NextOfIdx)
+	}
+	return nil
+}
+func (this *ReorderColumnReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReorderColumnReq)
+	if !ok {
+		that2, ok := that.(ReorderColumnReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ColumnID != that1.ColumnID {
+		return false
+	}
+	if this.NextOfIdx != that1.NextOfIdx {
+		return false
+	}
+	return true
+}
+func (this *ReorderColumnResp) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*ReorderColumnResp)
+	if !ok {
+		that2, ok := that.(ReorderColumnResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *ReorderColumnResp")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *ReorderColumnResp but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *ReorderColumnResp but is not nil && this == nil")
+	}
+	if this.Code != that1.Code {
+		return fmt.Errorf("Code this(%v) Not Equal that(%v)", this.Code, that1.Code)
+	}
+	if this.Message != that1.Message {
+		return fmt.Errorf("Message this(%v) Not Equal that(%v)", this.Message, that1.Message)
+	}
+	return nil
+}
+func (this *ReorderColumnResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReorderColumnResp)
+	if !ok {
+		that2, ok := that.(ReorderColumnResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Code != that1.Code {
+		return false
+	}
+	if this.Message != that1.Message {
+		return false
+	}
+	return true
+}
+func (this *ReorderCardReq) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*ReorderCardReq)
+	if !ok {
+		that2, ok := that.(ReorderCardReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *ReorderCardReq")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *ReorderCardReq but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *ReorderCardReq but is not nil && this == nil")
+	}
+	if this.CardID != that1.CardID {
+		return fmt.Errorf("CardID this(%v) Not Equal that(%v)", this.CardID, that1.CardID)
+	}
+	if this.AboveIdx != that1.AboveIdx {
+		return fmt.Errorf("AboveIdx this(%v) Not Equal that(%v)", this.AboveIdx, that1.AboveIdx)
+	}
+	return nil
+}
+func (this *ReorderCardReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReorderCardReq)
+	if !ok {
+		that2, ok := that.(ReorderCardReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CardID != that1.CardID {
+		return false
+	}
+	if this.AboveIdx != that1.AboveIdx {
+		return false
+	}
+	return true
+}
+func (this *ReorderCardResp) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*ReorderCardResp)
+	if !ok {
+		that2, ok := that.(ReorderCardResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *ReorderCardResp")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *ReorderCardResp but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *ReorderCardResp but is not nil && this == nil")
+	}
+	if this.Code != that1.Code {
+		return fmt.Errorf("Code this(%v) Not Equal that(%v)", this.Code, that1.Code)
+	}
+	if this.Message != that1.Message {
+		return fmt.Errorf("Message this(%v) Not Equal that(%v)", this.Message, that1.Message)
+	}
+	return nil
+}
+func (this *ReorderCardResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReorderCardResp)
+	if !ok {
+		that2, ok := that.(ReorderCardResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Code != that1.Code {
+		return false
+	}
+	if this.Message != that1.Message {
+		return false
+	}
+	return true
+}
 func (this *DeleteColumnByIDReq) VerboseEqual(that interface{}) error {
 	if that == nil {
 		if this == nil {
@@ -3958,6 +4659,29 @@ func (this *UpdateCardByIDResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *MoveCardToColReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&ccmanrpc.MoveCardToColReq{")
+	s = append(s, "CardID: "+fmt.Sprintf("%#v", this.CardID)+",\n")
+	s = append(s, "NewColID: "+fmt.Sprintf("%#v", this.NewColID)+",\n")
+	s = append(s, "AboveOf: "+fmt.Sprintf("%#v", this.AboveOf)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *MoveCardToColResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&ccmanrpc.MoveCardToColResp{")
+	s = append(s, "Code: "+fmt.Sprintf("%#v", this.Code)+",\n")
+	s = append(s, "Message: "+fmt.Sprintf("%#v", this.Message)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *DeleteCardByIDReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -4099,6 +4823,50 @@ func (this *UpdateColumnByIDResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ReorderColumnReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&ccmanrpc.ReorderColumnReq{")
+	s = append(s, "ColumnID: "+fmt.Sprintf("%#v", this.ColumnID)+",\n")
+	s = append(s, "NextOfIdx: "+fmt.Sprintf("%#v", this.NextOfIdx)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReorderColumnResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&ccmanrpc.ReorderColumnResp{")
+	s = append(s, "Code: "+fmt.Sprintf("%#v", this.Code)+",\n")
+	s = append(s, "Message: "+fmt.Sprintf("%#v", this.Message)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReorderCardReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&ccmanrpc.ReorderCardReq{")
+	s = append(s, "CardID: "+fmt.Sprintf("%#v", this.CardID)+",\n")
+	s = append(s, "AboveIdx: "+fmt.Sprintf("%#v", this.AboveIdx)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReorderCardResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&ccmanrpc.ReorderCardResp{")
+	s = append(s, "Code: "+fmt.Sprintf("%#v", this.Code)+",\n")
+	s = append(s, "Message: "+fmt.Sprintf("%#v", this.Message)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *DeleteColumnByIDReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -4171,13 +4939,16 @@ type CCManagerClient interface {
 	GetCardsByCreatorID(ctx context.Context, in *GetCardsByCreatorIDReq, opts ...grpc.CallOption) (*GetCardsByCreatorIDResp, error)
 	GetCardsByColumnID(ctx context.Context, in *GetCardsByColumnIDReq, opts ...grpc.CallOption) (*GetCardsByColumnIDResp, error)
 	UpdateCardByID(ctx context.Context, in *UpdateCardByIDReq, opts ...grpc.CallOption) (*UpdateCardByIDResp, error)
+	MoveCardToCol(ctx context.Context, in *MoveCardToColReq, opts ...grpc.CallOption) (*MoveCardToColResp, error)
 	DeleteCardByID(ctx context.Context, in *DeleteCardByIDReq, opts ...grpc.CallOption) (*DeleteCardByIDResp, error)
 	CreateColumn(ctx context.Context, in *CreateColumnReq, opts ...grpc.CallOption) (*CreateColumnResp, error)
 	GetColumnByID(ctx context.Context, in *GetColumnByIDReq, opts ...grpc.CallOption) (*GetColumnByIDResp, error)
 	GetColumnsByTitle(ctx context.Context, in *GetColumnsByTitleReq, opts ...grpc.CallOption) (*GetColumnsByTitleResp, error)
 	GetColumnsByProjectID(ctx context.Context, in *GetColumnsByProjectIDReq, opts ...grpc.CallOption) (*GetColumnsByProjectIDResp, error)
 	UpdateColumnByID(ctx context.Context, in *UpdateColumnByIDReq, opts ...grpc.CallOption) (*UpdateColumnByIDResp, error)
-	DeleteColumnByID(ctx context.Context, in *DeleteColumnByIDReq, opts ...grpc.CallOption) (*DeleteColumnByIDResp, error)
+	ReorderCard(ctx context.Context, in *ReorderCardReq, opts ...grpc.CallOption) (*ReorderCardResp, error)
+	ReorderColumn(ctx context.Context, in *ReorderColumnReq, opts ...grpc.CallOption) (*ReorderColumnResp, error)
+	DeleteColumnAndAllCardByID(ctx context.Context, in *DeleteColumnByIDReq, opts ...grpc.CallOption) (*DeleteColumnByIDResp, error)
 	DeleteColumnByIDAndMove(ctx context.Context, in *DeleteColumnByIDAndMoveReq, opts ...grpc.CallOption) (*DeleteColumnByIDAndMoveResp, error)
 }
 
@@ -4261,6 +5032,15 @@ func (c *cCManagerClient) UpdateCardByID(ctx context.Context, in *UpdateCardByID
 	return out, nil
 }
 
+func (c *cCManagerClient) MoveCardToCol(ctx context.Context, in *MoveCardToColReq, opts ...grpc.CallOption) (*MoveCardToColResp, error) {
+	out := new(MoveCardToColResp)
+	err := c.cc.Invoke(ctx, "/ccmanrpc.CCManager/MoveCardToCol", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cCManagerClient) DeleteCardByID(ctx context.Context, in *DeleteCardByIDReq, opts ...grpc.CallOption) (*DeleteCardByIDResp, error) {
 	out := new(DeleteCardByIDResp)
 	err := c.cc.Invoke(ctx, "/ccmanrpc.CCManager/DeleteCardByID", in, out, opts...)
@@ -4315,9 +5095,27 @@ func (c *cCManagerClient) UpdateColumnByID(ctx context.Context, in *UpdateColumn
 	return out, nil
 }
 
-func (c *cCManagerClient) DeleteColumnByID(ctx context.Context, in *DeleteColumnByIDReq, opts ...grpc.CallOption) (*DeleteColumnByIDResp, error) {
+func (c *cCManagerClient) ReorderCard(ctx context.Context, in *ReorderCardReq, opts ...grpc.CallOption) (*ReorderCardResp, error) {
+	out := new(ReorderCardResp)
+	err := c.cc.Invoke(ctx, "/ccmanrpc.CCManager/ReorderCard", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cCManagerClient) ReorderColumn(ctx context.Context, in *ReorderColumnReq, opts ...grpc.CallOption) (*ReorderColumnResp, error) {
+	out := new(ReorderColumnResp)
+	err := c.cc.Invoke(ctx, "/ccmanrpc.CCManager/ReorderColumn", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cCManagerClient) DeleteColumnAndAllCardByID(ctx context.Context, in *DeleteColumnByIDReq, opts ...grpc.CallOption) (*DeleteColumnByIDResp, error) {
 	out := new(DeleteColumnByIDResp)
-	err := c.cc.Invoke(ctx, "/ccmanrpc.CCManager/DeleteColumnByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/ccmanrpc.CCManager/DeleteColumnAndAllCardByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -4343,13 +5141,16 @@ type CCManagerServer interface {
 	GetCardsByCreatorID(context.Context, *GetCardsByCreatorIDReq) (*GetCardsByCreatorIDResp, error)
 	GetCardsByColumnID(context.Context, *GetCardsByColumnIDReq) (*GetCardsByColumnIDResp, error)
 	UpdateCardByID(context.Context, *UpdateCardByIDReq) (*UpdateCardByIDResp, error)
+	MoveCardToCol(context.Context, *MoveCardToColReq) (*MoveCardToColResp, error)
 	DeleteCardByID(context.Context, *DeleteCardByIDReq) (*DeleteCardByIDResp, error)
 	CreateColumn(context.Context, *CreateColumnReq) (*CreateColumnResp, error)
 	GetColumnByID(context.Context, *GetColumnByIDReq) (*GetColumnByIDResp, error)
 	GetColumnsByTitle(context.Context, *GetColumnsByTitleReq) (*GetColumnsByTitleResp, error)
 	GetColumnsByProjectID(context.Context, *GetColumnsByProjectIDReq) (*GetColumnsByProjectIDResp, error)
 	UpdateColumnByID(context.Context, *UpdateColumnByIDReq) (*UpdateColumnByIDResp, error)
-	DeleteColumnByID(context.Context, *DeleteColumnByIDReq) (*DeleteColumnByIDResp, error)
+	ReorderCard(context.Context, *ReorderCardReq) (*ReorderCardResp, error)
+	ReorderColumn(context.Context, *ReorderColumnReq) (*ReorderColumnResp, error)
+	DeleteColumnAndAllCardByID(context.Context, *DeleteColumnByIDReq) (*DeleteColumnByIDResp, error)
 	DeleteColumnByIDAndMove(context.Context, *DeleteColumnByIDAndMoveReq) (*DeleteColumnByIDAndMoveResp, error)
 }
 
@@ -4381,6 +5182,9 @@ func (*UnimplementedCCManagerServer) GetCardsByColumnID(ctx context.Context, req
 func (*UnimplementedCCManagerServer) UpdateCardByID(ctx context.Context, req *UpdateCardByIDReq) (*UpdateCardByIDResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCardByID not implemented")
 }
+func (*UnimplementedCCManagerServer) MoveCardToCol(ctx context.Context, req *MoveCardToColReq) (*MoveCardToColResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MoveCardToCol not implemented")
+}
 func (*UnimplementedCCManagerServer) DeleteCardByID(ctx context.Context, req *DeleteCardByIDReq) (*DeleteCardByIDResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCardByID not implemented")
 }
@@ -4399,8 +5203,14 @@ func (*UnimplementedCCManagerServer) GetColumnsByProjectID(ctx context.Context, 
 func (*UnimplementedCCManagerServer) UpdateColumnByID(ctx context.Context, req *UpdateColumnByIDReq) (*UpdateColumnByIDResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateColumnByID not implemented")
 }
-func (*UnimplementedCCManagerServer) DeleteColumnByID(ctx context.Context, req *DeleteColumnByIDReq) (*DeleteColumnByIDResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteColumnByID not implemented")
+func (*UnimplementedCCManagerServer) ReorderCard(ctx context.Context, req *ReorderCardReq) (*ReorderCardResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReorderCard not implemented")
+}
+func (*UnimplementedCCManagerServer) ReorderColumn(ctx context.Context, req *ReorderColumnReq) (*ReorderColumnResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReorderColumn not implemented")
+}
+func (*UnimplementedCCManagerServer) DeleteColumnAndAllCardByID(ctx context.Context, req *DeleteColumnByIDReq) (*DeleteColumnByIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteColumnAndAllCardByID not implemented")
 }
 func (*UnimplementedCCManagerServer) DeleteColumnByIDAndMove(ctx context.Context, req *DeleteColumnByIDAndMoveReq) (*DeleteColumnByIDAndMoveResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteColumnByIDAndMove not implemented")
@@ -4554,6 +5364,24 @@ func _CCManager_UpdateCardByID_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CCManager_MoveCardToCol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MoveCardToColReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CCManagerServer).MoveCardToCol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ccmanrpc.CCManager/MoveCardToCol",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CCManagerServer).MoveCardToCol(ctx, req.(*MoveCardToColReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CCManager_DeleteCardByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteCardByIDReq)
 	if err := dec(in); err != nil {
@@ -4662,20 +5490,56 @@ func _CCManager_UpdateColumnByID_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CCManager_DeleteColumnByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CCManager_ReorderCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReorderCardReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CCManagerServer).ReorderCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ccmanrpc.CCManager/ReorderCard",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CCManagerServer).ReorderCard(ctx, req.(*ReorderCardReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CCManager_ReorderColumn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReorderColumnReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CCManagerServer).ReorderColumn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ccmanrpc.CCManager/ReorderColumn",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CCManagerServer).ReorderColumn(ctx, req.(*ReorderColumnReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CCManager_DeleteColumnAndAllCardByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteColumnByIDReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CCManagerServer).DeleteColumnByID(ctx, in)
+		return srv.(CCManagerServer).DeleteColumnAndAllCardByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ccmanrpc.CCManager/DeleteColumnByID",
+		FullMethod: "/ccmanrpc.CCManager/DeleteColumnAndAllCardByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CCManagerServer).DeleteColumnByID(ctx, req.(*DeleteColumnByIDReq))
+		return srv.(CCManagerServer).DeleteColumnAndAllCardByID(ctx, req.(*DeleteColumnByIDReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -4735,6 +5599,10 @@ var _CCManager_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CCManager_UpdateCardByID_Handler,
 		},
 		{
+			MethodName: "MoveCardToCol",
+			Handler:    _CCManager_MoveCardToCol_Handler,
+		},
+		{
 			MethodName: "DeleteCardByID",
 			Handler:    _CCManager_DeleteCardByID_Handler,
 		},
@@ -4759,8 +5627,16 @@ var _CCManager_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CCManager_UpdateColumnByID_Handler,
 		},
 		{
-			MethodName: "DeleteColumnByID",
-			Handler:    _CCManager_DeleteColumnByID_Handler,
+			MethodName: "ReorderCard",
+			Handler:    _CCManager_ReorderCard_Handler,
+		},
+		{
+			MethodName: "ReorderColumn",
+			Handler:    _CCManager_ReorderColumn_Handler,
+		},
+		{
+			MethodName: "DeleteColumnAndAllCardByID",
+			Handler:    _CCManager_DeleteColumnAndAllCardByID_Handler,
 		},
 		{
 			MethodName: "DeleteColumnByIDAndMove",
@@ -5388,6 +6264,79 @@ func (m *UpdateCardByIDResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MoveCardToColReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MoveCardToColReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MoveCardToColReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AboveOf != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.AboveOf))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.NewColID != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.NewColID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.CardID != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.CardID))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MoveCardToColResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MoveCardToColResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MoveCardToColResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintCcmanService(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *DeleteCardByIDReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5832,6 +6781,142 @@ func (m *UpdateColumnByIDResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ReorderColumnReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReorderColumnReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReorderColumnReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.NextOfIdx != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.NextOfIdx))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.ColumnID != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.ColumnID))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReorderColumnResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReorderColumnResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReorderColumnResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintCcmanService(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReorderCardReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReorderCardReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReorderCardReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AboveIdx != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.AboveIdx))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.CardID != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.CardID))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReorderCardResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReorderCardResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReorderCardResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintCcmanService(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintCcmanService(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *DeleteColumnByIDReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -6180,6 +7265,28 @@ func NewPopulatedUpdateCardByIDResp(r randyCcmanService, easy bool) *UpdateCardB
 	return this
 }
 
+func NewPopulatedMoveCardToColReq(r randyCcmanService, easy bool) *MoveCardToColReq {
+	this := &MoveCardToColReq{}
+	this.CardID = uint32(r.Uint32())
+	this.NewColID = uint32(r.Uint32())
+	this.AboveOf = uint32(r.Uint32())
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedMoveCardToColResp(r randyCcmanService, easy bool) *MoveCardToColResp {
+	this := &MoveCardToColResp{}
+	this.Code = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Code *= -1
+	}
+	this.Message = string(randStringCcmanService(r))
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedDeleteCardByIDReq(r randyCcmanService, easy bool) *DeleteCardByIDReq {
 	this := &DeleteCardByIDReq{}
 	this.CardID = uint32(r.Uint32())
@@ -6313,6 +7420,48 @@ func NewPopulatedUpdateColumnByIDReq(r randyCcmanService, easy bool) *UpdateColu
 
 func NewPopulatedUpdateColumnByIDResp(r randyCcmanService, easy bool) *UpdateColumnByIDResp {
 	this := &UpdateColumnByIDResp{}
+	this.Code = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Code *= -1
+	}
+	this.Message = string(randStringCcmanService(r))
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedReorderColumnReq(r randyCcmanService, easy bool) *ReorderColumnReq {
+	this := &ReorderColumnReq{}
+	this.ColumnID = uint32(r.Uint32())
+	this.NextOfIdx = uint32(r.Uint32())
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedReorderColumnResp(r randyCcmanService, easy bool) *ReorderColumnResp {
+	this := &ReorderColumnResp{}
+	this.Code = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Code *= -1
+	}
+	this.Message = string(randStringCcmanService(r))
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedReorderCardReq(r randyCcmanService, easy bool) *ReorderCardReq {
+	this := &ReorderCardReq{}
+	this.CardID = uint32(r.Uint32())
+	this.AboveIdx = uint32(r.Uint32())
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedReorderCardResp(r randyCcmanService, easy bool) *ReorderCardResp {
+	this := &ReorderCardResp{}
 	this.Code = int32(r.Int31())
 	if r.Intn(2) == 0 {
 		this.Code *= -1
@@ -6703,6 +7852,40 @@ func (m *UpdateCardByIDResp) Size() (n int) {
 	return n
 }
 
+func (m *MoveCardToColReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CardID != 0 {
+		n += 1 + sovCcmanService(uint64(m.CardID))
+	}
+	if m.NewColID != 0 {
+		n += 1 + sovCcmanService(uint64(m.NewColID))
+	}
+	if m.AboveOf != 0 {
+		n += 1 + sovCcmanService(uint64(m.AboveOf))
+	}
+	return n
+}
+
+func (m *MoveCardToColResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovCcmanService(uint64(m.Code))
+	}
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovCcmanService(uint64(l))
+	}
+	return n
+}
+
 func (m *DeleteCardByIDReq) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6881,6 +8064,68 @@ func (m *UpdateColumnByIDReq) Size() (n int) {
 }
 
 func (m *UpdateColumnByIDResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovCcmanService(uint64(m.Code))
+	}
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovCcmanService(uint64(l))
+	}
+	return n
+}
+
+func (m *ReorderColumnReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ColumnID != 0 {
+		n += 1 + sovCcmanService(uint64(m.ColumnID))
+	}
+	if m.NextOfIdx != 0 {
+		n += 1 + sovCcmanService(uint64(m.NextOfIdx))
+	}
+	return n
+}
+
+func (m *ReorderColumnResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovCcmanService(uint64(m.Code))
+	}
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovCcmanService(uint64(l))
+	}
+	return n
+}
+
+func (m *ReorderCardReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CardID != 0 {
+		n += 1 + sovCcmanService(uint64(m.CardID))
+	}
+	if m.AboveIdx != 0 {
+		n += 1 + sovCcmanService(uint64(m.AboveIdx))
+	}
+	return n
+}
+
+func (m *ReorderCardResp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -8616,6 +9861,214 @@ func (m *UpdateCardByIDResp) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MoveCardToColReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCcmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MoveCardToColReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MoveCardToColReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CardID", wireType)
+			}
+			m.CardID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CardID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewColID", wireType)
+			}
+			m.NewColID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NewColID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AboveOf", wireType)
+			}
+			m.AboveOf = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AboveOf |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCcmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MoveCardToColResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCcmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MoveCardToColResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MoveCardToColResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCcmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *DeleteCardByIDReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -9751,6 +11204,384 @@ func (m *UpdateColumnByIDResp) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: UpdateColumnByIDResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCcmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReorderColumnReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCcmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReorderColumnReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReorderColumnReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ColumnID", wireType)
+			}
+			m.ColumnID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ColumnID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextOfIdx", wireType)
+			}
+			m.NextOfIdx = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NextOfIdx |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCcmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReorderColumnResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCcmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReorderColumnResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReorderColumnResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCcmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReorderCardReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCcmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReorderCardReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReorderCardReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CardID", wireType)
+			}
+			m.CardID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CardID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AboveIdx", wireType)
+			}
+			m.AboveIdx = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCcmanService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AboveIdx |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCcmanService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCcmanService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReorderCardResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCcmanService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReorderCardResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReorderCardResp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

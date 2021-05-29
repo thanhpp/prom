@@ -3,19 +3,28 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
 	"github.com/thanhpp/prom/pkg/ccmanrpc"
 	"github.com/thanhpp/prom/pkg/logger"
-	"github.com/thanhpp/prom/pkg/usrmanrpc"
 )
 
 type ColumnCtrl struct{}
 
+// ------------------------------
+// CreateNewColumn ...
+// @Summary Create new column
+// @Description Create new column
+// @Produce json
+// @Param 	Authorization	header	string					true	"jwt"
+// @Param 	teamID			path	int						true	"teamID"
+// @Param	projectID		path	int						true	"projectID"
+// @Param 	createReq		body	dto.CreateNewColumnReq	true	"CreateReq"
+// @Success 200 {object} dto.RespError "Create success"
+// @Tags column
+// @Router /teams/:teamID/projects/:projectID/columns [POST]
 func (cC *ColumnCtrl) CreateNewColumn(c *gin.Context) {
 	prjID, err := getProjectIDFromParam(c)
 	if err != nil {
@@ -65,11 +74,23 @@ func (cC *ColumnCtrl) CreateNewColumn(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// ReorderColumn ...
+// @Summary Reorder 1 column
+// @Description Reorder 1 column
+// @Produce json
+// @Param 	Authorization	header	string					true	"jwt"
+// @Param 	teamID			path	int						true	"teamID"
+// @Param	projectID		path	int						true	"projectID"
+// @Param 	reorderReq		body	dto.UpdateColumnIndex	true	"reorderReq"
+// @Success 200 {object} dto.RespError "ReorderOK"
+// @Tags column
+// @Router /teams/:teamID/projects/:projectID/columns/reorder  [POST]
 func (cC *ColumnCtrl) ReorderColumns(c *gin.Context) {
 	prjID, err := getProjectIDFromParam(c)
 	if err != nil {
@@ -85,21 +106,36 @@ func (cC *ColumnCtrl) ReorderColumns(c *gin.Context) {
 		return
 	}
 
-	project := &usrmanrpc.Project{
-		ID:    prjID,
-		Index: strings.Trim(strings.Replace(fmt.Sprint(req.ColumnIndex), " ", ",", -1), "[]") + ",",
-	}
-	if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
-		logger.Get().Errorf("Update project index error: %v", err)
+	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
+	if err != nil {
+		logger.Get().Errorf("Get project error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	resp := new(dto.Resp)
+	if err := service.GetCCManSrv().ReorderColumn(c, int(project.ShardID), req.ColumnID, req.NextOfIdx); err != nil {
+		logger.Get().Errorf("Update column index error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// DeleteColumn ...
+// @Summary Delete column by id
+// @Description Delete column by id and all card in column
+// @Produce json
+// @Param 	Authorization	header	string				true	"jwt"
+// @Param 	teamID			path	int					true	"teamID"
+// @Param	projectID		path	int					true	"projectID"
+// @Param 	deleteReq		body	dto.DeleteColumn	true	"deleteReq"
+// @Success 200 {object} dto.RespError
+// @Tags column
+// @Router /teams/:teamID/projects/:projectID/columns [DELETE]
 func (cC *ColumnCtrl) DeleteColumn(c *gin.Context) {
 	prjID, err := getProjectIDFromParam(c)
 	if err != nil {
@@ -122,30 +158,22 @@ func (cC *ColumnCtrl) DeleteColumn(c *gin.Context) {
 		return
 	}
 
-	if req.MoveTo == 0 {
-		if err = service.GetCCManSrv().DeleteColumnByID(c, int(project.ShardID), req.ColumnID); err != nil {
-			logger.Get().Errorf("Delete column error: %v", err)
-			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
-			return
-		}
-	} else {
-		if err = service.GetCCManSrv().DeleteColumnByIDAndMove(c, int(project.ShardID), req.ColumnID, req.MoveTo); err != nil {
-			logger.Get().Errorf("Delete column error: %v", err)
-			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
-			return
-		}
-	}
-
-	// update project index
-	project.Index = strings.ReplaceAll(project.Index, fmt.Sprintf("%d,", req.ColumnID), "")
-	fmt.Println(project.Index)
-	if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
-		logger.Get().Errorf("Update project index error: %v", err)
+	if err = service.GetCCManSrv().DeleteColumnByID(c, int(project.ShardID), req.ColumnID); err != nil {
+		logger.Get().Errorf("Delete column error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	resp := new(dto.Resp)
+	// // update project index
+	// project.Index = strings.ReplaceAll(project.Index, fmt.Sprintf("%d,", req.ColumnID), "")
+	// fmt.Println(project.Index)
+	// if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
+	// 	logger.Get().Errorf("Update project index error: %v", err)
+	// 	ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
+
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }

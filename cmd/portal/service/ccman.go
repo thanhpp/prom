@@ -58,6 +58,7 @@ type iCCMan interface {
 	GetCardsByCreatorID(ctx context.Context, shardID int, userID uint32) (cards []*ccmanrpc.Card, err error)
 	GetCardsByColumnID(ctx context.Context, shardID int, colID uint32) (cards []*ccmanrpc.Card, err error)
 	UpdateCardByID(ctx context.Context, shardID int, cardID uint32, card *ccmanrpc.Card) (err error)
+	MoveCardToCol(ctx context.Context, shardID int, cardID uint32, newCol uint32, aboveIdx uint32) (err error)
 	DeleteCardByID(ctx context.Context, shardID int, cardID uint32) (err error)
 
 	CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (createdID uint32, err error)
@@ -65,8 +66,10 @@ type iCCMan interface {
 	GetColumnsByTitle(ctx context.Context, shardID int, title string) (cols []*ccmanrpc.Column, err error)
 	GetColumnsByProjectID(ctx context.Context, shardID int, projectID uint32) (cols []*ccmanrpc.Column, err error)
 	UpdateColumnByID(ctx context.Context, shardID int, colID uint32, col *ccmanrpc.Column) (err error)
+	ReorderCard(ctx context.Context, shardID int, cardID uint32, aboveIdx uint32) (err error)
+	ReorderColumn(ctx context.Context, shardID int, columnID uint32, nextOfIdx uint32) (err error)
 	DeleteColumnByID(ctx context.Context, shardID int, colID uint32) (err error)
-	DeleteColumnByIDAndMove(ctx context.Context, shardID int, colID uint32, newColID uint32) (err error)
+	// DeleteColumnByIDAndMove(ctx context.Context, shardID int, colID uint32, newColID uint32) (err error)
 }
 
 var implCCManSrv = new(CCManSrv)
@@ -325,6 +328,31 @@ func (cS *CCManSrv) UpdateCardByID(ctx context.Context, shardID int, cardID uint
 	return nil
 }
 
+func (cS *CCManSrv) MoveCardToCol(ctx context.Context, shardID int, cardID uint32, newCol uint32, aboveIdx uint32) (err error) {
+	if ctx.Err() != nil {
+		return cS.error(err)
+	}
+
+	in := &ccmanrpc.MoveCardToColReq{
+		CardID:   cardID,
+		NewColID: newCol,
+		AboveOf:  aboveIdx,
+	}
+
+	client, ok := cS.client(shardID)
+	if !ok {
+		return fmt.Errorf("Client ID %d not found", shardID)
+	}
+
+	_, err = client.MoveCardToCol(ctx, in)
+	if err != nil {
+		checkServiceFailError(shardID, err)
+		return cS.error(err)
+	}
+
+	return nil
+}
+
 func (cS *CCManSrv) DeleteCardByID(ctx context.Context, shardID int, cardID uint32) (err error) {
 	if ctx.Err() != nil {
 		return cS.error(cS.error(err))
@@ -346,6 +374,9 @@ func (cS *CCManSrv) DeleteCardByID(ctx context.Context, shardID int, cardID uint
 
 	return nil
 }
+
+// --------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- COLUMN ----------------------------------------------------------
 
 func (cS *CCManSrv) CreateColumn(ctx context.Context, shardID int, column *ccmanrpc.Column) (createdID uint32, err error) {
 	if ctx.Err() != nil {
@@ -458,6 +489,51 @@ func (cS *CCManSrv) UpdateColumnByID(ctx context.Context, shardID int, colID uin
 	return nil
 }
 
+func (cS *CCManSrv) ReorderCard(ctx context.Context, shardID int, cardID uint32, aboveIdx uint32) (err error) {
+	if ctx.Err() != nil {
+		return cS.error(ctx.Err())
+	}
+
+	in := &ccmanrpc.ReorderCardReq{
+		CardID:   cardID,
+		AboveIdx: aboveIdx,
+	}
+	client, ok := cS.client(shardID)
+	if !ok {
+		return fmt.Errorf("Client ID %d not found", shardID)
+	}
+	_, err = client.ReorderCard(ctx, in)
+	if err != nil {
+		checkServiceFailError(shardID, err)
+		return cS.error(err)
+	}
+
+	return nil
+}
+
+func (cS *CCManSrv) ReorderColumn(ctx context.Context, shardID int, columnID uint32, nextOfIdx uint32) (err error) {
+	if ctx.Err() != nil {
+		return cS.error(ctx.Err())
+	}
+
+	in := &ccmanrpc.ReorderColumnReq{
+		ColumnID:  columnID,
+		NextOfIdx: nextOfIdx,
+	}
+	client, ok := cS.client(shardID)
+	if !ok {
+		return fmt.Errorf("Client ID %d not found", shardID)
+	}
+
+	_, err = client.ReorderColumn(ctx, in)
+	if err != nil {
+		checkServiceFailError(shardID, err)
+		return cS.error(err)
+	}
+
+	return nil
+}
+
 func (cS *CCManSrv) DeleteColumnByID(ctx context.Context, shardID int, colID uint32) (err error) {
 	if ctx.Err() != nil {
 		return cS.error(ctx.Err())
@@ -471,7 +547,7 @@ func (cS *CCManSrv) DeleteColumnByID(ctx context.Context, shardID int, colID uin
 	if !ok {
 		return fmt.Errorf("Client ID %d not found", shardID)
 	}
-	_, err = client.DeleteColumnByID(ctx, in)
+	_, err = client.DeleteColumnAndAllCardByID(ctx, in)
 	if err != nil {
 		checkServiceFailError(shardID, err)
 		return cS.error(err)
@@ -480,26 +556,26 @@ func (cS *CCManSrv) DeleteColumnByID(ctx context.Context, shardID int, colID uin
 	return nil
 }
 
-func (cS *CCManSrv) DeleteColumnByIDAndMove(ctx context.Context, shardID int, colID uint32, newColID uint32) (err error) {
-	if ctx.Err() != nil {
-		return cS.error(ctx.Err())
-	}
+// func (cS *CCManSrv) DeleteColumnByIDAndMove(ctx context.Context, shardID int, colID uint32, newColID uint32) (err error) {
+// 	if ctx.Err() != nil {
+// 		return cS.error(ctx.Err())
+// 	}
 
-	in := &ccmanrpc.DeleteColumnByIDAndMoveReq{
-		ColumnID:    colID,
-		NewColumnID: newColID,
-	}
+// 	in := &ccmanrpc.DeleteColumnByIDAndMoveReq{
+// 		ColumnID:    colID,
+// 		NewColumnID: newColID,
+// 	}
 
-	client, ok := cS.client(shardID)
-	if !ok {
-		return fmt.Errorf("DeleteColumnByIDAndMove %v", err)
-	}
+// 	client, ok := cS.client(shardID)
+// 	if !ok {
+// 		return fmt.Errorf("DeleteColumnByIDAndMove %v", err)
+// 	}
 
-	_, err = client.DeleteColumnByIDAndMove(ctx, in)
-	if err != nil {
-		checkServiceFailError(shardID, err)
-		return cS.error(err)
-	}
+// 	_, err = client.DeleteColumnByIDAndMove(ctx, in)
+// 	if err != nil {
+// 		checkServiceFailError(shardID, err)
+// 		return cS.error(err)
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

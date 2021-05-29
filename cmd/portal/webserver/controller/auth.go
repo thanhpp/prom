@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-
 	"github.com/thanhpp/prom/cmd/portal/repository"
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
@@ -16,6 +15,15 @@ import (
 
 type AuthCtrl struct{}
 
+// ------------------------------
+// Login ...
+// @Summary Login by username and password
+// @Description Login by username and password
+// @Produce json
+// @Param loginReq body dto.UserLoginReq true "login request"
+// @Success 200 {object} dto.UserLoginResp
+// @Tags auth
+// @Router /login [POST]
 func (a AuthCtrl) Login(c *gin.Context) {
 	req := new(dto.UserLoginReq)
 	if err := c.ShouldBindJSON(req); err != nil {
@@ -64,15 +72,21 @@ func (a AuthCtrl) Login(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
+	resp := new(dto.UserLoginResp)
 	resp.SetCodeMsg(http.StatusOK, "")
-	resp.Data = gin.H{
-		"token": token,
-	}
+	resp.SetToken(token)
 
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// Logout ...
+// @Summary Logout by token
+// @Description Logout by token
+// @Param Authorization header string true "jwt"
+// @Success 200
+// @Tags auth
+// @Router /logout [POST]
 func (a AuthCtrl) Logout(c *gin.Context) {
 	fmt.Println("Checkpoint")
 

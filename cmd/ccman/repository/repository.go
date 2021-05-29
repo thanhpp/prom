@@ -10,7 +10,7 @@ import (
 
 type iDao interface {
 	InitDBConnection(dsn string, logLevel string) (err error)
-	AutoMigrate(ctx context.Context, models ...interface{}) (err error)
+	AutoMigrate(ctx context.Context) (err error)
 
 	GetAllFromProjectID(ctx context.Context, projectID uint32) (cols []*ccmanrpc.Column, err error)
 
@@ -22,6 +22,7 @@ type iDao interface {
 	GetCardsByColumnID(ctx context.Context, columnID uint32) (cards []*ccmanrpc.Card, err error)
 	UpdateCardByID(ctx context.Context, cardID uint32, card *ccmanrpc.Card) (err error)
 	MoveCardToCol(ctx context.Context, cardID uint32, newColID uint32) (err error)
+	MoveCardToColv2(ctx context.Context, cardID uint32, colID uint32, index uint32) (err error)
 	DeleteCardByID(ctx context.Context, cardID uint32) (err error)
 
 	CreateColumn(ctx context.Context, column *ccmanrpc.Column) (createdID uint32, err error)
@@ -29,7 +30,9 @@ type iDao interface {
 	GetColumnsByTitle(ctx context.Context, title string) (columns []*ccmanrpc.Column, err error)
 	GetColumnsByProjectID(ctx context.Context, projectID uint32) (columns []*ccmanrpc.Column, err error)
 	UpdateColumnByID(ctx context.Context, columnID uint32, column *ccmanrpc.Column) (err error)
-	DeleteColumnByID(ctx context.Context, columnID uint32) (err error)
+	ReorderCard(ctx context.Context, cardID uint32, newIdx uint32) (err error)
+	ReorderColumn(ctx context.Context, columnID uint32, nextOfIdx uint32) (err error)
+	DeleteColumnAndAllCardByID(ctx context.Context, columnID uint32) (err error)
 	DeleteColumnByIDAndMove(ctx context.Context, columnID uint32, newColID uint32) (err error)
 }
 

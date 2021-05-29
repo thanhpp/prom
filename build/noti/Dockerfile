@@ -23,15 +23,12 @@ RUN go build -v -o noti .
 
 FROM alpine
 
-WORKDIR /run
-
 COPY --from=builder ["/build/cmd/noti/noti", "noti"]
 COPY --from=builder ["/build/cmd/noti/dev.yml", "dev.yml"]
 
 EXPOSE 23456
 
-ENV WAIT_VERSION 2.9.0
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
 RUN chmod +x /wait
 
-CMD ./wait && ./noti
+CMD /wait && /noti

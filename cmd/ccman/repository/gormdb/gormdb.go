@@ -12,7 +12,6 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	gormlog "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 
@@ -66,15 +65,18 @@ func (g *implGorm) InitDBConnection(dsn string, logLevel string) (err error) {
 		return err
 	}
 
-	if err = gDB.AutoMigrate(&ccmanrpc.Column{}, &ccmanrpc.Card{}); err != nil {
+	return nil
+}
+
+// AutoMigrate ...
+func (g *implGorm) AutoMigrate(ctx context.Context) (err error) {
+	if err = g.autoMigrate(ctx, &ccmanrpc.Column{}, &ccmanrpc.Card{}); err != nil {
 		return err
 	}
 
 	return nil
 }
-
-// AutoMigrate ...
-func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err error) {
+func (g *implGorm) autoMigrate(ctx context.Context, models ...interface{}) (err error) {
 	if err = gDB.WithContext(ctx).AutoMigrate(models...); err != nil {
 		return err
 	}
@@ -88,49 +90,60 @@ func (g *implGorm) AutoMigrate(ctx context.Context, models ...interface{}) (err 
 // GetAllFromProjectID
 
 func (g *implGorm) GetAllFromProjectID(ctx context.Context, projectID uint32) (cols []*ccmanrpc.Column, err error) {
-	if err := gDB.WithContext(ctx).Model(columnModel).Preload(clause.Associations).
-		Where("project_id = ?", projectID).Find(&cols).Error; err != nil {
+	if err := gDB.WithContext(ctx).Model(columnModel).
+		Preload("Cards", func(tx *gorm.DB) *gorm.DB {
+			return tx.Order("card.index DESC")
+		}).
+		Where("project_id = ?", projectID).
+		Order("project_index ASC").
+		Find(&cols).Error; err != nil {
 		return nil, err
 	}
 
-	for i := range cols {
-		index := strings.Split(strings.TrimRight(cols[i].Index, ","), ",")
-		if len(cols[i].Cards) == 0 {
-			continue
-		}
-		if len(index) != len(cols[i].Cards) {
-			return nil, errors.New("Mismatch index and cards len")
-		}
+	// for i := range cols {
+	// 	index := strings.Split(strings.TrimRight(cols[i].Index, ","), ",")
+	// 	if len(cols[i].Cards) == 0 {
+	// 		continue
+	// 	}
+	// 	if len(index) != len(cols[i].Cards) {
+	// 		return nil, errors.New("Mismatch index and cards len")
+	// 	}
 
-		for j := range index {
-			for k := range cols[i].Cards {
-				id, err := strconv.Atoi(index[j])
-				if err != nil {
-					return nil, err
-				}
-				if cols[i].Cards[k].ID == uint32(id) {
-					cols[i].Cards = append(cols[i].Cards, cols[i].Cards[k])
-				}
-			}
-		}
+	// 	for j := range index {
+	// 		for k := range cols[i].Cards {
+	// 			id, err := strconv.Atoi(index[j])
+	// 			if err != nil {
+	// 				return nil, err
+	// 			}
+	// 			if cols[i].Cards[k].ID == uint32(id) {
+	// 				cols[i].Cards = append(cols[i].Cards, cols[i].Cards[k])
+	// 			}
+	// 		}
+	// 	}
 
-		cols[i].Cards = cols[i].Cards[len(cols[i].Cards)/2:]
-	}
+	// 	cols[i].Cards = cols[i].Cards[len(cols[i].Cards)/2:]
+	// }
 
 	return cols, nil
 }
 
-// CreateCard Const
-const createCardColIndex = "UPDATE \"column\" SET index = ? || ',' || index  WHERE id = ?"
+// // CreateCard Const
+// const createCardColIndex = "UPDATE \"column\" SET index = ? || ',' || index  WHERE id = ?"
 
 // CreateCard ...
 func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (createdID uint32, err error) {
 	err = gDB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.WithContext(ctx).Table("card").WithContext(ctx).Save(card).Error; err != nil {
-			return err
-		}
+		// if err := tx.WithContext(ctx).Table("card").WithContext(ctx).Save(card).Error; err != nil {
+		// 	return err
+		// }
 
-		if err := tx.WithContext(ctx).Exec(createCardColIndex, strconv.Itoa(int(card.ID)), card.ColumnID).Error; err != nil {
+		// if err := tx.WithContext(ctx).Exec(createCardColIndex, strconv.Itoa(int(card.ID)), card.ColumnID).Error; err != nil {
+		// 	return err
+		// }
+
+		// return nil
+		_, err = g.createCardv2(ctx, tx, card)
+		if err != nil {
 			return err
 		}
 
@@ -138,6 +151,26 @@ func (g *implGorm) CreateCard(ctx context.Context, card *ccmanrpc.Card) (created
 	})
 
 	if err != nil {
+		return 0, err
+	}
+
+	return card.ID, nil
+}
+
+func (g *implGorm) createCardv2(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card) (cardID uint32, err error) {
+	// get column max index & increase
+	var maxIndex uint32
+	if err = tx.WithContext(ctx).Model(columnModel).Where("id = ?", card.ColumnID).Pluck("max_index", &maxIndex).Limit(1).Error; err != nil {
+		return 0, err
+	}
+	maxIndex = maxIndex + 1
+	if err = tx.WithContext(ctx).Model(columnModel).Where("id = ?", card.ColumnID).Update("max_index", maxIndex).Error; err != nil {
+		return 0, err
+	}
+
+	// save card
+	card.Index = maxIndex
+	if err = tx.WithContext(ctx).Model(cardModel).Save(card).Error; err != nil {
 		return 0, err
 	}
 
@@ -232,23 +265,98 @@ func (g *implGorm) MoveCardToCol(ctx context.Context, cardID uint32, newColID ui
 	return nil
 }
 
-// UpdateCardByID implement move card between column if card.ColumnID != 0
-func (g *implGorm) UpdateCardByID(ctx context.Context, cardID uint32, card *ccmanrpc.Card) (err error) {
-	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		if card.ColumnID > 0 {
-			dbCard := new(ccmanrpc.Card)
-			if err = tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Take(dbCard).Error; err != nil {
-				return err
-			}
+// ----------
+// MoveCardToColv2
+func (g *implGorm) MoveCardToColv2(ctx context.Context, cardID uint32, colID uint32, index uint32) (err error) {
+	// pre-exec check
+	if index == 0 {
+		return errors.New("Zero index")
+	}
 
-			if card.ColumnID != dbCard.ID {
-				if err = moveCardToColTransaction(tx, ctx, cardID, card.ColumnID); err != nil {
-					return err
-				}
-			}
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		if err := g.moveCardToColv2(ctx, tx, cardID, colID, index); err != nil {
+			return err
 		}
 
-		if err = tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Updates(card).Error; err != nil {
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint32, colID uint32, index uint32) (err error) {
+	// precheck max_index
+	var maxIndex uint32
+	if err = tx.WithContext(ctx).Model(columnModel).Where("id = ?", colID).Pluck("max_index", &maxIndex).Limit(1).Error; err != nil {
+		return err
+	}
+	if index > maxIndex+1 {
+		return errors.New("Invalid new index")
+	}
+
+	// remove from old column, decrease all larger(newer) index
+	var card = new(ccmanrpc.Card)
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("id = ?", cardID).
+		Take(card).Error; err != nil {
+		return err
+	}
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("column_id = ? AND index > ?", card.ColumnID, card.Index).
+		Update("index", gorm.Expr("index - ?", 1)).Error; err != nil {
+		return err
+	}
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("id = ?", card.ColumnID).
+		Update("max_index", gorm.Expr("max_index - ?", 1)).Error; err != nil {
+		return err
+	}
+
+	// add to new column, create empty index slot & update card
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("column_id = ? AND index >= ?", colID, index).
+		Update("index", gorm.Expr("index + ?", 1)).Error; err != nil {
+		return err
+	}
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("id = ?", colID).
+		Update("max_index", gorm.Expr("max_index + ?", 1)).Error; err != nil {
+		return err
+	}
+	card.ColumnID = colID
+	card.Index = index
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("id = ?", card.ID).
+		Updates(card).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// UpdateCardByID ..
+func (g *implGorm) UpdateCardByID(ctx context.Context, cardID uint32, card *ccmanrpc.Card) (err error) {
+	err = gDB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// if card.ColumnID > 0 {
+		// 	dbCard := new(ccmanrpc.Card)
+		// 	if err = tx.Model(cardModel).WithContext(ctx).Where("id = ?", cardID).Take(dbCard).Error; err != nil {
+		// 		return err
+		// 	}
+
+		// 	if card.ColumnID != dbCard.ID {
+		// 		if err = moveCardToColTransaction(tx, ctx, cardID, card.ColumnID); err != nil {
+		// 			return err
+		// 		}
+		// 	}
+		// }
+		card.ColumnID = 0 // prevent wrong column update
+		card.Index = 0    // prevent wrong index update
+		if err = tx.Model(cardModel).WithContext(ctx).
+			Where("id = ?", cardID).
+			Updates(card).Error; err != nil {
 			return err
 		}
 
@@ -272,11 +380,35 @@ func (g *implGorm) DeleteCardByID(ctx context.Context, cardID uint32) (err error
 
 // CreateColumn ...
 func (g *implGorm) CreateColumn(ctx context.Context, column *ccmanrpc.Column) (createdID uint32, err error) {
-	if err = gDB.Model(columnModel).WithContext(ctx).Save(column).Error; err != nil {
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		maxIdx, er := g.maxPrjColIndex(ctx, tx, column.ProjectID)
+		if er != nil {
+			return er
+		}
+		column.ProjectIndex = maxIdx + 1
+
+		if er = tx.Model(columnModel).WithContext(ctx).Save(column).Error; err != nil {
+			return er
+		}
+		return nil
+	})
+
+	if err != nil {
 		return 0, err
 	}
 
 	return column.ID, nil
+}
+
+func (g *implGorm) maxPrjColIndex(ctx context.Context, tx *gorm.DB, prjID uint32) (maxPrjColIdx uint32, err error) {
+	if err = tx.Model(columnModel).
+		Select("MAX(project_index) AS max_prj_col_idx").
+		Where("project_id = ?", prjID).
+		Pluck("max_prj_col_idx", &maxPrjColIdx).Error; err != nil {
+		return 0, nil
+	}
+
+	return maxPrjColIdx, nil
 }
 
 // GetColumnByID ...
@@ -330,8 +462,24 @@ func (g *implGorm) UpdateColumnByID(ctx context.Context, columnID uint32, column
 }
 
 // DeleteColumnByID ...
-func (g *implGorm) DeleteColumnByID(ctx context.Context, columnID uint32) (err error) {
-	if err = gDB.Model(columnModel).WithContext(ctx).Where("id = ?", columnID).Delete(&ccmanrpc.Column{}).Error; err != nil {
+func (g *implGorm) DeleteColumnAndAllCardByID(ctx context.Context, columnID uint32) (err error) {
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.WithContext(ctx).Model(cardModel).
+			Where("column_id = ?", columnID).
+			Delete(&ccmanrpc.Column{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.WithContext(ctx).Model(columnModel).
+			Where("id = ?", columnID).
+			Delete(&ccmanrpc.Column{}).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		return err
 	}
 
@@ -373,7 +521,188 @@ func (g *implGorm) DeleteColumnByIDAndMove(ctx context.Context, columnID uint32,
 	}
 
 	return nil
+}
 
+// ------------------------------
+// ReorderCard ...
+func (g *implGorm) ReorderCard(ctx context.Context, cardID uint32, newIdx uint32) (err error) {
+	// pre-exec check
+	if newIdx == 0 {
+		return errors.New("Zero index")
+	}
+
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		var card = new(ccmanrpc.Card)
+		if err := tx.WithContext(ctx).Model(cardModel).
+			Where("id = ?", cardID).Take(card).Error; err != nil {
+			return err
+		}
+
+		if card.Index == newIdx {
+			return nil
+		}
+
+		if newIdx > card.Index {
+			if err := g.moveCardUp(ctx, tx, card, newIdx); err != nil {
+				return err
+			}
+		} else {
+			if err := g.moveCardDown(ctx, tx, card, newIdx); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *implGorm) moveCardUp(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card, newIdx uint32) (err error) {
+	// pre-exec check
+	if card.Index >= newIdx {
+		return errors.New("Invalid index")
+	}
+	var maxIndex uint32
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("id = ?", card.ColumnID).
+		Pluck("max_index", &maxIndex).
+		Limit(1).Error; err != nil {
+		return err
+	}
+	if newIdx > maxIndex {
+		return errors.New("Invalid index")
+	}
+
+	// create empty slot
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("column_id = ? AND index > ? AND index <= ?", card.ColumnID, card.Index, newIdx).
+		Update("index", gorm.Expr("index - ?", 1)).Error; err != nil {
+		return err
+	}
+
+	// update card new index
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("id = ?", card.ID).
+		Update("index", newIdx).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *implGorm) moveCardDown(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card, newIdx uint32) (err error) {
+	// pre-exec check
+	if card.Index <= newIdx {
+		return errors.New("Invalid index")
+	}
+
+	// create empty slot
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("column_id = ? AND index > ? AND index < ?", card.ColumnID, newIdx, card.Index).
+		Update("index", gorm.Expr("index + ?", 1)).Error; err != nil {
+		return err
+	}
+
+	// update card index
+	if err = tx.WithContext(ctx).Model(cardModel).
+		Where("id = ?", card.ID).
+		Update("index", newIdx+1).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ------------------------------
+// Reorder column
+func (g *implGorm) ReorderColumn(ctx context.Context, columnID uint32, nextOfIdx uint32) (err error) {
+	err = gDB.Transaction(func(tx *gorm.DB) error {
+		var column = new(ccmanrpc.Column)
+		if err := tx.WithContext(ctx).Model(columnModel).
+			Where("id = ?", columnID).Take(column).Error; err != nil {
+			return err
+		}
+
+		if column.ProjectIndex == nextOfIdx {
+			return nil
+		}
+
+		if column.ProjectIndex < nextOfIdx {
+			if err := g.moveColumnForward(ctx, tx, column, nextOfIdx); err != nil {
+				return err
+			}
+		} else {
+			if err := g.moveColumnBackward(ctx, tx, column, nextOfIdx); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *implGorm) moveColumnForward(ctx context.Context, tx *gorm.DB, column *ccmanrpc.Column, nextOfIdx uint32) (err error) {
+	// pre-exec check
+	if column.ProjectIndex >= nextOfIdx {
+		return errors.New("Invalid Index")
+	}
+
+	maxColPrjIdx, err := g.maxPrjColIndex(ctx, tx, column.ProjectID)
+	if err != nil {
+		return err
+	}
+	if nextOfIdx > maxColPrjIdx {
+		return errors.New("Invalid Index")
+	}
+
+	// create slot
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("project_id = ? AND project_index > ? AND project_index <= ?", column.ProjectID, column.ProjectIndex, nextOfIdx).
+		Update("project_index", gorm.Expr("project_index - ?", 1)).Error; err != nil {
+		return err
+	}
+
+	// update column index
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("id = ?", column.ID).
+		Update("project_index", nextOfIdx).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *implGorm) moveColumnBackward(ctx context.Context, tx *gorm.DB, column *ccmanrpc.Column, nextOfIdx uint32) (err error) {
+	// pre-exec check
+	if column.ProjectIndex <= nextOfIdx {
+		return errors.New("Invalid Index")
+	}
+
+	// create slot
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("project_id = ? AND project_index < ? AND project_index > ?", column.ProjectID, column.ProjectIndex, nextOfIdx).
+		Update("project_index", gorm.Expr("project_index + ?", 1)).Error; err != nil {
+		return err
+	}
+
+	// update column index
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("id = ?", column.ID).
+		Update("project_index", nextOfIdx+1).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // ------------------------------------------------------------------------------------------------------------------------

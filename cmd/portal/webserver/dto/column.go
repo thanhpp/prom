@@ -5,10 +5,10 @@ type CreateNewColumnReq struct {
 }
 
 type UpdateColumnIndex struct {
-	ColumnIndex []uint32 `json:"columnIndex"`
+	ColumnID  uint32 `json:"columnID"`
+	NextOfIdx uint32 `json:"nextOfIndex"`
 }
 
 type DeleteColumn struct {
 	ColumnID uint32 `json:"columnID"`
-	MoveTo   uint32 `json:"moveToColumnID"`
 }
