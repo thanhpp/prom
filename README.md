@@ -37,4 +37,7 @@ Project Management. HUST_20202_DS
 
    3. Example
       - ![ReorderCardExample](docs/drawio/ReorderCardExp.jpg)
-      - ![ReorderColumnExample](docs/drawio/ReorderColumnExp.jpg)
+
+4. Reorder columns
+
+- ![ReorderColumnExample](docs/drawio/ReorderColumnExp.jpg)
