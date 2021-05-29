@@ -1,0 +1,740 @@
+definitions:
+  dto.CreateNewCardReq:
+    properties:
+      card:
+        properties:
+          assignedTo:
+            type: integer
+          description:
+            type: string
+          duedate:
+            type: integer
+          title:
+            type: string
+        type: object
+      columnID:
+        type: integer
+    type: object
+  dto.CreateNewColumnReq:
+    properties:
+      columnName:
+        type: string
+    type: object
+  dto.CreateNewTeamReq:
+    properties:
+      teamName:
+        type: string
+    type: object
+  dto.CreateProjectReq:
+    properties:
+      projectName:
+        type: string
+    type: object
+  dto.CreateUserReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.DeleteCardReq:
+    properties:
+      cardID:
+        type: integer
+    type: object
+  dto.DeleteColumn:
+    properties:
+      columnID:
+        type: integer
+    type: object
+  dto.GetAllProjectFromTeamIDResp:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+      projects:
+        type: string
+    type: object
+  dto.GetAllTeamByUserIDResp:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+      teams:
+        type: string
+    type: object
+  dto.GetProjectDetailsResp:
+    properties:
+      columns:
+        type: string
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+      project:
+        type: string
+    type: object
+  dto.GetTeamByIDResp:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+      team:
+        type: string
+    type: object
+  dto.GetUserNameResp:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+      users:
+        type: string
+    type: object
+  dto.ReorderCard:
+    properties:
+      aboveOfIdx:
+        type: integer
+      cardID:
+        type: integer
+      columnID:
+        type: integer
+    type: object
+  dto.RespError:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+    type: object
+  dto.UpdateCardInfoReq:
+    properties:
+      card:
+        properties:
+          assignedTo:
+            type: integer
+          description:
+            type: string
+          duedate:
+            type: integer
+          id:
+            type: integer
+          title:
+            type: string
+        type: object
+      columnID:
+        type: integer
+    type: object
+  dto.UpdateColumnIndex:
+    properties:
+      columnID:
+        type: integer
+      nextOfIndex:
+        type: integer
+    type: object
+  dto.UpdateTeamMemberReq:
+    properties:
+      memberID:
+        type: integer
+      op:
+        type: string
+    type: object
+  dto.UpdateUserReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UserLoginReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UserLoginResp:
+    properties:
+      data:
+        properties:
+          token:
+            type: string
+        type: object
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /login:
+    post:
+      description: Login by username and password
+      parameters:
+      - description: login request
+        in: body
+        name: loginReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserLoginResp'
+      summary: Login by username and password
+      tags:
+      - auth
+  /logout:
+    post:
+      description: Logout by token
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      summary: Logout by token
+      tags:
+      - auth
+  /teams:
+    get:
+      description: Get all team by userID
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetAllTeamByUserIDResp'
+      summary: Get all team by userID
+      tags:
+      - team
+    post:
+      description: Create new team
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: team info
+        in: body
+        name: createReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateNewTeamReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Create new team
+      tags:
+      - team
+  /teams/:teamID:
+    delete:
+      description: Delete team
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: delete OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Delete team
+      tags:
+      - team
+    get:
+      description: Get team by ID
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: team details
+          schema:
+            $ref: '#/definitions/dto.GetTeamByIDResp'
+      summary: Get team by ID
+      tags:
+      - team
+    put:
+      description: Edit member by teamID and userID
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: Op =  add/remove
+        in: body
+        name: editReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTeamMemberReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: edit ok
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Edit member
+      tags:
+      - team
+  /teams/:teamID/projects:
+    get:
+      description: Get all projects from teamID
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: projects response
+          schema:
+            $ref: '#/definitions/dto.GetAllProjectFromTeamIDResp'
+      summary: Get all projects
+      tags:
+      - project
+    post:
+      description: Create new project
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: project info
+        in: body
+        name: createReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProjectReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Create new project
+      tags:
+      - project
+  /teams/:teamID/projects/:projectID:
+    get:
+      description: Get project details by id
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: project details
+          schema:
+            $ref: '#/definitions/dto.GetProjectDetailsResp'
+      summary: Get project details
+      tags:
+      - project
+  /teams/:teamID/projects/:projectID/cards:
+    delete:
+      description: Delete card by ID
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: delete request
+        in: body
+        name: deleteReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DeleteCardReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: delete success
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Delete card by ID
+      tags:
+      - card
+    patch:
+      description: Update card info (No column ID)
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: update info
+        in: body
+        name: updateReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCardInfoReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Update card info
+      tags:
+      - card
+    post:
+      description: Create new card
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: CreateReq
+        in: body
+        name: createReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateNewCardReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Create new card
+      tags:
+      - card
+  /teams/:teamID/projects/:projectID/cards/reorder:
+    post:
+      description: Reorder card in one column
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: ReorderReq
+        in: body
+        name: reorderReq
+        schema:
+          $ref: '#/definitions/dto.ReorderCard'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reorder success
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Reorder card in one column
+      tags:
+      - card
+  /teams/:teamID/projects/:projectID/columns:
+    delete:
+      description: Delete column by id and all card in column
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: deleteReq
+        in: body
+        name: deleteReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DeleteColumn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Delete column by id
+      tags:
+      - column
+    post:
+      description: Create new column
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: CreateReq
+        in: body
+        name: createReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateNewColumnReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create success
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Create new column
+      tags:
+      - column
+  /teams/:teamID/projects/:projectID/columns/reorder:
+    post:
+      description: Reorder 1 column
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: reorderReq
+        in: body
+        name: reorderReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateColumnIndex'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ReorderOK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Reorder 1 column
+      tags:
+      - column
+  /user:
+    get:
+      description: Get user by username pattern
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: username pattern
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: users info
+          schema:
+            $ref: '#/definitions/dto.GetUserNameResp'
+      summary: Get user by username pattern
+      tags:
+      - user
+    patch:
+      description: Update user infomation
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update Req
+        in: body
+        name: updateReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Update user infomation
+      tags:
+      - user
+    post:
+      description: Create new user
+      parameters:
+      - description: user info
+        in: body
+        name: createReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: create OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Create new user
+      tags:
+      - user
+swagger: "2.0"

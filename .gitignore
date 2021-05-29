@@ -16,3 +16,4 @@ go.sum
 # vendor/
 cmd/noti/noti
 prom-eef45-firebase-adminsdk-5f4bn-b133193339.json
+./build/postgres-data/*

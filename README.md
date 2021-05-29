@@ -23,7 +23,9 @@ Project Management. HUST_20202_DS
 
 1. Postman Collection: https://www.getpostman.com/collections/654a270d5382abd97404
 
-2. Reorder cards
+2. SwaggerUI: http://127.0.0.1:12345/docs/index.html
+
+3. Reorder cards
    1. Reorder in 1 column
       - Specify card id(1)
       - index of card(2) that you want to set card(1) above of it.
@@ -34,4 +36,5 @@ Project Management. HUST_20202_DS
       - index of card(2) that you want to set card(1) above of it.
 
    3. Example
-      - ![ReorderExample](docs/drawio/ReorderCardExp.jpg)
+      - ![ReorderCardExample](docs/drawio/ReorderCardExp.jpg)
+      - ![ReorderColumnExample](docs/drawio/ReorderColumnExp.jpg)

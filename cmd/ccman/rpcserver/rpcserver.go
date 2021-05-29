@@ -36,7 +36,8 @@ type iCCManSv interface {
 	GetColumnsByProjectID(ctx context.Context, req *ccmanrpc.GetColumnsByProjectIDReq) (resp *ccmanrpc.GetColumnsByProjectIDResp, err error)
 	UpdateColumnByID(ctx context.Context, req *ccmanrpc.UpdateColumnByIDReq) (resp *ccmanrpc.UpdateColumnByIDResp, err error)
 	ReorderCard(ctx context.Context, req *ccmanrpc.ReorderCardReq) (resp *ccmanrpc.ReorderCardResp, err error)
-	DeleteColumnByID(ctx context.Context, req *ccmanrpc.DeleteColumnByIDReq) (resp *ccmanrpc.DeleteColumnByIDResp, err error)
+	ReorderColumn(ctx context.Context, req *ccmanrpc.ReorderColumnReq) (resp *ccmanrpc.ReorderColumnResp, err error)
+	DeleteColumnAndAllCardByID(ctx context.Context, req *ccmanrpc.DeleteColumnByIDReq) (resp *ccmanrpc.DeleteColumnByIDResp, err error)
 	DeleteColumnByIDAndMove(ctx context.Context, req *ccmanrpc.DeleteColumnByIDAndMoveReq) (resp *ccmanrpc.DeleteColumnByIDAndMoveResp, err error)
 }
 
@@ -321,25 +322,42 @@ func (c *ccManSv) ReorderCard(ctx context.Context, req *ccmanrpc.ReorderCardReq)
 	return &ccmanrpc.ReorderCardResp{Code: errconst.RPCSuccessCode}, nil
 }
 
-func (c *ccManSv) DeleteColumnByID(ctx context.Context, req *ccmanrpc.DeleteColumnByIDReq) (resp *ccmanrpc.DeleteColumnByIDResp, err error) {
+// ------------------------------
+// ReorderColumn ...
+func (c *ccManSv) ReorderColumn(ctx context.Context, req *ccmanrpc.ReorderColumnReq) (resp *ccmanrpc.ReorderColumnResp, err error) {
 	// pre-exec check
 	if req == nil {
-		logger.Get().Errorf("Delete column by ID error : %v", errconst.RPCEmptyRequestErr)
+		logger.Get().Errorf("ReorderColumn error : %v", errconst.RPCEmptyRequestErr)
 		return nil, status.Error(codes.Unavailable, "Empty request")
 	}
 
-	if err := repository.GetDAO().DeleteColumnByID(ctx, req.ColumnID); err != nil {
-		logger.Get().Errorf("Delete column by ID error : %v", err)
+	if err = repository.GetDAO().ReorderColumn(ctx, req.ColumnID, req.NextOfIdx); err != nil {
+		logger.Get().Errorf("ReorderColumn error: %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	logger.Get().Info("Delete column by ID OK")
+	return &ccmanrpc.ReorderColumnResp{Code: errconst.RPCSuccessCode}, nil
+}
+
+func (c *ccManSv) DeleteColumnAndAllCardByID(ctx context.Context, req *ccmanrpc.DeleteColumnByIDReq) (resp *ccmanrpc.DeleteColumnByIDResp, err error) {
+	// pre-exec check
+	if req == nil {
+		logger.Get().Errorf("DeleteColumnAndAllCardByID error : %v", errconst.RPCEmptyRequestErr)
+		return nil, status.Error(codes.Unavailable, "Empty request")
+	}
+
+	if err := repository.GetDAO().DeleteColumnAndAllCardByID(ctx, req.ColumnID); err != nil {
+		logger.Get().Errorf("DeleteColumnAndAllCardByID error : %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("DeleteColumnAndAllCardByID OK")
 	return &ccmanrpc.DeleteColumnByIDResp{Code: errconst.RPCSuccessCode}, nil
 }
 
 func (c *ccManSv) DeleteColumnByIDAndMove(ctx context.Context, req *ccmanrpc.DeleteColumnByIDAndMoveReq) (resp *ccmanrpc.DeleteColumnByIDAndMoveResp, err error) {
 	if req == nil {
-		logger.Get().Errorf("Delete column by ID error : %v", errconst.RPCEmptyRequestErr)
+		logger.Get().Errorf("DeleteColumnAndAllCardByID error : %v", errconst.RPCEmptyRequestErr)
 		return nil, status.Error(codes.Unavailable, "Empty request")
 	}
 

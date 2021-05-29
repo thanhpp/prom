@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
 	"github.com/thanhpp/prom/pkg/logger"
@@ -15,6 +14,15 @@ import (
 
 type TeamCtrl struct{}
 
+// ------------------------------
+// GetAllTeamByUserID ...
+// @Summary Get all team by userID
+// @Description Get all team by userID
+// @Produce json
+// @Param 	Authorization	header	string	true "jwt"
+// @Success 200 {object} dto.GetAllTeamByUserIDResp
+// @Tags team
+// @Router /teams [GET]
 func (t *TeamCtrl) GetAllTeamByUserID(c *gin.Context) {
 	claims, err := getClaimsFromContext(c)
 	if err != nil {
@@ -30,14 +38,23 @@ func (t *TeamCtrl) GetAllTeamByUserID(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
-	resp.SetCode(http.StatusOK).SetData(gin.H{
-		"teams": teams,
-	})
+	resp := new(dto.GetAllTeamByUserIDResp)
+	resp.SetCode(http.StatusOK)
+	resp.SetData(teams)
 
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// CreateNewTeam ...
+// @Summary Create new team
+// @Description Create new team
+// @Produce json
+// @Param 	Authorization	header	string					true 	"jwt"
+// @Param 	createReq		body	dto.CreateNewTeamReq	true	"team info"
+// @Success 200 {object} dto.RespError "Create OK"
+// @Tags team
+// @Router /teams [POST]
 func (t *TeamCtrl) CreateNewTeam(c *gin.Context) {
 	req := new(dto.CreateNewTeamReq)
 	if err := c.ShouldBindJSON(req); err != nil {
@@ -64,12 +81,22 @@ func (t *TeamCtrl) CreateNewTeam(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// GetTeamByID ...
+// @Summary Get team by ID
+// @Description Get team by ID
+// @Produce json
+// @Param 	Authorization	header	string	true 	"jwt"
+// @Param 	teamID			path	int		true	"teamID"
+// @Success 200 {object} dto.GetTeamByIDResp "team details"
+// @Tags team
+// @Router /teams/:teamID [GET]
 func (t *TeamCtrl) GetTeamByID(c *gin.Context) {
 	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
@@ -85,13 +112,23 @@ func (t *TeamCtrl) GetTeamByID(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
-	resp.SetCode(http.StatusOK).SetData(gin.H{
-		"team": team,
-	})
+	resp := new(dto.GetTeamByIDResp)
+	resp.SetCode(http.StatusOK)
+	resp.SetData(team)
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// Edit member
+// @Summary Edit member
+// @Description Edit member by teamID and userID
+// @Produce json
+// @Param 	Authorization	header	string					true 	"jwt"
+// @Param 	teamID			path	int						true	"teamID"
+// @Param 	editReq			body	dto.UpdateTeamMemberReq	true	"Op =  add/remove"
+// @Success 200 {object} 	dto.RespError "edit ok"
+// @Tags team
+// @Router /teams/:teamID [PUT]
 func (t *TeamCtrl) EditMember(c *gin.Context) {
 	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
@@ -153,11 +190,21 @@ func (t *TeamCtrl) EditMember(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// DeleteTeam ...
+// @Summary Delete team
+// @Description Delete team
+// @Produce json
+// @Param 	Authorization	header	string					true 	"jwt"
+// @Param 	teamID			path	int						true	"teamID"
+// @Success 200 {object} dto.RespError "delete OK"
+// @Tags team
+// @Router /teams/:teamID [DELETE]
 func (t *TeamCtrl) DeleteTeam(c *gin.Context) {
 	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
@@ -172,7 +219,7 @@ func (t *TeamCtrl) DeleteTeam(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }

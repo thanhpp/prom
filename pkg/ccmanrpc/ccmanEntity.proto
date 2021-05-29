@@ -19,29 +19,30 @@ option (gogoproto.unmarshaler_all) = true;
 
 // card
 message Card {
-    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
-    string Title = 2 [(gogoproto.jsontag) = "title", (gogoproto.moretags) = "gorm:\"Column:title; Type:text\""];
-    string Description = 3 [(gogoproto.jsontag) = "description", (gogoproto.moretags) = "gorm:\"Column:description; Type:text\""];
-    uint32 ColumnID = 4 [(gogoproto.jsontag) = "column_id", (gogoproto.moretags) = "gorm:\"Column:column_id; Type:bigint; index:col_idx; index:col_idx_idx\""];
-    uint32 AssignedTo = 5 [(gogoproto.jsontag) = "assigned_to", (gogoproto.moretags) = "gorm:\"Column:assigned_to; Type:bigint\""];
-    uint32 CreatedBy  = 6 [(gogoproto.jsontag) = "created_by", (gogoproto.moretags) = "gorm:\"Column:created_by; Type:bigint\""];
-    uint32 Index = 7 [(gogoproto.jsontag) = "index", (gogoproto.moretags) = "gorm:\"Column:index; Type:int; index:col_idx_idx\""];
-    timerpc.Time DueDate = 8 [(gogoproto.jsontag) = "due_date", (gogoproto.moretags) = "gorm:\"Column:due_date\""];
-    timerpc.Time CreatedAt = 9 [(gogoproto.jsontag) = "created_at", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
-    timerpc.Time UpdatedAt = 10 [(gogoproto.jsontag) = "updated_at", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
-    timerpc.Time DeletedAt = 11 [(gogoproto.jsontag) = "deleted_at", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""];
+    uint32          ID          = 1     [(gogoproto.jsontag) = "id",                (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
+    string          Title       = 2     [(gogoproto.jsontag) = "title",             (gogoproto.moretags) = "gorm:\"Column:title; Type:text\""];
+    string          Description = 3     [(gogoproto.jsontag) = "description",       (gogoproto.moretags) = "gorm:\"Column:description; Type:text\""];
+    uint32          ColumnID    = 4     [(gogoproto.jsontag) = "column_id",         (gogoproto.moretags) = "gorm:\"Column:column_id; Type:bigint; index:col_idx; index:col_idx_idx\""];
+    uint32          AssignedTo  = 5     [(gogoproto.jsontag) = "assigned_to",       (gogoproto.moretags) = "gorm:\"Column:assigned_to; Type:bigint\""];
+    uint32          CreatedBy   = 6     [(gogoproto.jsontag) = "created_by",        (gogoproto.moretags) = "gorm:\"Column:created_by; Type:bigint\""];
+    uint32          Index       = 7     [(gogoproto.jsontag) = "index",             (gogoproto.moretags) = "gorm:\"Column:index; Type:int; index:col_idx_idx\""];
+    timerpc.Time    DueDate     = 8     [(gogoproto.jsontag) = "due_date",          (gogoproto.moretags) = "gorm:\"Column:due_date\""];
+    timerpc.Time    CreatedAt   = 9     [(gogoproto.jsontag) = "created_at",        (gogoproto.moretags) = "gorm:\"Column:created_at\""];
+    timerpc.Time    UpdatedAt   = 10    [(gogoproto.jsontag) = "updated_at",        (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
+    timerpc.Time    DeletedAt   = 11    [(gogoproto.jsontag) = "deleted_at",        (gogoproto.moretags) = "gorm:\"Column:deleted_at\""];
 }
 
 // column
 message Column {
-    uint32 ID = 1 [(gogoproto.jsontag) = "id", (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
-    string Title = 2 [(gogoproto.jsontag) = "title", (gogoproto.moretags) = "gorm:\"Column:title; Type:text\""];
-    uint32 ProjectID = 3 [(gogoproto.jsontag) = "project_id", (gogoproto.moretags) = "gorm:\"Column:project_id; Type:bigint\""];
-    repeated Card Cards = 4 [(gogoproto.jsontag) = "cards", (gogoproto.moretags) = "gorm:\"foreignKey:ColumnID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE\""];
-    uint32 CreatedBy  = 5 [(gogoproto.jsontag) = "created_by", (gogoproto.moretags) = "gorm:\"Column:created_by; Type:bigint\""];
-    string Index = 6 [(gogoproto.jsontag) = "index", (gogoproto.moretags) = "gorm:\"Column:index; Type:text\""];
-    uint32 MaxIndex = 7 [(gogoproto.jsontag) = "maxIndex", (gogoproto.moretags) = "gorm:\"Column:max_index; Type:int; Default:0\""];
-    timerpc.Time CreatedAt = 8 [(gogoproto.jsontag) = "createdAt", (gogoproto.moretags) = "gorm:\"Column:created_at\""];
-    timerpc.Time UpdatedAt = 9 [(gogoproto.jsontag) = "updatedAt", (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
-    timerpc.Time DeletedAt = 10 [(gogoproto.jsontag) = "deletedAt", (gogoproto.moretags) = "gorm:\"Column:deleted_at\""]; 
+    uint32          ID              = 1     [(gogoproto.jsontag) = "id",            (gogoproto.moretags) = "gorm:\"Column:id; Type:int; primaryKey; autoIncrement\""];
+    string          Title           = 2     [(gogoproto.jsontag) = "title",         (gogoproto.moretags) = "gorm:\"Column:title; Type:text\""];
+    uint32          ProjectID       = 3     [(gogoproto.jsontag) = "project_id",    (gogoproto.moretags) = "gorm:\"Column:project_id; Type:bigint\""];
+    repeated Card   Cards           = 4     [(gogoproto.jsontag) = "cards",         (gogoproto.moretags) = "gorm:\"foreignKey:ColumnID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE\""];
+    uint32          CreatedBy       = 5     [(gogoproto.jsontag) = "created_by",    (gogoproto.moretags) = "gorm:\"Column:created_by; Type:bigint\""];
+    string          Index           = 6     [(gogoproto.jsontag) = "index",         (gogoproto.moretags) = "gorm:\"Column:index; Type:text\""];
+    uint32          MaxIndex        = 7     [(gogoproto.jsontag) = "maxIndex",      (gogoproto.moretags) = "gorm:\"Column:max_index; Type:int; Default:0\""];
+    uint32          ProjectIndex    = 8     [(gogoproto.jsontag) = "projectIndex",  (gogoproto.moretags) = "gorm:\"Column:project_index; Type:int; index\""];
+    timerpc.Time    CreatedAt       = 9     [(gogoproto.jsontag) = "createdAt",     (gogoproto.moretags) = "gorm:\"Column:created_at\""];
+    timerpc.Time    UpdatedAt       = 10    [(gogoproto.jsontag) = "updatedAt",     (gogoproto.moretags) = "gorm:\"Column:updated_at\""];
+    timerpc.Time    DeletedAt       = 11    [(gogoproto.jsontag) = "deletedAt",     (gogoproto.moretags) = "gorm:\"Column:deleted_at\""]; 
 }

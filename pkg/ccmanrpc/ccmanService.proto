@@ -21,24 +21,25 @@ option (gogoproto.unmarshaler_all) = true;
 service CCManager {
     rpc GetAllFromProjectID(GetAllFromProjectIDReq) returns (GetAllFromProjectIDResp);
 
-    rpc CreateCard (CreateCardReq) returns (CreateCardResp);
-    rpc GetCardByID (GetCardByIDReq) returns (GetCardByIDResp);
-    rpc GetCardsByDueDate (GetCardsByDueDateReq) returns (GetCardsByDueDateResp);
-    rpc GetCardsByAssignedToID (GetCardsByAssignedToIDReq) returns (GetCardsByAssignedToIDResp);
-    rpc GetCardsByCreatorID (GetCardsByCreatorIDReq) returns (GetCardsByCreatorIDResp);
-    rpc GetCardsByColumnID (GetCardsByColumnIDReq) returns (GetCardsByColumnIDResp);
-    rpc UpdateCardByID (UpdateCardByIDReq) returns (UpdateCardByIDResp);
-    rpc MoveCardToCol(MoveCardToColReq) returns (MoveCardToColResp);
-    rpc DeleteCardByID (DeleteCardByIDReq) returns (DeleteCardByIDResp);
+    rpc CreateCard                  (CreateCardReq)                 returns (CreateCardResp);
+    rpc GetCardByID                 (GetCardByIDReq)                returns (GetCardByIDResp);
+    rpc GetCardsByDueDate           (GetCardsByDueDateReq)          returns (GetCardsByDueDateResp);
+    rpc GetCardsByAssignedToID      (GetCardsByAssignedToIDReq)     returns (GetCardsByAssignedToIDResp);
+    rpc GetCardsByCreatorID         (GetCardsByCreatorIDReq)        returns (GetCardsByCreatorIDResp);
+    rpc GetCardsByColumnID          (GetCardsByColumnIDReq)         returns (GetCardsByColumnIDResp);
+    rpc UpdateCardByID              (UpdateCardByIDReq)             returns (UpdateCardByIDResp);
+    rpc MoveCardToCol               (MoveCardToColReq)              returns (MoveCardToColResp);
+    rpc DeleteCardByID              (DeleteCardByIDReq)             returns (DeleteCardByIDResp);
 
-    rpc CreateColumn (CreateColumnReq) returns (CreateColumnResp);
-    rpc GetColumnByID (GetColumnByIDReq) returns (GetColumnByIDResp);
-    rpc GetColumnsByTitle (GetColumnsByTitleReq) returns (GetColumnsByTitleResp);
-    rpc GetColumnsByProjectID (GetColumnsByProjectIDReq) returns (GetColumnsByProjectIDResp);
-    rpc UpdateColumnByID (UpdateColumnByIDReq) returns (UpdateColumnByIDResp);
-    rpc ReorderCard(ReorderCardReq) returns (ReorderCardResp);
-    rpc DeleteColumnByID (DeleteColumnByIDReq) returns (DeleteColumnByIDResp);
-    rpc DeleteColumnByIDAndMove(DeleteColumnByIDAndMoveReq) returns (DeleteColumnByIDAndMoveResp);
+    rpc CreateColumn                (CreateColumnReq)               returns (CreateColumnResp);
+    rpc GetColumnByID               (GetColumnByIDReq)              returns (GetColumnByIDResp);
+    rpc GetColumnsByTitle           (GetColumnsByTitleReq)          returns (GetColumnsByTitleResp);
+    rpc GetColumnsByProjectID       (GetColumnsByProjectIDReq)      returns (GetColumnsByProjectIDResp);
+    rpc UpdateColumnByID            (UpdateColumnByIDReq)           returns (UpdateColumnByIDResp);
+    rpc ReorderCard                 (ReorderCardReq)                returns (ReorderCardResp);
+    rpc ReorderColumn               (ReorderColumnReq)              returns (ReorderColumnResp);
+    rpc DeleteColumnAndAllCardByID  (DeleteColumnByIDReq)           returns (DeleteColumnByIDResp);
+    rpc DeleteColumnByIDAndMove     (DeleteColumnByIDAndMoveReq)    returns (DeleteColumnByIDAndMoveResp);
 }
 
 // CARD
@@ -192,6 +193,16 @@ message UpdateColumnByIDReq {
 }
 
 message UpdateColumnByIDResp {
+    int32 Code = 1;
+    string Message = 2;
+}
+
+message ReorderColumnReq {
+    uint32 ColumnID = 1;
+    uint32 NextOfIdx = 2;
+}
+
+message ReorderColumnResp {
     int32 Code = 1;
     string Message = 2;
 }

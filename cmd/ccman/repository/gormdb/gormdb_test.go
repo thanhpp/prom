@@ -25,11 +25,10 @@ func TestInitConnection(t *testing.T) {
 func TestAutoMigrate(t *testing.T) {
 	TestInitConnection(t)
 	var (
-		ctx    = context.Background()
-		models = []interface{}{&ccmanrpc.Column{}, &ccmanrpc.Card{}}
+		ctx = context.Background()
 	)
 
-	if err := gormdb.GetGormDB().AutoMigrate(ctx, models...); err != nil {
+	if err := gormdb.GetGormDB().AutoMigrate(ctx); err != nil {
 		t.Error(err)
 		return
 	}
@@ -100,7 +99,7 @@ func TestCreateColumn(t *testing.T) {
 		ctx    = context.Background()
 		column = &ccmanrpc.Column{
 			ProjectID: 1,
-			Title:     "test3",
+			Title:     "test4",
 			Index:     "",
 		}
 	)
@@ -186,5 +185,18 @@ func TestReorderCard(t *testing.T) {
 	if err := gormdb.GetGormDB().ReorderCard(ctx, cardID, newIdx); err != nil {
 		t.Error(err)
 		return
+	}
+}
+
+func TestReorderColumn(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx              = context.Background()
+		columnID  uint32 = 2
+		nextOfIdx uint32 = 1
+	)
+
+	if err := gormdb.GetGormDB().ReorderColumn(ctx, columnID, nextOfIdx); err != nil {
+		t.Error(err)
 	}
 }

@@ -9,7 +9,7 @@ replace (
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
-	github.com/appleboy/go-fcm v0.1.5
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/coreos/etcd v3.3.25+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
@@ -20,6 +20,9 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/spf13/viper v1.7.1
 	github.com/streadway/amqp v1.0.0
+	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
+	github.com/swaggo/gin-swagger v1.3.0
+	github.com/swaggo/swag v1.7.0
 	go.etcd.io/etcd v3.3.25+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9

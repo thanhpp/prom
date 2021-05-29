@@ -31,7 +31,8 @@ type iDao interface {
 	GetColumnsByProjectID(ctx context.Context, projectID uint32) (columns []*ccmanrpc.Column, err error)
 	UpdateColumnByID(ctx context.Context, columnID uint32, column *ccmanrpc.Column) (err error)
 	ReorderCard(ctx context.Context, cardID uint32, newIdx uint32) (err error)
-	DeleteColumnByID(ctx context.Context, columnID uint32) (err error)
+	ReorderColumn(ctx context.Context, columnID uint32, nextOfIdx uint32) (err error)
+	DeleteColumnAndAllCardByID(ctx context.Context, columnID uint32) (err error)
 	DeleteColumnByIDAndMove(ctx context.Context, columnID uint32, newColID uint32) (err error)
 }
 

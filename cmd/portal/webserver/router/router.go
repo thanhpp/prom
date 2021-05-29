@@ -3,13 +3,31 @@ package router
 import (
 	"time"
 
-	"github.com/thanhpp/prom/cmd/portal/webserver/controller"
-	"github.com/thanhpp/prom/cmd/portal/webserver/middleware"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "github.com/thanhpp/prom/cmd/portal/docs"
+	"github.com/thanhpp/prom/cmd/portal/webserver/controller"
+	"github.com/thanhpp/prom/cmd/portal/webserver/middleware"
 )
 
+// ------------------------------
+// NewRouter ...
+// @title prom portal
+// @version 1.0
+// @description edda manager api.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:12345
+// @BasePath
 func NewRouter() (routers *gin.Engine) {
 	routers = gin.New()
 	routers.Use(gin.Recovery())
@@ -24,6 +42,9 @@ func NewRouter() (routers *gin.Engine) {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	url := ginSwagger.URL("http://127.0.0.1:12345/docs/doc.json")
+	routers.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	// login/logout
 	authCtrl := new(controller.AuthCtrl)
@@ -79,6 +100,7 @@ func NewRouter() (routers *gin.Engine) {
 						cards.POST("", cardCtrl.CreateNewCard)
 						cards.POST("/reorder", cardCtrl.ReorderCard)
 						cards.PATCH("", cardCtrl.UpdateCard)
+						cards.DELETE("", cardCtrl.DeleteCard)
 					}
 				}
 			}
