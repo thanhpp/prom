@@ -6,17 +6,26 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/thanhpp/prom/pkg/ccmanrpc"
-
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
+	"github.com/thanhpp/prom/pkg/ccmanrpc"
 	"github.com/thanhpp/prom/pkg/logger"
 	"github.com/thanhpp/prom/pkg/usrmanrpc"
 )
 
 type ProjectCtrl struct{}
 
+// ------------------------------
+// GetAllProjectsFromTeamID ...
+// @Summary Get all projects
+// @Description Get all projects from teamID
+// @Produce json
+// @Param 	Authorization	header	string				true	"jwt"
+// @Param 	teamID			path	int					true	"teamID"
+// @Success 200 {object} dto.GetAllProjectFromTeamIDResp "projects response"
+// @Tags project
+// @Router /teams/:teamID/projects [GET]
 func (p *ProjectCtrl) GetAllProjectsFromTeamID(c *gin.Context) {
 	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
@@ -32,14 +41,24 @@ func (p *ProjectCtrl) GetAllProjectsFromTeamID(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
-	resp.SetCode(http.StatusOK).SetData(gin.H{
-		"projects": projects,
-	})
+	resp := new(dto.GetAllProjectFromTeamIDResp)
+	resp.SetCode(http.StatusOK)
+	resp.SetData(projects)
 
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// CreateNewProject ...
+// @Summary Create new project
+// @Description Create new project
+// @Produce json
+// @Param 	Authorization	header	string					true	"jwt"
+// @Param 	teamID			path	int						true	"teamID"
+// @Param	createReq		body	dto.CreateProjectReq	true 	"project info"
+// @Success 200 {object} dto.RespError "Create OK"
+// @Tags project
+// @Router /teams/:teamID/projects [POST]
 func (p *ProjectCtrl) CreateNewProject(c *gin.Context) {
 	teamID, err := getTeamIDFromParam(c)
 	if err != nil {
@@ -89,12 +108,23 @@ func (p *ProjectCtrl) CreateNewProject(c *gin.Context) {
 		return
 	}
 
-	resp := new(dto.Resp)
+	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
 
 	c.JSON(http.StatusOK, resp)
 }
 
+// ------------------------------
+// GetProjectDetails ...
+// @Summary Get project details
+// @Description Get project details by id
+// @Produce json
+// @Param 	Authorization	header	string	true	"jwt"
+// @Param 	teamID			path	int		true	"teamID"
+// @Param 	projectID		path	int		true	"projectID"
+// @Success 200 {object} dto.GetProjectDetailsResp "project details"
+// @Tags project
+// @Router /teams/:teamID/projects/:projectID [GET]
 func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 	projectID, err := getProjectIDFromParam(c)
 	if err != nil {
@@ -143,10 +173,8 @@ func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 		}
 	}
 
-	resp := new(dto.Resp)
-	resp.SetCode(http.StatusOK).SetData(gin.H{
-		"project": project,
-		"columns": respCols,
-	})
+	resp := new(dto.GetProjectDetailsResp)
+	resp.SetCode(http.StatusOK)
+	resp.SetData(project, respCols)
 	c.JSON(http.StatusOK, resp)
 }

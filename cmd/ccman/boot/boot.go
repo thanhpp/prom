@@ -33,6 +33,9 @@ func Boot(shardID int64) (err error) {
 	if err := repository.GetDAO().InitDBConnection(core.GetConfig().DB.GenDBDSN(), core.GetConfig().DB.Log); err != nil {
 		return err
 	}
+	if err := repository.GetDAO().AutoMigrate(ctx); err != nil {
+		return err
+	}
 
 	logger.Get().Info("CONENCTING TO ETCD")
 	etcdConf := &core.GetConfig().ETCD

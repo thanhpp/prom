@@ -1,0 +1,1123 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {},
+        "license": {}
+    },
+    "paths": {
+        "/login": {
+            "post": {
+                "description": "Login by username and password",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login by username and password",
+                "parameters": [
+                    {
+                        "description": "login request",
+                        "name": "loginReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "description": "Logout by token",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout by token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/teams": {
+            "get": {
+                "description": "Get all team by userID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "team"
+                ],
+                "summary": "Get all team by userID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetAllTeamByUserIDResp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new team",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "team"
+                ],
+                "summary": "Create new team",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "team info",
+                        "name": "createReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateNewTeamReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID": {
+            "get": {
+                "description": "Get team by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "team"
+                ],
+                "summary": "Get team by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "team details",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetTeamByIDResp"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Edit member by teamID and userID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "team"
+                ],
+                "summary": "Edit member",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Op =  add/remove",
+                        "name": "editReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateTeamMemberReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "edit ok",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete team",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "team"
+                ],
+                "summary": "Delete team",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects": {
+            "get": {
+                "description": "Get all projects from teamID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get all projects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "projects response",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetAllProjectFromTeamIDResp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new project",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "Create new project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "project info",
+                        "name": "createReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateProjectReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/:projectID": {
+            "get": {
+                "description": "Get project details by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get project details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "project details",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetProjectDetailsResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/:projectID/cards": {
+            "post": {
+                "description": "Create new card",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "card"
+                ],
+                "summary": "Create new card",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "CreateReq",
+                        "name": "createReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateNewCardReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete card by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "card"
+                ],
+                "summary": "Delete card by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "delete request",
+                        "name": "deleteReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeleteCardReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete success",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update card info (No column ID)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "card"
+                ],
+                "summary": "Update card info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update info",
+                        "name": "updateReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateCardInfoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/:projectID/cards/reorder": {
+            "post": {
+                "description": "Reorder card in one column",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "card"
+                ],
+                "summary": "Reorder card in one column",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "ReorderReq",
+                        "name": "reorderReq",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReorderCard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reorder success",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/:projectID/columns": {
+            "post": {
+                "description": "Create new column",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column"
+                ],
+                "summary": "Create new column",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "CreateReq",
+                        "name": "createReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateNewColumnReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create success",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete column by id and all card in column",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column"
+                ],
+                "summary": "Delete column by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "deleteReq",
+                        "name": "deleteReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeleteColumn"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/:projectID/columns/reorder": {
+            "post": {
+                "description": "Reorder 1 column",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column"
+                ],
+                "summary": "Reorder 1 column",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "reorderReq",
+                        "name": "reorderReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateColumnIndex"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ReorderOK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "description": "Get user by username pattern",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get user by username pattern",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "username pattern",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users info",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetUserNameResp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create new user",
+                "parameters": [
+                    {
+                        "description": "user info",
+                        "name": "createReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "create OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update user infomation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update user infomation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "update Req",
+                        "name": "updateReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.CreateNewCardReq": {
+            "type": "object",
+            "properties": {
+                "card": {
+                    "type": "object",
+                    "properties": {
+                        "assignedTo": {
+                            "type": "integer"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "duedate": {
+                            "type": "integer"
+                        },
+                        "title": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "columnID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.CreateNewColumnReq": {
+            "type": "object",
+            "properties": {
+                "columnName": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateNewTeamReq": {
+            "type": "object",
+            "properties": {
+                "teamName": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateProjectReq": {
+            "type": "object",
+            "properties": {
+                "projectName": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateUserReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.DeleteCardReq": {
+            "type": "object",
+            "properties": {
+                "cardID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.DeleteColumn": {
+            "type": "object",
+            "properties": {
+                "columnID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.GetAllProjectFromTeamIDResp": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "projects": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetAllTeamByUserIDResp": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "teams": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetProjectDetailsResp": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "project": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetTeamByIDResp": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "team": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetUserNameResp": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "users": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ReorderCard": {
+            "type": "object",
+            "properties": {
+                "aboveOfIdx": {
+                    "type": "integer"
+                },
+                "cardID": {
+                    "type": "integer"
+                },
+                "columnID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.RespError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "dto.UpdateCardInfoReq": {
+            "type": "object",
+            "properties": {
+                "card": {
+                    "type": "object",
+                    "properties": {
+                        "assignedTo": {
+                            "type": "integer"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "duedate": {
+                            "type": "integer"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "title": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "columnID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UpdateColumnIndex": {
+            "type": "object",
+            "properties": {
+                "columnID": {
+                    "type": "integer"
+                },
+                "nextOfIndex": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UpdateTeamMemberReq": {
+            "type": "object",
+            "properties": {
+                "memberID": {
+                    "type": "integer"
+                },
+                "op": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateUserReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserLoginReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserLoginResp": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "token": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
