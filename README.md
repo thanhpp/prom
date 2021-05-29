@@ -1,6 +1,6 @@
 # prom
-Project Management. HUST_20202_DS
-
+- Project Management. HUST_20202_DS
+- [DOCUMENT](https://docs.google.com/document/d/1P3y1ooL-uSGomqsTag6MspTsKyCxqANajjhT1v88H7c/edit?usp=sharing)
 # Project folders
 
 1. Golang
