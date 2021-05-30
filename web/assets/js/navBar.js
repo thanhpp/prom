@@ -54,7 +54,7 @@ function getPersonalProjects(teamID) {
 
           // Create a temporary <div> to load into
           let li = document.createElement("li");
-          li.setAttribute("class", "nav-item");
+          li.setAttribute("class", "nav-item ");
           li.setAttribute("project-id", projectID);
           let projectURL = new URL(
             "http://127.0.0.1:5501/web/pages/project.html"
@@ -64,11 +64,10 @@ function getPersonalProjects(teamID) {
 
           projectURLSearchParams.set("id", projectID.toString());
           projectURLSearchParams.set("team", teamID);
-
           li.innerHTML =
             '<a href="' +
             projectURL.toString() +
-            '" class="nav-link"><i class="fas fa-briefcase"></i> <span>' +
+            '" class="project-link nav-link"><i class="fas fa-briefcase"></i> <span>' +
             projectName.toString() +
             "</span></a>";
 

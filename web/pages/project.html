@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Projects Name &mdash; Treno</title>
-
+  <script src="../assets/js/fetchBoard.js"></script>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/jkanban.css">
   <link rel="stylesheet" href="../assets/css/project.css">
-
+  
 </head>
 
 <body>
@@ -75,7 +75,7 @@
           </li>
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
             <img alt="image" src="../assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-            <div class="d-sm-none d-lg-inline-block">Hi, <span id="name"></span></div></a>
+            <div class="d-sm-none d-lg-inline-block">Hi, <span class="name"></span></div></a>
             <div class="dropdown-menu dropdown-menu-right">
               <a href="features-profile.html" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> Account
@@ -94,38 +94,39 @@
       <div class="main-sidebar">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="home.html">Treno</a>
+            <a href="index.html">Treno</a>
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
-            <a href="home.html">TrN</a>
+            <a href="index.html">TrN</a>
           </div>
-          <ul class="sidebar-menu">
+          <ul id="sidebar" class="sidebar-menu">
               <li class="nav-item dropdown">
-                <a href="home.html" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
+                <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
               </li>
-              <li class="menu-header activve">Projects</li>
+              <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+                <a id="navBarNewProject" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newProjectModal">
+                  <i class="fas fa-plus"></i> Create a new project
+                </a>
+              </div>
+              <li id="personalProjects" class="menu-header">Personal Projects</li>
               <!-- li cua header va item deu phai active -->
-              <li class="nav-item dropdown active">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-briefcase"></i> <span>Test project</span></a>
-                <ul class="dropdown-menu">
-                  <li class="active"><a class="nav-link" href="layout-default.html"><i class="fas fa-columns"></i>Board</a></li>
-                  <li><a class="nav-link" href="layout-transparent.html"><i class="fas fa-users"></i>Members</a></li>
-                  <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-cog"></i>Settings</a></li>
-                </ul>
-              </li>
-            <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-              <a id="test" href="#" class="btn btn-primary btn-lg btn-block btn-icon-split">
-                <i class="fas fa-plus"></i> Create a new project
-              </a>
-            </div>
+              <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+                <a id="navBarNewTeam" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newTeamModal">
+                  <i class="fas fa-plus"></i> Create a new team
+                </a>
+              </div>
+              <li id="teams" class="menu-header">Teams</li>
+              <!-- li cua header va item deu phai active -->
+            
         </aside>
       </div>
+
 
      <!-- Main Content -->
      <div class="main-content">
       <section class="section">
         <div class="section-header">
-          <h1>Projects Name</h1>
+          <h1 id="projectName">aaa</h1>
         </div>
         <div class="section-body">
           <div id="project-boards" class="row">
@@ -137,7 +138,105 @@
     </div>
   </div>
 </div>
+<div class="modal fade" tabindex="-1" role="document" id="newProjectModal">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="card modal-body">
+        <div class="section">
+        <div class="section-title mt-0">Project</div>
+        <div class="form-group">
+          <label>Project Name</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <i class="fas fa-briefcase"></i>
+              </div>
+            </div>
+            <input placeholder="Name of your new project" id="createProjectName" type="text" class="form-control phone-number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea placeholder="About your project" id="createProjectDescription" class="form-control"></textarea>
+        </div>
+        <div class="section-title mt-0">Team</div>
+        <div class="form-group">
+          <label>Assign a team</label>
+          <select id="createSelectTeam" class="form-control">
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <input id="createNewTeamName" type="text" class="form-control" placeholder="Name for your new team" aria-label="">
+            <div class="input-group-append">
+              <button id="createNewTeamButton" class="btn btn-primary" type="button">Create new team</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewProjectButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="modal fade" tabindex="-1" role="document" id="newTeamModal">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new team</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="section">
+          <div class="section-title mt-0">Team Info</div>
+          <div class="form-group">
+            <label>Team Name</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <i class="fas fa-briefcase"></i>
+                </div>
+              </div>
+              <input id="createTeamName" placeholder="Name of your new team" type="text" class="form-control phone-number">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="About your new team" id="createTeamDescription" class="form-control"></textarea>
+          </div>
+          <div class="section-title mt-0">Team Members</div>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <input id="addNewPerson" type="text" class="form-control" placeholder="Add a person to your team" aria-label="">
+              <div class="input-group-append">
+                <button id="addNewPersonButton" class="btn btn-primary disabled" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+          <div id="members">
+            
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewTeamModalButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- General JS Scripts -->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -156,6 +255,8 @@
 
   <!-- Page Specific JS File -->
   <script src="../assets/js/jkanban.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/navBar.js"></script>
   <script src="../assets/js/project.js"></script>
 
 </body>

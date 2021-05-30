@@ -1,128 +1,87 @@
-var KanbanTest = new jKanban({
-  element: "#myKanban",
-  gutter: "10px",
-  widthBoard: "300px",
-  responsivePercentage: false,
-  itemHandleOptions: {
-    enabled: false,
-  },
-  click: function (el) {
-    console.log("Trigger on all items click!");
-  },
-  context: function (el, e) {
-    console.log("Trigger on all items right-click!");
-  },
-  dropEl: function (el, target, source, sibling) {
-    console.log(target.parentElement.getAttribute("data-id"));
-    console.log(el, target, source, sibling);
-  },
-  buttonClick: function (el, boardId) {
-    console.log(el);
-    console.log(boardId);
-    // create a form to enter element
-    var formItem = document.createElement("form");
-    formItem.setAttribute("class", "itemform");
-    formItem.innerHTML =
-      '<div class="new-item form-group"><input type="text" class="form-control new-item-text" rows="2" autofocus><input style="display: none; visibility: hidden; position: absolute;" type="submit" value></input></div><div class="form-group text-right"><button type="submit" id="submit" class="btn btn-success new-item-button">Add</button><button type="button" id="CancelBtn" class="btn btn-outline-danger pull-right new-item-button">Cancel</button></div>';
+var projectName = "";
+var projectDetail;
 
-    KanbanTest.addForm(boardId, formItem);
-    formItem.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var text = e.target[0].value;
-      KanbanTest.addElement(boardId, {
-        title: text,
+var token = sessionStorage.getItem("token");
+
+fetch(
+  "http://127.0.0.1:12345/teams/" + projectTeamID + "/projects/" + projectID,
+  getProjectDetailOptions
+)
+  .then((response) => response.json())
+  .then((result) => {
+    if (result.error.code == 200) {
+      projectDetail = result;
+      projectName = projectDetail.project.name;
+
+      document.getElementById("projectName").innerHTML = projectName;
+    }
+  });
+console.log(sessionStorage.getItem("board"))
+ initKanban(JSON.parse(sessionStorage.getItem('board')));
+
+function initKanban(finalBoard){
+  var KanbanTest = new jKanban({
+    element: "#myKanban",
+    gutter: "10px",
+    widthBoard: "300px",
+    responsivePercentage: false,
+    itemHandleOptions: {
+      enabled: false,
+    },
+    click: function (el) {
+      console.log("Trigger on all items click!");
+    },
+    context: function (el, e) {
+      console.log("Trigger on all items right-click!");
+    },
+    dropEl: function (el, target, source, sibling) {
+      console.log(target.parentElement.getAttribute("data-id"));
+      console.log(el, target, source, sibling);
+    },
+    buttonClick: function (el, boardId) {
+      console.log(el);
+      console.log(boardId);
+      // create a form to enter element
+      var formItem = document.createElement("form");
+      formItem.setAttribute("class", "itemform");
+      formItem.innerHTML =
+        '<div class="new-item form-group"><input type="text" class="form-control new-item-text" rows="2" autofocus><input style="display: none; visibility: hidden; position: absolute;" type="submit" value></input></div><div class="form-group text-right"><button type="submit" id="submit" class="btn btn-success new-item-button">Add</button><button type="button" id="CancelBtn" class="btn btn-outline-danger pull-right new-item-button">Cancel</button></div>';
+  
+      KanbanTest.addForm(boardId, formItem);
+      formItem.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var text = e.target[0].value;
+        KanbanTest.addElement(boardId, {
+          title: text,
+        });
+        formItem.parentNode.removeChild(formItem);
+        addClassToNewBoard();
       });
-      formItem.parentNode.removeChild(formItem);
-      addClassToNewBoard();
-    });
-    document.getElementById("CancelBtn").onclick = function () {
-      formItem.parentNode.removeChild(formItem);
-    };
-  },
-  itemAddOptions: {
-    enabled: true,
-    content: "+ New Item",
-    class: "new-card btn btn-outline-primary",
-    footer: false,
-  },
-  click: function (el) {
-    console.log(KanbanTest.options.boardsjfe)
-  },
-  context: function (el, e) {
-    alert("right-click at (" + `${e.pageX}` + "," + `${e.pageX}` + ")");
-  },
-  dropEl: function (el, target, source, sibling) {
-    console.log("a");
-    console.log(el.dataset);
-    console.log(target.children[0].dataset);
-    console.log(target.children[1].dataset);
-    console.log(source.dataset);
-    console.log(sibling);
-  },
-  boards: [
-    {
-      id: "_todo",
-      title: "To Do ",
-      class: "info,good",
-      dragTo: ["_working"],
-      item: [
-        {
-          id: "1",
-          title: "1",
-          num:"1",
-          // drag: function (el, source) {
-          //   console.log("START DRAG: " + el.dataset.eid);
-          //   console.log(source);
-          // },
-          // dragend: function (el) {
-          //   console.log("END DRAG: " + el.dataset.eid);
-          // },
-          // drop: function (el) {
-          //   console.log("DROPPED: " + el.dataset.eid);
-          // },
-        },
-        {
-          title: "2",
-          id: "2",
-         num:"2",
-        },
-      ],
+      document.getElementById("CancelBtn").onclick = function () {
+        formItem.parentNode.removeChild(formItem);
+      };
     },
-    {
-      id: "_working",
-      title: "Working ",
-      class: "",
-      item: [
-        {
-          title: "Do Something!",
-        },
-        {
-          title: "Run?",
-        },
-      ],
+    itemAddOptions: {
+      enabled: true,
+      content: "+ New Item",
+      class: "new-card btn btn-outline-primary",
+      footer: false,
     },
-    {
-      id: "_done",
-      title: "Done",
-      class: "",
-      dragTo: [],
-      item: [
-        {
-          title: "All right",
-        },
-        {
-          title: "Ok!",
-        },
-        {
-          title: "Ok!",
-        },
-        {
-          title: "Ok!",
-        },
-      ],
+    click: function (el) {
+      console.log(KanbanTest.options.boardsjfe);
     },
-  ],
-});
+    dropEl: function (el, target, source, sibling) {
+      console.log("a");
+      console.log(el.dataset);
+      console.log(target.children[0].dataset);
+      console.log(target.children[1].dataset);
+      console.log(source.dataset);
+      console.log(sibling);
+    },
+    boards: finalBoard
+  });
+}
+
 
 // var toDoButton = document.getElementById("addToDo");
 // toDoButton.addEventListener("click", function () {
@@ -179,15 +138,16 @@ function addClassToNewBoard() {
 
   var boardElements = document.getElementsByClassName("kanban-board");
   for (i = 0; i < boardElements.length; i++) {
-    boardElements[i].classList.add("col","card");
+    boardElements[i].classList.add("col", "card");
   }
-  
-  var boardHeaderElements = document.getElementsByClassName("kanban-board-header");
+
+  var boardHeaderElements = document.getElementsByClassName(
+    "kanban-board-header"
+  );
   for (i = 0; i < boardHeaderElements.length; i++) {
     boardHeaderElements[i].classList.add("card-header");
   }
 
-   
   var boardBodyElements = document.getElementsByClassName("kanban-drag");
   for (i = 0; i < boardBodyElements.length; i++) {
     boardBodyElements[i].classList.add("card-body", "row");
@@ -195,7 +155,6 @@ function addClassToNewBoard() {
 
   var kanbanItems = document.getElementsByClassName("kanban-item");
   for (i = 0; i < kanbanItems.length; i++) {
-    kanbanItems[i].classList.add("btn", "btn-primary",);
+    kanbanItems[i].classList.add("btn", "btn-primary");
   }
-  
 }
