@@ -137,7 +137,7 @@
           <h2>Welcome back, <span class="name"></span>!</h2>
           <p class="lead">What's your plan for today?</p>
           <div class="mt-4">
-            <a href="#" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="fas fa-plus"></i>New project...</a>
+            <a id="heroNewProject" href="#" data-toggle="modal" data-target="#newProjectModal" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="fas fa-plus"></i>New project...</a>
           </div>
         </div>
       </div>
@@ -194,12 +194,12 @@
                 <i class="fas fa-briefcase"></i>
               </div>
             </div>
-            <input id="createProjectName" type="text" class="form-control phone-number">
+            <input placeholder="Name of your new project" id="createProjectName" type="text" class="form-control phone-number">
           </div>
         </div>
         <div class="form-group">
           <label>Description</label>
-          <textarea id="createProjectDescription" class="form-control"></textarea>
+          <textarea placeholder="About your project" id="createProjectDescription" class="form-control"></textarea>
         </div>
         <div class="section-title mt-0">Team</div>
         <div class="form-group">
@@ -209,7 +209,7 @@
         </div>
         <div class="form-group">
           <div class="input-group mb-3">
-            <input id="createNewTeamName" type="text" class="form-control" placeholder="Type name for your new team" aria-label="">
+            <input id="createNewTeamName" type="text" class="form-control" placeholder="Name for your new team" aria-label="">
             <div class="input-group-append">
               <button id="createNewTeamButton" class="btn btn-primary" type="button">Create new team</button>
             </div>
@@ -235,11 +235,40 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Modal body text goes here.</p>
+        <div class="section">
+          <div class="section-title mt-0">Team Info</div>
+          <div class="form-group">
+            <label>Team Name</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <i class="fas fa-briefcase"></i>
+                </div>
+              </div>
+              <input id="createTeamName" placeholder="Name of your new team" type="text" class="form-control phone-number">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="About your new team" id="createTeamDescription" class="form-control"></textarea>
+          </div>
+          <div class="section-title mt-0">Team Members</div>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <input id="addNewPerson" type="text" class="form-control" placeholder="Add a person to your team" aria-label="">
+              <div class="input-group-append">
+                <button id="addNewPersonButton" class="btn btn-primary disabled" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+          <div id="members">
+            
+          </div>
+        </div>
       </div>
       <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="createNewTeamButton" type="button" class="btn btn-primary">Create</button>
+        <button id="createNewTeamModalButton" type="button" class="btn btn-primary">Create</button>
       </div>
     </div>
   </div>
