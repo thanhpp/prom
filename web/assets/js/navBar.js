@@ -23,7 +23,7 @@ function getTeamsRequest() {
         getPersonalProjects(personalTeamID);
         assignTeamsHTML();
         assignRecentProjects();
-      }
+      } 
     });
 }
 
@@ -151,7 +151,9 @@ function assignRecentProjects() {
             "</h2></div></div></a>";
 
           // Write the <div> to the HTML container
-          document.getElementById("recentProjects").appendChild(li);
+          if(document.getElementById("recentProjects")!=null){
+            document.getElementById("recentProjects").appendChild(li);
+          }    
         }
       }
     });

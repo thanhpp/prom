@@ -2,10 +2,11 @@ var queryString = window.location.search;
 var urlParams = new URLSearchParams(queryString);
 var projectID = urlParams.get("id");
 var projectTeamID = urlParams.get("team");
+var projectDetail;
 
 sessionStorage.removeItem("board");
 
-var kanbanBoard = {};
+var kanbanBoard = [];
 
 let getProjectDetailOptions = {
   method: "GET",
@@ -28,10 +29,8 @@ fetch(
 
       for (let i = 0; i < projectDetail.columns.length; i++) {
         let column = {
-          id: projectDetail.columns[i].id,
-          title: projectDetail.columns[i].title,
-          class: "",
-          dragTo: [],
+          id: projectDetail.columns[i].id.toString(),
+          title: projectDetail.columns[i].title.toString(),
           project_id: projectDetail.columns[i].project_id,
           item: projectDetail.columns[i].cards,
           created_by: projectDetail.columns[i].created_by,
@@ -45,5 +44,6 @@ fetch(
         kanbanBoard[i] = column;
       }
       sessionStorage.setItem("board", JSON.stringify(kanbanBoard));
+      console.log(kanbanBoard);
     }
   });

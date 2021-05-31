@@ -1,5 +1,5 @@
 var projectName = "";
-var projectDetail;
+var KanbanTest
 
 var token = sessionStorage.getItem("token");
 
@@ -16,11 +16,11 @@ fetch(
       document.getElementById("projectName").innerHTML = projectName;
     }
   });
-console.log(sessionStorage.getItem("board"))
- initKanban(JSON.parse(sessionStorage.getItem('board')));
+ 
+  initKanban(JSON.parse(sessionStorage.getItem('board')));
 
 function initKanban(finalBoard){
-  var KanbanTest = new jKanban({
+   KanbanTest = new jKanban({
     element: "#myKanban",
     gutter: "10px",
     widthBoard: "300px",
@@ -71,12 +71,12 @@ function initKanban(finalBoard){
       console.log(KanbanTest.options.boardsjfe);
     },
     dropEl: function (el, target, source, sibling) {
-      console.log("a");
-      console.log(el.dataset);
-      console.log(target.children[0].dataset);
-      console.log(target.children[1].dataset);
-      console.log(source.dataset);
-      console.log(sibling);
+      // console.log("a");
+      // console.log(el.dataset);
+      // console.log(target.children[0].dataset);
+      // console.log(target.children[1].dataset);
+      // console.log(source.dataset);
+      // console.log(sibling);
     },
     boards: finalBoard
   });
