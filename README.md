@@ -36,7 +36,7 @@
       - index of card(2) that you want to set card(1) above of it.
 
    3. Example
-      - ![ReorderCardExample](docs/drawio/ReorderCardExp.jpg)
+      - ![ReorderCardExample](docs/drawio/ReorderCardExp.png)
 
 4. Reorder columns
 
