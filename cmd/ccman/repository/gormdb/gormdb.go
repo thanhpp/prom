@@ -92,7 +92,7 @@ func (g *implGorm) autoMigrate(ctx context.Context, models ...interface{}) (err 
 func (g *implGorm) GetAllFromProjectID(ctx context.Context, projectID uint32) (cols []*ccmanrpc.Column, err error) {
 	if err := gDB.WithContext(ctx).Model(columnModel).
 		Preload("Cards", func(tx *gorm.DB) *gorm.DB {
-			return tx.Order("card.index DESC")
+			return tx.Order("card.index ASC")
 		}).
 		Where("project_id = ?", projectID).
 		Order("project_index ASC").
@@ -267,14 +267,14 @@ func (g *implGorm) MoveCardToCol(ctx context.Context, cardID uint32, newColID ui
 
 // ----------
 // MoveCardToColv2
-func (g *implGorm) MoveCardToColv2(ctx context.Context, cardID uint32, colID uint32, index uint32) (err error) {
+func (g *implGorm) MoveCardToColv2(ctx context.Context, cardID uint32, colID uint32, aboveIdx uint32) (err error) {
 	// pre-exec check
-	if index == 0 {
+	if aboveIdx == 0 {
 		return errors.New("Zero index")
 	}
 
 	err = gDB.Transaction(func(tx *gorm.DB) error {
-		if err := g.moveCardToColv2(ctx, tx, cardID, colID, index); err != nil {
+		if err := g.moveCardToColv2(ctx, tx, cardID, colID, aboveIdx); err != nil {
 			return err
 		}
 
@@ -288,13 +288,15 @@ func (g *implGorm) MoveCardToColv2(ctx context.Context, cardID uint32, colID uin
 	return nil
 }
 
-func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint32, colID uint32, index uint32) (err error) {
+func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint32, colID uint32, aboveIdx uint32) (err error) {
 	// precheck max_index
 	var maxIndex uint32
-	if err = tx.WithContext(ctx).Model(columnModel).Where("id = ?", colID).Pluck("max_index", &maxIndex).Limit(1).Error; err != nil {
+	if err = tx.WithContext(ctx).Model(columnModel).
+		Where("id = ?", colID).
+		Pluck("max_index", &maxIndex).Limit(1).Error; err != nil {
 		return err
 	}
-	if index > maxIndex+1 {
+	if aboveIdx > maxIndex+1 || aboveIdx < 1 {
 		return errors.New("Invalid new index")
 	}
 
@@ -305,6 +307,11 @@ func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint
 		Take(card).Error; err != nil {
 		return err
 	}
+
+	if card.ColumnID == colID {
+		return errors.New("Same column id")
+	}
+
 	if err = tx.WithContext(ctx).Model(cardModel).
 		Where("column_id = ? AND index > ?", card.ColumnID, card.Index).
 		Update("index", gorm.Expr("index - ?", 1)).Error; err != nil {
@@ -318,7 +325,7 @@ func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint
 
 	// add to new column, create empty index slot & update card
 	if err = tx.WithContext(ctx).Model(cardModel).
-		Where("column_id = ? AND index >= ?", colID, index).
+		Where("column_id = ? AND index >= ?", colID, aboveIdx).
 		Update("index", gorm.Expr("index + ?", 1)).Error; err != nil {
 		return err
 	}
@@ -328,7 +335,7 @@ func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint
 		return err
 	}
 	card.ColumnID = colID
-	card.Index = index
+	card.Index = aboveIdx
 	if err = tx.WithContext(ctx).Model(cardModel).
 		Where("id = ?", card.ID).
 		Updates(card).Error; err != nil {
@@ -525,9 +532,9 @@ func (g *implGorm) DeleteColumnByIDAndMove(ctx context.Context, columnID uint32,
 
 // ------------------------------
 // ReorderCard ...
-func (g *implGorm) ReorderCard(ctx context.Context, cardID uint32, newIdx uint32) (err error) {
+func (g *implGorm) ReorderCard(ctx context.Context, cardID uint32, aboveIdx uint32) (err error) {
 	// pre-exec check
-	if newIdx == 0 {
+	if aboveIdx == 0 {
 		return errors.New("Zero index")
 	}
 
@@ -538,16 +545,16 @@ func (g *implGorm) ReorderCard(ctx context.Context, cardID uint32, newIdx uint32
 			return err
 		}
 
-		if card.Index == newIdx {
+		if card.Index == aboveIdx {
 			return nil
 		}
 
-		if newIdx > card.Index {
-			if err := g.moveCardUp(ctx, tx, card, newIdx); err != nil {
+		if aboveIdx > card.Index {
+			if err := g.moveCardDown(ctx, tx, card, aboveIdx); err != nil {
 				return err
 			}
 		} else {
-			if err := g.moveCardDown(ctx, tx, card, newIdx); err != nil {
+			if err := g.moveCardUp(ctx, tx, card, aboveIdx); err != nil {
 				return err
 			}
 		}
@@ -562,9 +569,9 @@ func (g *implGorm) ReorderCard(ctx context.Context, cardID uint32, newIdx uint32
 	return nil
 }
 
-func (g *implGorm) moveCardUp(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card, newIdx uint32) (err error) {
+func (g *implGorm) moveCardDown(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card, aboveIdx uint32) (err error) {
 	// pre-exec check
-	if card.Index >= newIdx {
+	if card.Index >= aboveIdx {
 		return errors.New("Invalid index")
 	}
 	var maxIndex uint32
@@ -574,13 +581,13 @@ func (g *implGorm) moveCardUp(ctx context.Context, tx *gorm.DB, card *ccmanrpc.C
 		Limit(1).Error; err != nil {
 		return err
 	}
-	if newIdx > maxIndex {
+	if aboveIdx > maxIndex+1 {
 		return errors.New("Invalid index")
 	}
 
 	// create empty slot
 	if err = tx.WithContext(ctx).Model(cardModel).
-		Where("column_id = ? AND index > ? AND index <= ?", card.ColumnID, card.Index, newIdx).
+		Where("column_id = ? AND index > ? AND index < ?", card.ColumnID, card.Index, aboveIdx).
 		Update("index", gorm.Expr("index - ?", 1)).Error; err != nil {
 		return err
 	}
@@ -588,22 +595,22 @@ func (g *implGorm) moveCardUp(ctx context.Context, tx *gorm.DB, card *ccmanrpc.C
 	// update card new index
 	if err = tx.WithContext(ctx).Model(cardModel).
 		Where("id = ?", card.ID).
-		Update("index", newIdx).Error; err != nil {
+		Update("index", aboveIdx-1).Error; err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (g *implGorm) moveCardDown(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card, newIdx uint32) (err error) {
+func (g *implGorm) moveCardUp(ctx context.Context, tx *gorm.DB, card *ccmanrpc.Card, aboveIdx uint32) (err error) {
 	// pre-exec check
-	if card.Index <= newIdx {
+	if card.Index <= aboveIdx || aboveIdx < 1 {
 		return errors.New("Invalid index")
 	}
 
 	// create empty slot
 	if err = tx.WithContext(ctx).Model(cardModel).
-		Where("column_id = ? AND index > ? AND index < ?", card.ColumnID, newIdx, card.Index).
+		Where("column_id = ? AND index >= ? AND index < ?", card.ColumnID, aboveIdx, card.Index).
 		Update("index", gorm.Expr("index + ?", 1)).Error; err != nil {
 		return err
 	}
@@ -611,7 +618,7 @@ func (g *implGorm) moveCardDown(ctx context.Context, tx *gorm.DB, card *ccmanrpc
 	// update card index
 	if err = tx.WithContext(ctx).Model(cardModel).
 		Where("id = ?", card.ID).
-		Update("index", newIdx+1).Error; err != nil {
+		Update("index", aboveIdx).Error; err != nil {
 		return err
 	}
 

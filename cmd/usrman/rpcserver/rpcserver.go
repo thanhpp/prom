@@ -228,7 +228,7 @@ func (u *usrManSrv) AddMemberByID(ctx context.Context, req *usrmanrpc.AddMemberB
 		return nil, status.Error(codes.Unavailable, "Empty request")
 	}
 
-	if err = repository.GetDAO().AddMemberByID(ctx, req.TeamID, req.TeamID); err != nil {
+	if err = repository.GetDAO().AddMemberByID(ctx, req.TeamID, req.UserID); err != nil {
 		logger.Get().Errorf("AddMemberByID error: %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}

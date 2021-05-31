@@ -10,8 +10,8 @@ type UserLoginReq struct {
 }
 
 type UserLoginResp struct {
-	RespError `json:"error"`
-	Data      struct {
+	RespError
+	Data struct {
 		Token string `json:"token"`
 	} `json:"data"`
 }

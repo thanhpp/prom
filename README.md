@@ -15,7 +15,7 @@
 
 ## System design
 
-![SystemDesign](docs/drawio/prom_design.png)
+![SystemDesign](docs/drawio/prom_design.jpg)
 
 - NOTE: Nofications will be developed if there is enough time
 
