@@ -1,4 +1,4 @@
-$(document).ready(function () {
+
     var token = sessionStorage.getItem("token");
 
     var testTokenOptions = {
@@ -29,5 +29,4 @@ $(document).ready(function () {
       loginRequest(username, password);
     });
   
-  });
   

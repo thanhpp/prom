@@ -126,12 +126,16 @@
      <div class="main-content">
       <section class="section">
         <div class="section-header">
-          <h1 id="projectName">aaa</h1>
+          <h1 id="projectName"></h1>
         </div>
         <div class="section-body">
           <div id="project-boards" class="row">
-            <div id="myKanban" class="col-12">
-          </div>
+            <div id="buttonsArea" class="col-1">
+              <a id="addNewBoardButton" href="#" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#newColumn">
+                <i class="fas fa-plus"></i> Add
+              </a>
+            </div>
+            <div id="myKanban" class="col-11"></div>
           </div>
         </div>
       </section>
@@ -233,6 +237,30 @@
       <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button id="createNewTeamModalButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="document" id="newColumn">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Name your new column</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="section">
+          <div class="form-group">
+            <input placeholder="Name of the new column" id="newColumnName" class="form-control"></input>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewColumnButton" data-dismiss="modal" type="button" class="btn btn-primary">Create</button>
       </div>
     </div>
   </div>

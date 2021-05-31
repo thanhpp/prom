@@ -1,5 +1,5 @@
 var projectName = "";
-var KanbanTest
+var KanbanTest;
 
 var token = sessionStorage.getItem("token");
 
@@ -16,11 +16,11 @@ fetch(
       document.getElementById("projectName").innerHTML = projectName;
     }
   });
- 
-  initKanban(JSON.parse(sessionStorage.getItem('board')));
 
-function initKanban(finalBoard){
-   KanbanTest = new jKanban({
+initKanban(JSON.parse(sessionStorage.getItem("board")));
+
+function initKanban(finalBoard) {
+  KanbanTest = new jKanban({
     element: "#myKanban",
     gutter: "10px",
     widthBoard: "300px",
@@ -46,7 +46,7 @@ function initKanban(finalBoard){
       formItem.setAttribute("class", "itemform");
       formItem.innerHTML =
         '<div class="new-item form-group"><input type="text" class="form-control new-item-text" rows="2" autofocus><input style="display: none; visibility: hidden; position: absolute;" type="submit" value></input></div><div class="form-group text-right"><button type="submit" id="submit" class="btn btn-success new-item-button">Add</button><button type="button" id="CancelBtn" class="btn btn-outline-danger pull-right new-item-button">Cancel</button></div>';
-  
+
       KanbanTest.addForm(boardId, formItem);
       formItem.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -78,10 +78,9 @@ function initKanban(finalBoard){
       // console.log(source.dataset);
       // console.log(sibling);
     },
-    boards: finalBoard
+    boards: finalBoard,
   });
 }
-
 
 // var toDoButton = document.getElementById("addToDo");
 // toDoButton.addEventListener("click", function () {
@@ -158,3 +157,51 @@ function addClassToNewBoard() {
     kanbanItems[i].classList.add("btn", "btn-primary");
   }
 }
+
+var addBoard = document.getElementById("createNewColumnButton");
+addBoard.addEventListener("click", function () {
+  let boardid = (KanbanTest.boardContainer.length + 1).toString();
+  KanbanTest.addBoards([
+    {
+      id: boardid,
+      title: $("#newColumnName").val().toString(),
+      class: "card-header",
+      project_id: projectID,
+      item: [],
+      created_by: sessionStorage.getItem("userID"),
+      projectIndex: projectID,
+    },
+  ]);
+  let container = KanbanTest.boardContainer;
+  container[container.length - 1].classList.add("card-body", "row");
+  KanbanTest.findBoard(boardid).classList.add("col", "card");
+
+  var raw =
+    '{\n  "columnName" : "' + $("#newColumnName").val().toString() + '"\n}';
+
+  var requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+      "Content-Type": "text/plain",
+    },
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch(
+    "http://127.0.0.1:12345/teams/" +
+      projectTeamID +
+      "/projects/" +
+      projectID +
+      "/columns",
+    requestOptions
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      if (result.error.code == 200) {
+        $("#newColumnName").value = '';
+      }
+    });
+});

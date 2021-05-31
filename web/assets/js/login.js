@@ -1,6 +1,6 @@
 $(document).ready(function () {
   var token = sessionStorage.getItem("token");
-
+  
   var testTokenOptions = {
     method: "GET",
     credentials: "omit",
@@ -46,6 +46,8 @@ $(document).ready(function () {
           var token = result.data.token;
           sessionStorage.setItem("token", token);
           sessionStorage.setItem("username", String(user));
+          var decoded = jwt_decode(token);
+          sessionStorage.setItem("userID",decoded.userid);
           window.location.href = "../../../web/pages/home.html";
         } else {
           alert("Incorrect account credentials");
