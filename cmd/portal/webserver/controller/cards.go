@@ -140,8 +140,8 @@ func (cC *CardCtrl) CreateNewCard(c *gin.Context) {
 
 // ------------------------------
 // ReorderCard
-// @Summary Reorder card in one column
-// @Description Reorder card in one column
+// @Summary Reorder card
+// @Description Reorder card if in the same column, columnID = 0
 // @Produce json
 // @Param 	Authorization	header	string					true	"jwt"
 // @Param 	teamID			path	int						true	"teamID"
@@ -172,14 +172,14 @@ func (cC *CardCtrl) ReorderCard(c *gin.Context) {
 		return
 	}
 
-	if req.ColID == 0 {
+	if req.ColumnID == 0 {
 		if err = service.GetCCManSrv().ReorderCard(c, int(project.ShardID), req.CardID, req.AboveIdx); err != nil {
 			logger.Get().Errorf("Reorcard error: %v", err)
 			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 			return
 		}
 	} else {
-		if err = service.GetCCManSrv().MoveCardToCol(c, int(project.ShardID), req.CardID, req.ColID, req.AboveIdx); err != nil {
+		if err = service.GetCCManSrv().MoveCardToCol(c, int(project.ShardID), req.CardID, req.ColumnID, req.AboveIdx); err != nil {
 			logger.Get().Errorf("MoveCardToCol error: %v", err)
 			ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 			return
@@ -190,6 +190,38 @@ func (cC *CardCtrl) ReorderCard(c *gin.Context) {
 	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }
+
+// // ------------------------------
+// // MoveCardToCol
+// func (cC *CardCtrl) MoveCardToCol(c *gin.Context) {
+// 	prjID, err := getProjectIDFromParam(c)
+// 	if err != nil {
+// 		logger.Get().Errorf("Project ID from param error: %v", err)
+// 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+// 		return
+// 	}
+
+// 	claim, err := getClaimsFromContext(c)
+// 	if err != nil {
+// 		logger.Get().Errorf("Context claims error: %v", err)
+// 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+// 		return
+// 	}
+
+// 	req := new(dto.MoveCardColReq)
+// 	if err = c.ShouldBindJSON(req); err != nil {
+// 		logger.Get().Errorf("Bind JSON error: %v", err)
+// 		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+// 		return
+// 	}
+
+// 	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
+// 	if err != nil {
+// 		logger.Get().Errorf("Get project error: %v", err)
+// 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
+// }
 
 // ------------------------------
 // UpdateCard ...
@@ -240,7 +272,7 @@ func (cC *CardCtrl) UpdateCard(c *gin.Context) {
 	}
 
 	// prevent column update
-	card.ColumnID = req.ColumnID
+	card.ColumnID = 0
 
 	if err = service.GetCCManSrv().UpdateCardByID(c, int(project.ShardID), req.Card.ID, card); err != nil {
 		logger.Get().Errorf("Update card by id error: %v", err)

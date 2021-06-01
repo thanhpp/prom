@@ -169,6 +169,10 @@ func (cS *CCManSrv) GetAllFromProjectID(ctx context.Context, shardID int, projec
 		return nil, cS.error(err)
 	}
 
+	for i := range resp.Columns {
+		fmt.Printf("id: %d. idx: %d \n", resp.Columns[i].ID, resp.Columns[i].ProjectIndex)
+	}
+
 	return resp.Columns, nil
 }
 
