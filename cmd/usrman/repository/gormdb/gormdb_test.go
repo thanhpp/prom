@@ -159,3 +159,20 @@ func TestNextProjectID(t *testing.T) {
 
 	fmt.Println(id)
 }
+
+func TestGetRecentCreatedProjectByUserID(t *testing.T) {
+	TestInitConnection(t)
+	var (
+		ctx           = context.Background()
+		userID uint32 = 24
+		recent uint   = 5
+	)
+
+	projects, err := gormdb.GetGormDB().GetRecentCreatedProjectByUserID(ctx, userID, recent)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(projects)
+}

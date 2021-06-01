@@ -312,6 +312,22 @@ func (u *usrManSrv) GetProjectByID(ctx context.Context, req *usrmanrpc.GetProjec
 	return &usrmanrpc.GetProjectByIDResp{Code: errconst.RPCSuccessCode, Project: project}, nil
 }
 
+func (u *usrManSrv) GetRecentCreatedProjectByUserID(ctx context.Context, req *usrmanrpc.GetRecentCreatedProjectByUserIDReq) (resp *usrmanrpc.GetRecentCreatedProjectByUserIDResp, err error) {
+	if req == nil {
+		logger.Get().Errorf("GetRecentCreatedProjectByUserID error: %v", errconst.RPCEmptyRequestErr)
+		return nil, status.Error(codes.Unavailable, "Empty request")
+	}
+
+	projects, err := repository.GetDAO().GetRecentCreatedProjectByUserID(ctx, req.UserID, uint(req.Recent))
+	if err != nil {
+		logger.Get().Errorf("GetRecentCreatedProjectByUserID error: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	logger.Get().Info("GetRecentCreatedProjectByUserID OK")
+	return &usrmanrpc.GetRecentCreatedProjectByUserIDResp{Code: errconst.RPCSuccessCode, Projects: projects}, nil
+}
+
 func (u *usrManSrv) GetProjtectsByTeamID(ctx context.Context, req *usrmanrpc.GetProjtectsByTeamIDReq) (resp *usrmanrpc.GetProjtectsByTeamIDResp, err error) {
 	if req == nil {
 		logger.Get().Errorf("GetProjtectsByTeamID error: %v", errconst.RPCEmptyRequestErr)

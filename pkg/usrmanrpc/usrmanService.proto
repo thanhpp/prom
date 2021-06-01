@@ -18,28 +18,31 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 
 service UsrManSrv {
-    rpc GetUserByID             (GetUserByIDReq)            returns (GetUserByIDResp);
-    rpc CreateUser              (CreateUserReq)             returns (CreateUserResp);
-    rpc GetUserByPattern        (GetUserByPatternReq)       returns (GetUserByPatternResp);
-    rpc GetUserByUsernamePass   (GetUserByUsernamePassReq)  returns (GetUserByUsernamePassResp);
-    rpc GetUserByTeamID         (GetUserByTeamIDReq)        returns (GetUserByTeamIDResp);
-    rpc UpdateUserByID          (UpdateUserByIDReq)         returns (UpdateUserByIDResp);
-    rpc DeleteUserByID          (DeleteUserByIDReq)         returns (DeleteUserByIDResp);
-    rpc CreateTeam              (CreateTeamReq)             returns (CreateTeamResp);
-    rpc GetTeamByID             (GetTeamByIDReq)            returns (GetTeamByIDResp);
-    rpc GetTeamsByUserID        (GetTeamsByUserIDReq)       returns (GetTeamsByUserIDResp);
-    rpc GetTeamsByCreatorID     (GetTeamsByCreatorIDReq)    returns (GetTeamsByCreatorIDResp);
-    rpc GetTeamByName           (GetTeamByNameReq)          returns (GetTeamByNameResp);
-    rpc UpdateTeamByID          (UpdateTeamByIDReq)         returns (UpdateTeamByIDResp);
-    rpc AddMemberByID           (AddMemberByIDReq)          returns (AddMemberByIDResp);
-    rpc RemoveMemberByID        (RemoveMemberByIDReq)       returns (RemoveMemberByIDResp);
-    rpc DeleteTeamByID          (DeleteTeamByIDReq)         returns (DeleteTeamByIDResp);
-    rpc NextProjectID           (NextProjectIDReq)          returns (NextProjectIDResp);
-    rpc CreateProject           (CreateProjectReq)          returns (CreateProjectResp);
-    rpc GetProjectByID          (GetProjectByIDReq)         returns (GetProjectByIDResp);
-    rpc GetProjtectsByTeamID    (GetProjtectsByTeamIDReq)   returns (GetProjtectsByTeamIDResp);
-    rpc UpdateProjectByID       (UpdateProjectByIDReq)      returns (UpdateProjectByIDResp);
-    rpc DeleteProjectByID       (DeleteProjectByIDReq)      returns (DeleteProjectByIDResp);
+    rpc GetUserByID                     (GetUserByIDReq)                        returns (GetUserByIDResp);
+    rpc CreateUser                      (CreateUserReq)                         returns (CreateUserResp);
+    rpc GetUserByPattern                (GetUserByPatternReq)                   returns (GetUserByPatternResp);
+    rpc GetUserByUsernamePass           (GetUserByUsernamePassReq)              returns (GetUserByUsernamePassResp);
+    rpc GetUserByTeamID                 (GetUserByTeamIDReq)                    returns (GetUserByTeamIDResp);
+    rpc UpdateUserByID                  (UpdateUserByIDReq)                     returns (UpdateUserByIDResp);
+    rpc DeleteUserByID                  (DeleteUserByIDReq)                     returns (DeleteUserByIDResp);
+
+    rpc CreateTeam                      (CreateTeamReq)                         returns (CreateTeamResp);
+    rpc GetTeamByID                     (GetTeamByIDReq)                        returns (GetTeamByIDResp);
+    rpc GetTeamsByUserID                (GetTeamsByUserIDReq)                   returns (GetTeamsByUserIDResp);
+    rpc GetTeamsByCreatorID             (GetTeamsByCreatorIDReq)                returns (GetTeamsByCreatorIDResp);
+    rpc GetTeamByName                   (GetTeamByNameReq)                      returns (GetTeamByNameResp);
+    rpc UpdateTeamByID                  (UpdateTeamByIDReq)                     returns (UpdateTeamByIDResp);
+    rpc AddMemberByID                   (AddMemberByIDReq)                      returns (AddMemberByIDResp);
+    rpc RemoveMemberByID                (RemoveMemberByIDReq)                   returns (RemoveMemberByIDResp);
+    rpc DeleteTeamByID                  (DeleteTeamByIDReq)                     returns (DeleteTeamByIDResp);
+    
+    rpc NextProjectID                   (NextProjectIDReq)                      returns (NextProjectIDResp);
+    rpc CreateProject                   (CreateProjectReq)                      returns (CreateProjectResp);
+    rpc GetProjectByID                  (GetProjectByIDReq)                     returns (GetProjectByIDResp);
+    rpc GetRecentCreatedProjectByUserID (GetRecentCreatedProjectByUserIDReq)    returns (GetRecentCreatedProjectByUserIDResp);
+    rpc GetProjtectsByTeamID            (GetProjtectsByTeamIDReq)               returns (GetProjtectsByTeamIDResp);
+    rpc UpdateProjectByID               (UpdateProjectByIDReq)                  returns (UpdateProjectByIDResp);
+    rpc DeleteProjectByID               (DeleteProjectByIDReq)                  returns (DeleteProjectByIDResp);
 }
 
 message GetUserByIDReq {
@@ -226,6 +229,17 @@ message GetProjectByIDResp {
     int32 Code = 1;
     string Message = 2;
     Project Project = 3;
+}
+
+message GetRecentCreatedProjectByUserIDReq {
+    uint32 UserID = 1;
+    uint32 Recent = 2;
+}
+
+message GetRecentCreatedProjectByUserIDResp {
+    int32 Code = 1;
+    string Message = 2;
+    repeated Project Projects = 3;
 }
 
 message GetProjtectsByTeamIDReq {

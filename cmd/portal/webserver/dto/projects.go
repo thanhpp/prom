@@ -28,3 +28,12 @@ func (r *GetProjectDetailsResp) SetData(prj *usrmanrpc.Project, cols []*ccmanrpc
 	r.Project = prj
 	r.Column = cols
 }
+
+type GetRecentCreatedProjectByUserIDResp struct {
+	RespError
+	Projects []*usrmanrpc.Project `json:"projects"`
+}
+
+func (r *GetRecentCreatedProjectByUserIDResp) SetData(prjs []*usrmanrpc.Project) {
+	r.Projects = prjs
+}

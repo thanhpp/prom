@@ -71,6 +71,18 @@ definitions:
       teams:
         type: string
     type: object
+  dto.GetCardByIDResp:
+    properties:
+      card:
+        type: string
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+    type: object
   dto.GetProjectDetailsResp:
     properties:
       columns:
@@ -83,6 +95,18 @@ definitions:
             type: string
         type: object
       project:
+        type: string
+    type: object
+  dto.GetRecentCreatedProjectByUserIDResp:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+      projects:
         type: string
     type: object
   dto.GetTeamByIDResp:
@@ -151,6 +175,13 @@ definitions:
       columnID:
         type: integer
       nextOfIndex:
+        type: integer
+    type: object
+  dto.UpdateColumnReq:
+    properties:
+      column:
+        type: string
+      columnID:
         type: integer
     type: object
   dto.UpdateTeamMemberReq:
@@ -532,9 +563,43 @@ paths:
       summary: Create new card
       tags:
       - card
+  /teams/:teamID/projects/:projectID/cards/:cardID:
+    get:
+      description: Get card by ID
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: cardID
+        in: path
+        name: cardID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get card OK
+          schema:
+            $ref: '#/definitions/dto.GetCardByIDResp'
+      summary: Get card by ID
+      tags:
+      - card
   /teams/:teamID/projects/:projectID/cards/reorder:
     post:
-      description: Reorder card in one column
+      description: Reorder card if in the same column, columnID = 0
       parameters:
       - description: jwt
         in: header
@@ -563,7 +628,7 @@ paths:
           description: Reorder success
           schema:
             $ref: '#/definitions/dto.RespError'
-      summary: Reorder card in one column
+      summary: Reorder card
       tags:
       - card
   /teams/:teamID/projects/:projectID/columns:
@@ -599,6 +664,40 @@ paths:
           schema:
             $ref: '#/definitions/dto.RespError'
       summary: Delete column by id
+      tags:
+      - column
+    patch:
+      description: Update column by id
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: projectID
+        in: path
+        name: projectID
+        required: true
+        type: integer
+      - description: update column info
+        in: body
+        name: updateReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateColumnReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update OK
+          schema:
+            $ref: '#/definitions/dto.RespError'
+      summary: Update column by id
       tags:
       - column
     post:
@@ -670,6 +769,35 @@ paths:
       summary: Reorder 1 column
       tags:
       - column
+  /teams/:teamID/projects/recent:
+    get:
+      description: Get recent project by recent count
+      parameters:
+      - description: jwt
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: teamID
+        in: path
+        name: teamID
+        required: true
+        type: integer
+      - description: recent count
+        in: query
+        name: recent
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get success
+          schema:
+            $ref: '#/definitions/dto.GetRecentCreatedProjectByUserIDResp'
+      summary: Get recent project
+      tags:
+      - project
   /user:
     get:
       description: Get user by username pattern

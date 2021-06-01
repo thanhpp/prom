@@ -341,6 +341,20 @@ func (g *implGorm) CreateProject(ctx context.Context, project *usrmanrpc.Project
 	return nil
 }
 
+func (g *implGorm) GetRecentCreatedProjectByUserID(ctx context.Context, userID uint32, recent uint) (projects []*usrmanrpc.Project, err error) {
+	err = gDB.WithContext(ctx).Model(prjModel).Select("project.*").
+		Joins("JOIN team ON team.id = project.team_id").
+		Joins("JOIN team_user ON team.id = team_user.team_id AND team_user.user_id = ?", userID).
+		Order("project.created_at DESC").Limit(int(recent)).
+		Find(&projects).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return projects, nil
+}
+
 func (g *implGorm) GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error) {
 	project = new(usrmanrpc.Project)
 	if err = gDB.Model(prjModel).WithContext(ctx).Where("id = ?", projectID).Take(project).Error; err != nil {

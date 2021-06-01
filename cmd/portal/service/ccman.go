@@ -169,6 +169,10 @@ func (cS *CCManSrv) GetAllFromProjectID(ctx context.Context, shardID int, projec
 		return nil, cS.error(err)
 	}
 
+	for i := range resp.Columns {
+		fmt.Printf("id: %d. idx: %d \n", resp.Columns[i].ID, resp.Columns[i].ProjectIndex)
+	}
+
 	return resp.Columns, nil
 }
 
@@ -470,6 +474,10 @@ func (cS *CCManSrv) UpdateColumnByID(ctx context.Context, shardID int, colID uin
 	if ctx.Err() != nil {
 		return cS.error(ctx.Err())
 	}
+
+	// prevent unexpected update
+	col.ID = 0
+	col.ProjectIndex = 0
 
 	in := &ccmanrpc.UpdateColumnByIDReq{
 		ColumnID: colID,

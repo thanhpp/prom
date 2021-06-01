@@ -1,15 +1,12 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
-	"github.com/thanhpp/prom/pkg/ccmanrpc"
 	"github.com/thanhpp/prom/pkg/logger"
 	"github.com/thanhpp/prom/pkg/usrmanrpc"
 )
@@ -148,33 +145,76 @@ func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 		return
 	}
 
-	// sort columns
-	respCols := make([]*ccmanrpc.Column, 0, len(columns))
-	if len(columns) > 0 {
-		colIdx := strings.Split(project.Index, ",") // empty string returns slice length 1
-		fmt.Println(colIdx)
-		if len(colIdx)-1 != len(columns) {
-			logger.Get().Errorf("Index not equals. Idx: %s. Cols: %d", project.Index, len(columns))
-			ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Mismatch index length")
-			return
-		}
-		for i := 0; i < len(colIdx)-1; i++ {
-			for k := range columns {
-				id, err := strconv.Atoi(colIdx[i])
-				if err != nil {
-					logger.Get().Errorf("Convert id error: %v", err.Error())
-					ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
-					return
-				}
-				if columns[k].ID == uint32(id) {
-					respCols = append(respCols, columns[k])
-				}
-			}
-		}
-	}
+	// // sort columns
+	// respCols := make([]*ccmanrpc.Column, 0, len(columns))
+	// if len(columns) > 0 {
+	// 	colIdx := strings.Split(project.Index, ",") // empty string returns slice length 1
+	// 	fmt.Println(colIdx)
+	// 	if len(colIdx)-1 != len(columns) {
+	// 		logger.Get().Errorf("Index not equals. Idx: %s. Cols: %d", project.Index, len(columns))
+	// 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Mismatch index length")
+	// 		return
+	// 	}
+	// 	for i := 0; i < len(colIdx)-1; i++ {
+	// 		for k := range columns {
+	// 			id, err := strconv.Atoi(colIdx[i])
+	// 			if err != nil {
+	// 				logger.Get().Errorf("Convert id error: %v", err.Error())
+	// 				ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+	// 				return
+	// 			}
+	// 			if columns[k].ID == uint32(id) {
+	// 				respCols = append(respCols, columns[k])
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	resp := new(dto.GetProjectDetailsResp)
 	resp.SetCode(http.StatusOK)
-	resp.SetData(project, respCols)
+	resp.SetData(project, columns)
+	c.JSON(http.StatusOK, resp)
+}
+
+// ------------------------------
+// GetRecentProject
+// @Summary Get recent project
+// @Description Get recent project by recent count
+// @Produce json
+// @Param 	Authorization	header	string	true	"jwt"
+// @Param 	teamID			path	int		true	"teamID"
+// @Param 	recent 			query 	int 	true 	"recent count"
+// @Success 200 {object} dto.GetRecentCreatedProjectByUserIDResp "Get success"
+// @Tags project
+// @Router /teams/:teamID/projects/recent [GET]
+func (p *ProjectCtrl) GetRecentProject(c *gin.Context) {
+	claims, err := getClaimsFromContext(c)
+	if err != nil {
+		logger.Get().Errorf("Context claims error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Context claims error")
+		return
+	}
+
+	var recent int = 5
+	recentStr := c.Query("recent")
+	if len(recentStr) != 0 {
+		recent, err = strconv.Atoi(recentStr)
+		if err != nil {
+			logger.Get().Errorf("Get recent Query error: %v", err)
+			ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+			return
+		}
+	}
+
+	projects, err := service.GetUsrManService().GetRecentCreatedProjectByUserID(c, claims.UserID, uint(recent))
+	if err != nil {
+		logger.Get().Errorf("GetRecentCreatedProjectByUserID error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	resp := new(dto.GetRecentCreatedProjectByUserIDResp)
+	resp.SetData(projects)
+	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }
