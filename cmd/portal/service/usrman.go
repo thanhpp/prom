@@ -54,6 +54,7 @@ type iUsrManSrv interface {
 
 	// project
 	GetProjectByID(ctx context.Context, projectID uint32) (project *usrmanrpc.Project, err error)
+	GetRecentCreatedProjectByUserID(ctx context.Context, userID uint32, recent uint) (projects []*usrmanrpc.Project, err error)
 	GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error)
 	NextProjectID(ctx context.Context) (id uint32, err error)
 	NewProject(ctx context.Context, project *usrmanrpc.Project) (err error)
@@ -328,6 +329,24 @@ func (uS *usrManSrv) GetProjectByID(ctx context.Context, projectID uint32) (proj
 	}
 
 	return resp.Project, nil
+}
+
+func (uS *usrManSrv) GetRecentCreatedProjectByUserID(ctx context.Context, userID uint32, recent uint) (projects []*usrmanrpc.Project, err error) {
+	if ctx.Err() != nil {
+		return nil, uS.error(ctx.Err())
+	}
+
+	in := &usrmanrpc.GetRecentCreatedProjectByUserIDReq{
+		UserID: userID,
+		Recent: uint32(recent),
+	}
+
+	resp, err := uS.client().GetRecentCreatedProjectByUserID(ctx, in)
+	if err != nil {
+		return nil, uS.error(err)
+	}
+
+	return resp.Projects, nil
 }
 
 func (uS *usrManSrv) GetProjectsByTeamID(ctx context.Context, teamID uint32) (projects []*usrmanrpc.Project, err error) {
