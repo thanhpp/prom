@@ -95,7 +95,121 @@ function initKanban(finalBoard) {
       footer: false,
     },
     click: function (el) {
-      console.log("aa");
+      console.log(el);
+      $("#cardDetailModal").modal();
+
+      let getCardOptions = {
+        method: "GET",
+        credentials: "omit",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "text/plain",
+        },
+        redirect: "follow",
+      };
+
+      fetch(
+        "http://127.0.0.1:12345/teams/" +
+          projectTeamID +
+          "/projects/" +
+          projectID +
+          "/cards/" +
+          el.getAttribute("data-eid"),
+        getCardOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.error.code == 200) {
+            console.log(result);
+            let title = result.card.title;
+            let des = result.card.description;
+            let creator = result.card.created_by;
+
+            $("#cardName").val(title);
+            $("#description").val(des);
+            $("#createdBy").val(creator);
+
+            $("#saveCard").off();
+            $("#saveCard").on("click", function () {
+              let raw =
+                '{\n "card": {\n "assignedTo": 0, \n "description": "' +
+                $("#description").val().toString() +
+                '",\n "duedate": 0, \n "id": ' +
+                el.getAttribute("data-eid") +
+                ', \n "title": "' +
+                el.textContent +
+                '"\n }, \n "columnID": ' +
+                el.getAttribute("data-column_id") +
+                " \n }";
+              console.log(raw);
+
+              let saveCardOptions = {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + sessionStorage.getItem("token"),
+                  "Content-Type": "text/plain",
+                },
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(
+                "http://127.0.0.1:12345/teams/" +
+                  projectTeamID +
+                  "/projects/" +
+                  projectID +
+                  "/cards",
+                saveCardOptions
+              )
+                .then((response) => response.json())
+                .then((result) => {
+                  console.log(result);
+                  if (result.error.code == 200) {
+                    
+                  }
+                });
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        $("#deleteCard").off();
+       $("#deleteCard").on("click", function () {
+          //////////////////////////////////////////
+          KanbanTest.removeElement(el.getAttribute("data-eid").toString());
+        let raw =
+        '{\n  "cardID" : ' +
+        el.getAttribute("data-eid") +
+        "\n}";
+
+      let deleteCardOptions = {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
+          "Content-Type": "text/plain",
+        },
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(
+        "http://127.0.0.1:12345/teams/" +
+        projectTeamID +
+        "/projects/" +
+        projectID +
+        "/cards",
+        deleteCardOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          if (result.error.code == 200) {
+            
+          }
+        });
+        })
+        
     },
     dragendBoard: function (el) {
       console.log(el);
@@ -292,9 +406,10 @@ addBoard.addEventListener("click", function () {
     });
 });
 addEventListenerToHeader();
+
 function addEventListenerToHeader() {
   let editCol = document.getElementsByClassName("kanban-board-header");
-  console.log(editCol);
+
   for (var i = 0; i < editCol.length; i++) {
     editCol[i].children[0].setAttribute("data-toggle", "modal");
     editCol[i].children[0].setAttribute("data-target", "#editColumn");
@@ -311,11 +426,11 @@ function addEventListenerToHeader() {
 
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "text/plain");
-      
-        let raw = '{\n  "columnID" : ' + parseInt(colID) + '\n}';
-      
+
+        let raw = '{\n  "columnID" : ' + parseInt(colID) + "\n}";
+
         let deleteColOptions = {
-          method: "POST",
+          method: "DELETE",
           credentials: "omit",
           headers: {
             Authorization: "Bearer " + token,
@@ -324,15 +439,20 @@ function addEventListenerToHeader() {
           body: raw,
           redirect: "follow",
         };
-      
-        fetch("http://127.0.0.1:12345/teams", deleteColOptions)
+
+        fetch(
+          "http://127.0.0.1:12345/teams/" +
+            projectTeamID +
+            "/projects/" +
+            projectID +
+            "/columns",
+          deleteColOptions
+        )
           .then((response) => response.json())
           .then((result) => {
             if (result.error.code == 200) {
-         
             }
           });
-
       });
     });
   }

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Team &mdash; Treno</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="" href="../node_modules/jqvmap/dist/jqvmap.min.css">
+  <link rel="" href="../node_modules/summernote/dist/summernote-bs4.css">
+  <link rel="" href="../node_modules/owl.carousel/dist/assets/owl.carousel.min.css">
+  <link rel="" href="../node_modules/owl.carousel/dist/assets/owl.theme.default.min.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/home.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar">
+        <form class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+          </ul>
+        </form>
+        <ul class="navbar-nav navbar-right">
+            <!-- can add "beep" after message-toggle to enable beep circle -->
+          <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle"><i class="far fa-envelope"></i></a>
+            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+              <div class="dropdown-header">Invitations
+              </div>
+              <div class="dropdown-list-content dropdown-list-message">
+                <a href="#" class="dropdown-item dropdown-item-unread"> 
+                  <div class="dropdown-item-avatar">
+                    <img alt="image" src="../assets/img/avatar/avatar-1.png" class="rounded-circle">
+                  </div>
+                  <div class="dropdown-item-desc">
+                    <b>Thanh Phan Phu</b> has invited you to <b>Thanh Phan Phu</b>
+                    <div class="time">10 Hours Ago</div>
+                  </div>
+                </a>
+              </div>
+              <div class="dropdown-footer text-center">
+                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+              </div>
+            </div>
+          </li>
+            <!-- can add "beep" after message-toggle to enable beep circle -->
+          <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg"><i class="far fa-bell"></i></a>
+            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+              <div class="dropdown-header">Notifications
+              </div>
+              <div class="dropdown-list-content dropdown-list-icons">
+                <a href="#" class="dropdown-item">
+                  <div class="dropdown-item-icon bg-info text-white">
+                    <i class="fas fa-bell"></i>
+                  </div>
+                  <div class="dropdown-item-desc">
+                    Welcome to Stisla template!
+                    <div class="time">Yesterday</div>
+                  </div>
+                </a>
+              </div>
+              <div class="dropdown-footer text-center">
+                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+              </div>
+            </div>
+          </li>
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+            <img alt="image" src="../assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+            <div class="d-sm-none d-lg-inline-block">Hi, <span class="name"></span></div></a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a href="features-profile.html" class="dropdown-item has-icon">
+                <i class="far fa-user"></i> Account
+              </a>
+              <a href="features-settings.html" class="dropdown-item has-icon">
+                <i class="fas fa-cog"></i> Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a id="logoutButton" href="#" class="dropdown-item has-icon text-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <div class="main-sidebar">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+            <a href="home.html">Treno</a>
+          </div>
+          <div class="sidebar-brand sidebar-brand-sm">
+            <a href="home.html">TrN</a>
+          </div>
+          <ul id="sidebar" class="sidebar-menu">
+              <li class="nav-item dropdown active">
+                <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
+              </li>
+              <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+                <a id="navBarNewProject" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newProjectModal">
+                  <i class="fas fa-plus"></i> Create a new project
+                </a>
+              </div>
+              <li id="personalProjects" class="menu-header">Personal Projects</li>
+              <!-- li cua header va item deu phai active -->
+              <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+                <a id="navBarNewTeam" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newTeamModal">
+                  <i class="fas fa-plus"></i> Create a new team
+                </a>
+              </div>
+              <li id="teams" class="menu-header">Teams</li>
+              <!-- li cua header va item deu phai active -->
+            
+        </aside>
+      </div>
+
+     <!-- Main Content -->
+     <div class="main-content">
+      <section class="section">
+        <div class="section-header">
+          <h1>Home</h1>
+        </div>
+<section class ="section">
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="hero text-white bg-primary"">
+        <div class="hero-inner">
+          <h2>Welcome back, <span class="name"></span>!</h2>
+          <p class="lead">What's your plan for today?</p>
+          <div class="mt-4">
+            <a id="heroNewProject" href="#" data-toggle="modal" data-target="#newProjectModal" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="fas fa-plus"></i>New project...</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+        <div class="section-body">
+          <h2 class="section-title">Recent Projects</h2>
+        </div>
+        <div id="recentProjects" class="row">
+          
+        </div>
+        <div class="section-body">
+          <h2 class="section-title">Recent activites</h2>
+        </div>
+        <div class="row" style="height:80%; overflow:hidden;">
+          <div class="col-lg-12 col-md-12 col-12 col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <ul class="list-unstyled list-unstyled-border">
+                  <li class="media">
+                    <img class="mr-3 rounded-circle" width="50" src="../assets/img/avatar/avatar-1.png" alt="avatar">
+                    <div class="media-body">
+                      <div class="float-right text-primary">Now</div>
+                      <div class="media-title">Nguyen Ba Nam</div>
+                      <span class="text-small text-muted">Add a new column to Birthday Party projects</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="document" id="newProjectModal">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="card modal-body">
+        <div class="section">
+        <div class="section-title mt-0">Project</div>
+        <div class="form-group">
+          <label>Project Name</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <i class="fas fa-briefcase"></i>
+              </div>
+            </div>
+            <input placeholder="Name of your new project" id="createProjectName" type="text" class="form-control phone-number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea placeholder="About your project" id="createProjectDescription" class="form-control"></textarea>
+        </div>
+        <div class="section-title mt-0">Team</div>
+        <div class="form-group">
+          <label>Assign a team</label>
+          <select id="createSelectTeam" class="form-control">
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <input id="createNewTeamName" type="text" class="form-control" placeholder="Name for your new team" aria-label="">
+            <div class="input-group-append">
+              <button id="createNewTeamButton" class="btn btn-primary" type="button">Create new team</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewProjectButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="document" id="newTeamModal">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new team</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="section">
+          <div class="section-title mt-0">Team Info</div>
+          <div class="form-group">
+            <label>Team Name</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <i class="fas fa-briefcase"></i>
+                </div>
+              </div>
+              <input id="createTeamName" placeholder="Name of your new team" type="text" class="form-control phone-number">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="About your new team" id="createTeamDescription" class="form-control"></textarea>
+          </div>
+          <div class="section-title mt-0">Team Members</div>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <input id="addNewPerson" type="text" class="form-control" placeholder="Add a person to your team" aria-label="">
+              <div class="input-group-append">
+                <button id="addNewPersonButton" class="btn btn-primary disabled" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+          <div id="members">
+            
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="createNewTeamModalButton" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="../assets/js/stisla.js"></script>
+
+  <!-- JS Libraies -->
+
+
+  <!-- Template JS File -->
+  <script src="../assets/js/scripts.js"></script>
+  <script src="../assets/js/custom.js"></script>
+
+
+
+  <!-- Page Specific JS File -->
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/navBar.js"></script>
+  <script src="../assets/js/team.js"></script>
+
+</body>
+</html>
