@@ -8,6 +8,8 @@
    2. pkg: shared packages  
 2. web: web resources
 3. docs: documentation
+4. build: build docker images, docker-compose
+5. api: api document (move to embedded swagger) 
 
 ## DB desgin
 ### 1. Overall DB
