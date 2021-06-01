@@ -99,7 +99,7 @@ func TestCreateColumn(t *testing.T) {
 		ctx    = context.Background()
 		column = &ccmanrpc.Column{
 			ProjectID: 1,
-			Title:     "test2",
+			Title:     "test4",
 			Index:     "",
 		}
 	)
@@ -117,18 +117,18 @@ func TestGetAllFromProjectID(t *testing.T) {
 		projectID uint32 = 1
 	)
 
-	cols, err := gormdb.GetGormDB().GetAllFromProjectID(ctx, projectID)
+	_, err := gormdb.GetGormDB().GetAllFromProjectID(ctx, projectID)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	for i := range cols {
-		for j := range cols[i].Cards {
-			fmt.Println(cols[i].Cards[j])
-		}
-		fmt.Println()
-	}
+	// for i := range cols {
+	// 	for j := range cols[i].Cards {
+	// 		fmt.Println(cols[i].Cards[j])
+	// 	}
+	// 	fmt.Println()
+	// }
 }
 
 func TestMoveCardToCol(t *testing.T) {
@@ -192,7 +192,7 @@ func TestReorderColumn(t *testing.T) {
 	TestInitConnection(t)
 	var (
 		ctx              = context.Background()
-		columnID  uint32 = 2
+		columnID  uint32 = 4
 		nextOfIdx uint32 = 1
 	)
 

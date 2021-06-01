@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -59,20 +58,20 @@ func (cC *ColumnCtrl) CreateNewColumn(c *gin.Context) {
 		Title:     req.ColumnName,
 		CreatedBy: claim.UserID,
 	}
-	id, err := service.GetCCManSrv().CreateColumn(c, int(project.ShardID), column)
+	_, err = service.GetCCManSrv().CreateColumn(c, int(project.ShardID), column)
 	if err != nil {
 		logger.Get().Errorf("Create column error: %v", err)
 		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// update project index
-	project.Index += fmt.Sprintf("%d,", id)
-	if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
-		logger.Get().Errorf("Update project index error: %v", err)
-		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
-		return
-	}
+	// // update project index
+	// project.Index += fmt.Sprintf("%d,", id)
+	// if err = service.GetUsrManService().UpdateProject(c, project); err != nil {
+	// 	logger.Get().Errorf("Update project index error: %v", err)
+	// 	ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
 
 	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)

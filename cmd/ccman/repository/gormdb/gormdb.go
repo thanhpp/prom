@@ -24,10 +24,11 @@ import (
 type implGorm struct{}
 
 var (
-	gDB         = &gorm.DB{}
-	gormObj     = new(implGorm)
-	cardModel   = new(ccmanrpc.Card)
-	columnModel = new(ccmanrpc.Column)
+	gDB           = &gorm.DB{}
+	gormObj       = new(implGorm)
+	cardModel     = new(ccmanrpc.Card)
+	columnModel   = new(ccmanrpc.Column)
+	ErrSameColumn = errors.New("Same column ID")
 )
 
 // GetGormDB ...
@@ -124,6 +125,9 @@ func (g *implGorm) GetAllFromProjectID(ctx context.Context, projectID uint32) (c
 	// 	cols[i].Cards = cols[i].Cards[len(cols[i].Cards)/2:]
 	// }
 
+	for i := range cols {
+		fmt.Println(cols[i].ID, cols[i].ProjectIndex)
+	}
 	return cols, nil
 }
 
@@ -309,7 +313,7 @@ func (g *implGorm) moveCardToColv2(ctx context.Context, tx *gorm.DB, cardID uint
 	}
 
 	if card.ColumnID == colID {
-		return errors.New("Same column id")
+		return ErrSameColumn
 	}
 
 	if err = tx.WithContext(ctx).Model(cardModel).

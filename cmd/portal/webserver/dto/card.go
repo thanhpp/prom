@@ -30,7 +30,13 @@ type ReorderCardOneColumnReq struct {
 type ReorderCard struct {
 	CardID   uint32 `json:"cardID"`
 	AboveIdx uint32 `json:"aboveOfIdx"`
-	ColID    uint32 `json:"columnID"`
+	ColumnID uint32 `json:"columnID"`
+}
+
+type MoveCardColReq struct {
+	CardID   uint32 `json:"cardID"`
+	AboveIdx uint32 `json:"aboveOfIdx"`
+	ColumnID uint32 `json:"columnID"`
 }
 
 type DeleteCardReq struct {
