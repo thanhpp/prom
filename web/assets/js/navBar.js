@@ -125,7 +125,6 @@ function assignRecentProjects() {
     .then((result) => {
       if (result.error.code == 200) {
         projects = result.projects;
-        console.log(projects);
         for (var i = projects.length - 1; i >= 0; i--) {
           let projectName = projects[i].name;
           let projectID = projects[i].id;
@@ -237,7 +236,6 @@ function updateChooseTeam(teams) {
 $("#createNewProjectButton").on("click", function () {
   let projectName = $("#createProjectName").val();
   let assignedTeam = parseInt($("#createSelectTeam").val());
-  console.log(assignedTeam);
 
   let myHeaders = new Headers();
   myHeaders.append("Content-Type", "text/plain");
@@ -289,8 +287,8 @@ $("#createNewProjectButton").on("click", function () {
               let projectURLSearchParams = projectURL.searchParams;
 
               projectURLSearchParams.set("id", newProjectID.toString());
-              alert(projectURL);
-              // window.location.href = projectURL;
+
+              window.location.href = projectURL;
             }
           });
       }
@@ -421,13 +419,12 @@ $("#createNewTeamModalButton").on("click", function () {
           .then((result) => {
             if (result.error.code == 200) {
               newTeamsID = result.teams[result.teams.length - 1].id;
-              console.log("start");
+
               for (let i = 0; i < membersID.length; i++) {
                 addToTeam(membersID[i], newTeamsID);
               }
 
               setTimeout(function () {
-                console.log("done");
                 window.location.href =
                   "http://127.0.0.1:5501/web/pages/team.html?id=" + newTeamsID;
               }, 2000);
@@ -458,7 +455,6 @@ function addToTeam(memberID, teamID) {
     .then((response) => response.json())
     .then((result) => {
       if (result.error.code == 200) {
-        console.log("added " + memberID);
       }
     });
 }

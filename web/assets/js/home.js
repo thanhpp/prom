@@ -289,8 +289,8 @@ $("#createNewProjectButton").on("click", function () {
               let projectURLSearchParams = projectURL.searchParams;
 
               projectURLSearchParams.set("id", newProjectID.toString());
-              alert(projectURL);
-              // window.location.href = projectURL;
+
+              window.location.href = projectURL;
             }
           });
       }

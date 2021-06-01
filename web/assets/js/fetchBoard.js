@@ -1,12 +1,12 @@
-var queryString = window.location.search;
-var urlParams = new URLSearchParams(queryString);
-var projectID = urlParams.get("id");
-var projectTeamID = urlParams.get("team");
-var projectDetail;
+let queryString = window.location.search;
+let urlParams = new URLSearchParams(queryString);
+let projectID = urlParams.get("id");
+let projectTeamID = urlParams.get("team");
+let projectDetail;
 
 sessionStorage.removeItem("board");
 
-var kanbanBoard = [];
+let kanbanBoard = [];
 
 let getProjectDetailOptions = {
   method: "GET",
@@ -25,25 +25,26 @@ fetch(
   .then((response) => response.json())
   .then((result) => {
     if (result.error.code == 200) {
+      console.log(result);
       projectDetail = result;
-
-      for (let i = 0; i < projectDetail.columns.length; i++) {
-        let column = {
-          id: projectDetail.columns[i].id.toString(),
-          title: projectDetail.columns[i].title.toString(),
-          project_id: projectDetail.columns[i].project_id,
-          item: projectDetail.columns[i].cards,
-          created_by: projectDetail.columns[i].created_by,
-          index: projectDetail.columns[i].index,
-          maxIndex: projectDetail.columns[i].maxIndex,
-          projectIndex: projectDetail.columns[i].projectIndex,
-          createdAt: projectDetail.columns[i].createdAt,
-          updatedAt: projectDetail.columns[i].updatedAt,
-          deletedAt: projectDetail.columns[i].deletedAt,
-        };
-        kanbanBoard[i] = column;
+      if (projectDetail.columns != null) {
+        for (let i = 0; i < projectDetail.columns.length; i++) {
+          let column = {
+            id: projectDetail.columns[i].id.toString(),
+            title: projectDetail.columns[i].title.toString(),
+            project_id: projectDetail.columns[i].project_id,
+            item: projectDetail.columns[i].cards,
+            created_by: projectDetail.columns[i].created_by,
+            index: projectDetail.columns[i].index,
+            maxIndex: projectDetail.columns[i].maxIndex,
+            projectIndex: projectDetail.columns[i].projectIndex,
+            createdAt: projectDetail.columns[i].createdAt,
+            updatedAt: projectDetail.columns[i].updatedAt,
+            deletedAt: projectDetail.columns[i].deletedAt,
+          };
+          kanbanBoard[i] = column;
+        }
       }
       sessionStorage.setItem("board", JSON.stringify(kanbanBoard));
-      console.log(kanbanBoard);
     }
   });

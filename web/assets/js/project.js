@@ -1,5 +1,5 @@
 var projectName = "";
-var KanbanTest;
+let KanbanTest;
 
 var token = sessionStorage.getItem("token");
 
@@ -29,8 +29,6 @@ function initKanban(finalBoard) {
       enabled: false,
     },
     buttonClick: function (el, boardId) {
-      console.log(el);
-      console.log(boardId);
       // create a form to enter element
       var formItem = document.createElement("form");
       formItem.setAttribute("class", "itemform");
@@ -92,28 +90,59 @@ function initKanban(finalBoard) {
     },
     itemAddOptions: {
       enabled: true,
-      content: "+ New Item",
+      content: "+ New",
       class: "new-card btn btn-outline-primary",
       footer: false,
     },
     click: function (el) {
       console.log("aa");
     },
-    dropEl: function (el, target, source, sibling) {
-      console.log("a");
+    dragendBoard: function (el) {
       console.log(el);
-      console.log(target);
-      console.log(source);
-      console.log(sibling);
+      let columnID = parseInt(el.getAttribute("data-id"));
+      let nextOfIndex = parseInt(el.getAttribute("data-order"));
+      let raw =
+        '{\n  "columnID" : ' +
+        columnID +
+        ',\n  "nextOfIndex" : ' +
+        nextOfIndex +
+        "\n}";
 
+      let reorderColumnOptions = {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
+          "Content-Type": "text/plain",
+        },
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(
+        "http://127.0.0.1:12345/teams/" +
+          projectTeamID +
+          "/projects/" +
+          projectID +
+          "/columns/reorder",
+        reorderColumnOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          if (result.error.code == 200) {
+          }
+        });
+    },
+    dropEl: function (el, target, source, sibling) {
       if (target.parentElement == source.parentElement) {
         let raw =
           '{\n  "cardID" : ' +
           parseInt(el.getAttribute("data-eid")) +
           ',\n  "aboveOfIdx" : ' +
-          parseInt(Array.from(el.parentNode.children).indexOf(el)) +
-          '\n}';
-console.log(raw);
+          parseInt(Array.from(el.parentNode.children).indexOf(el) + 2) +
+          ',\n  "columnID" : 0' +
+          "\n}";
+
         let cardReorderSameColumnOptions = {
           method: "POST",
           headers: {
@@ -130,7 +159,7 @@ console.log(raw);
             "/projects/" +
             projectID +
             "/cards/reorder",
-            cardReorderSameColumnOptions
+          cardReorderSameColumnOptions
         )
           .then((response) => response.json())
           .then((result) => {
@@ -139,52 +168,45 @@ console.log(raw);
             }
           });
       } else {
+        let targetColumnID = target.parentElement.getAttribute("data-order");
+        let raw =
+          '{\n  "cardID" : ' +
+          parseInt(el.getAttribute("data-eid")) +
+          ',\n  "aboveOfIdx" : ' +
+          parseInt(Array.from(el.parentNode.children).indexOf(el) + 1) +
+          ',\n  "columnID" : ' +
+          targetColumnID +
+          "\n}";
+        console.log(raw);
+        let cardReorderSameColumnOptions = {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+            "Content-Type": "text/plain",
+          },
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(
+          "http://127.0.0.1:12345/teams/" +
+            projectTeamID +
+            "/projects/" +
+            projectID +
+            "/cards/reorder",
+          cardReorderSameColumnOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            if (result.error.code == 200) {
+            }
+          });
       }
     },
     boards: finalBoard,
   });
 }
-
-// var toDoButton = document.getElementById("addToDo");
-// toDoButton.addEventListener("click", function () {
-//   KanbanTest.addElement("_todo", {
-//     title: "Test Add",
-//   });
-//   addClassToNewBoard();
-// });
-
-// var addBoardDefault = document.getElementById("addDefault");
-// addBoardDefault.addEventListener("click", function () {
-//   KanbanTest.addBoards([
-//     {
-//       id: "_default",
-//       title: "New Board",
-//       item: [],
-//     },
-//   ]);
-//   addClassToNewBoard();
-// });
-
-// var removeBoard = document.getElementById("removeBoard");
-// removeBoard.addEventListener("click", function () {
-//   KanbanTest.removeBoard("_done");
-// });
-
-// var removeElement = document.getElementById("removeElement");
-// removeElement.addEventListener("click", function () {
-//   KanbanTest.removeElement("_test_delete");
-// });
-
-// var allEle = KanbanTest.getBoardElements("_todo");
-// allEle.forEach(function (item, index) {
-//   //console.log(item);
-// });
-
-// var test = document.getElementById("test");
-// test.addEventListener("click", function () {
-// var board = KanbanTest.findBoard("_done");
-// console.log(board);
-// });
 
 $(document).ready(function () {
   console.log("ready!");
@@ -200,7 +222,7 @@ function addClassToNewBoard() {
 
   var boardElements = document.getElementsByClassName("kanban-board");
   for (i = 0; i < boardElements.length; i++) {
-    boardElements[i].classList.add("col", "card");
+    boardElements[i].classList.add("col", "card", "card-primary");
   }
 
   var boardHeaderElements = document.getElementsByClassName(
@@ -237,7 +259,7 @@ addBoard.addEventListener("click", function () {
   ]);
   let container = KanbanTest.boardContainer;
   container[container.length - 1].classList.add("card-body", "row");
-  KanbanTest.findBoard(boardid).classList.add("col", "card");
+  KanbanTest.findBoard(boardid).classList.add("col", "card", "card-primary");
 
   let raw =
     '{\n  "columnName" : "' + $("#newColumnName").val().toString() + '"\n}';
@@ -265,6 +287,53 @@ addBoard.addEventListener("click", function () {
       console.log(result);
       if (result.error.code == 200) {
         $("#newColumnName").value = "";
+        addEventListenerToHeader();
       }
     });
 });
+addEventListenerToHeader();
+function addEventListenerToHeader() {
+  let editCol = document.getElementsByClassName("kanban-board-header");
+  console.log(editCol);
+  for (var i = 0; i < editCol.length; i++) {
+    editCol[i].children[0].setAttribute("data-toggle", "modal");
+    editCol[i].children[0].setAttribute("data-target", "#editColumn");
+    editCol[i].addEventListener("click", function () {
+      let curentCol = this;
+      console.log(this.parentElement.getAttribute("data-id"));
+      document
+        .getElementById("newColumnNameChange")
+        .setAttribute("placeholder", this.children[0].outerText);
+      $("#deleteColumn").off();
+      $("#deleteColumn").on("click", function () {
+        let colID = curentCol.parentElement.getAttribute("data-id");
+        KanbanTest.removeBoard(colID);
+
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "text/plain");
+      
+        let raw = '{\n  "columnID" : ' + parseInt(colID) + '\n}';
+      
+        let deleteColOptions = {
+          method: "POST",
+          credentials: "omit",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "text/plain",
+          },
+          body: raw,
+          redirect: "follow",
+        };
+      
+        fetch("http://127.0.0.1:12345/teams", deleteColOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.error.code == 200) {
+         
+            }
+          });
+
+      });
+    });
+  }
+}
