@@ -10,14 +10,16 @@
 3. docs: documentation
 
 ## DB desgin
-
+### 1. Overall DB
 ![DBDesign](docs/dbdiagram/prom_db.png)
+
+### 2. Actual DB
+
+![ActualDB](docs/dbdiagram/prom_db_microservice.png)
 
 ## System design
 
-![SystemDesign](docs/drawio/prom_design.jpg)
-
-- NOTE: Nofications will be developed if there is enough time
+![SystemDesign](docs/drawio/prom_design.png)
 
 ## DEVELOPMENT
 
