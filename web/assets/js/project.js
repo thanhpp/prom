@@ -28,16 +28,6 @@ function initKanban(finalBoard) {
     itemHandleOptions: {
       enabled: false,
     },
-    click: function (el) {
-      console.log("Trigger on all items click!");
-    },
-    context: function (el, e) {
-      console.log("Trigger on all items right-click!");
-    },
-    dropEl: function (el, target, source, sibling) {
-      console.log(target.parentElement.getAttribute("data-id"));
-      console.log(el, target, source, sibling);
-    },
     buttonClick: function (el, boardId) {
       console.log(el);
       console.log(boardId);
@@ -53,7 +43,46 @@ function initKanban(finalBoard) {
         var text = e.target[0].value;
         KanbanTest.addElement(boardId, {
           title: text,
+          description: "",
+          column_id: boardId,
+          created_by: sessionStorage.getItem("userID"),
+          index: KanbanTest.getBoardElements(boardId).length + 1,
         });
+
+        let raw =
+          '{"card":{"assignedTo":' +
+          sessionStorage.getItem("userID") +
+          ',"description":"","duedate":0,"title":"' +
+          text +
+          '"},"columnID":' +
+          parseInt(boardId) +
+          "}";
+
+        let newCardOptions = {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+            "Content-Type": "text/plain",
+          },
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(
+          "http://127.0.0.1:12345/teams/" +
+            projectTeamID +
+            "/projects/" +
+            projectID +
+            "/cards",
+          newCardOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            if (result.error.code == 200) {
+            }
+          });
+
         formItem.parentNode.removeChild(formItem);
         addClassToNewBoard();
       });
@@ -68,15 +97,49 @@ function initKanban(finalBoard) {
       footer: false,
     },
     click: function (el) {
-      console.log(KanbanTest.options.boardsjfe);
+      console.log("aa");
     },
     dropEl: function (el, target, source, sibling) {
-      // console.log("a");
-      // console.log(el.dataset);
-      // console.log(target.children[0].dataset);
-      // console.log(target.children[1].dataset);
-      // console.log(source.dataset);
-      // console.log(sibling);
+      console.log("a");
+      console.log(el);
+      console.log(target);
+      console.log(source);
+      console.log(sibling);
+
+      if (target.parentElement == source.parentElement) {
+        let raw =
+          '{\n  "cardID" : ' +
+          parseInt(el.getAttribute("data-eid")) +
+          ',\n  "aboveOfIdx" : ' +
+          parseInt(Array.from(el.parentNode.children).indexOf(el)) +
+          '\n}';
+console.log(raw);
+        let cardReorderSameColumnOptions = {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+            "Content-Type": "text/plain",
+          },
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(
+          "http://127.0.0.1:12345/teams/" +
+            projectTeamID +
+            "/projects/" +
+            projectID +
+            "/cards/reorder",
+            cardReorderSameColumnOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            if (result.error.code == 200) {
+            }
+          });
+      } else {
+      }
     },
     boards: finalBoard,
   });
@@ -176,10 +239,10 @@ addBoard.addEventListener("click", function () {
   container[container.length - 1].classList.add("card-body", "row");
   KanbanTest.findBoard(boardid).classList.add("col", "card");
 
-  var raw =
+  let raw =
     '{\n  "columnName" : "' + $("#newColumnName").val().toString() + '"\n}';
 
-  var requestOptions = {
+  let requestOptions = {
     method: "POST",
     headers: {
       Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -201,7 +264,7 @@ addBoard.addEventListener("click", function () {
     .then((result) => {
       console.log(result);
       if (result.error.code == 200) {
-        $("#newColumnName").value = '';
+        $("#newColumnName").value = "";
       }
     });
 });

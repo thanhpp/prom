@@ -93,6 +93,7 @@ function assignTeamsHTML() {
     let teamURLSearchParams = teamURL.searchParams;
 
     teamURLSearchParams.set("id", teamID.toString());
+    
 
     li.innerHTML =
       '<a href="' +
@@ -143,7 +144,7 @@ function assignRecentProjects() {
           let projectURLSearchParams = projectURL.searchParams;
 
           projectURLSearchParams.set("id", projectID.toString());
-
+          projectURLSearchParams.set("team", personalTeamID);
           li.innerHTML =
             '<a href="' +
             projectURL.toString() +
