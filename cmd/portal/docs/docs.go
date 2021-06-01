@@ -531,16 +531,66 @@ var doc = `{
                 }
             }
         },
-        "/teams/:teamID/projects/:projectID/cards/reorder": {
-            "post": {
-                "description": "Reorder card in one column",
+        "/teams/:teamID/projects/:projectID/cards/:cardID": {
+            "get": {
+                "description": "Get card by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "card"
                 ],
-                "summary": "Reorder card in one column",
+                "summary": "Get card by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "cardID",
+                        "name": "cardID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get card OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetCardByIDResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/:projectID/cards/reorder": {
+            "post": {
+                "description": "Reorder card if in the same column, columnID = 0",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "card"
+                ],
+                "summary": "Reorder card",
                 "parameters": [
                     {
                         "type": "string",
@@ -682,6 +732,56 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Update column by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column"
+                ],
+                "summary": "Update column by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "projectID",
+                        "name": "projectID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update column info",
+                        "name": "updateReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateColumnReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
             }
         },
         "/teams/:teamID/projects/:projectID/columns/reorder": {
@@ -731,6 +831,49 @@ var doc = `{
                         "description": "ReorderOK",
                         "schema": {
                             "$ref": "#/definitions/dto.RespError"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams/:teamID/projects/recent": {
+            "get": {
+                "description": "Get recent project by recent count",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get recent project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "teamID",
+                        "name": "teamID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "recent count",
+                        "name": "recent",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get success",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetRecentCreatedProjectByUserIDResp"
                         }
                     }
                 }
@@ -953,6 +1096,25 @@ var doc = `{
                 }
             }
         },
+        "dto.GetCardByIDResp": {
+            "type": "object",
+            "properties": {
+                "card": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "dto.GetProjectDetailsResp": {
             "type": "object",
             "properties": {
@@ -971,6 +1133,25 @@ var doc = `{
                     }
                 },
                 "project": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetRecentCreatedProjectByUserIDResp": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "projects": {
                     "type": "string"
                 }
             }
@@ -1078,6 +1259,17 @@ var doc = `{
                     "type": "integer"
                 },
                 "nextOfIndex": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UpdateColumnReq": {
+            "type": "object",
+            "properties": {
+                "column": {
+                    "type": "string"
+                },
+                "columnID": {
                     "type": "integer"
                 }
             }

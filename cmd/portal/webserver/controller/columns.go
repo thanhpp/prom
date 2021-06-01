@@ -124,6 +124,51 @@ func (cC *ColumnCtrl) ReorderColumns(c *gin.Context) {
 }
 
 // ------------------------------
+// UpdateColumn ...
+// @Summary Update column by id
+// @Description Update column by id
+// @Produce json
+// @Param 	Authorization	header	string				true	"jwt"
+// @Param 	teamID			path	int					true	"teamID"
+// @Param	projectID		path	int					true	"projectID"
+// @Param 	updateReq 		body 	dto.UpdateColumnReq true "update column info"
+// @Success 200 {object} dto.RespError "Update OK"
+// @Tags column
+// @Router /teams/:teamID/projects/:projectID/columns  [PATCH]
+func (cC *ColumnCtrl) UpdateColumn(c *gin.Context) {
+	prjID, err := getProjectIDFromParam(c)
+	if err != nil {
+		logger.Get().Errorf("Project ID from param error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
+	req := new(dto.UpdateColumnReq)
+	if err = c.ShouldBindJSON(req); err != nil {
+		logger.Get().Errorf("Bind json error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
+	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
+	if err != nil {
+		logger.Get().Errorf("Get project error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if err = service.GetCCManSrv().UpdateColumnByID(c, int(project.ShardID), req.ColumnID, req.Column); err != nil {
+		logger.Get().Errorf("UpdateColumnByID error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	resp := new(dto.RespError)
+	resp.SetCode(http.StatusOK)
+	c.JSON(http.StatusOK, resp)
+}
+
+// ------------------------------
 // DeleteColumn ...
 // @Summary Delete column by id
 // @Description Delete column by id and all card in column

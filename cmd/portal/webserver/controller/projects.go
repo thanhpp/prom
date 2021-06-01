@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/prom/cmd/portal/service"
@@ -172,5 +173,48 @@ func (p *ProjectCtrl) GetProjectDetails(c *gin.Context) {
 	resp := new(dto.GetProjectDetailsResp)
 	resp.SetCode(http.StatusOK)
 	resp.SetData(project, columns)
+	c.JSON(http.StatusOK, resp)
+}
+
+// ------------------------------
+// GetRecentProject
+// @Summary Get recent project
+// @Description Get recent project by recent count
+// @Produce json
+// @Param 	Authorization	header	string	true	"jwt"
+// @Param 	teamID			path	int		true	"teamID"
+// @Param 	recent 			query 	int 	true 	"recent count"
+// @Success 200 {object} dto.GetRecentCreatedProjectByUserIDResp "Get success"
+// @Tags project
+// @Router /teams/:teamID/projects/recent [GET]
+func (p *ProjectCtrl) GetRecentProject(c *gin.Context) {
+	claims, err := getClaimsFromContext(c)
+	if err != nil {
+		logger.Get().Errorf("Context claims error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, "Context claims error")
+		return
+	}
+
+	var recent int = 5
+	recentStr := c.Query("recent")
+	if len(recentStr) != 0 {
+		recent, err = strconv.Atoi(recentStr)
+		if err != nil {
+			logger.Get().Errorf("Get recent Query error: %v", err)
+			ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+			return
+		}
+	}
+
+	projects, err := service.GetUsrManService().GetRecentCreatedProjectByUserID(c, claims.UserID, uint(recent))
+	if err != nil {
+		logger.Get().Errorf("GetRecentCreatedProjectByUserID error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	resp := new(dto.GetRecentCreatedProjectByUserIDResp)
+	resp.SetData(projects)
+	resp.SetCode(http.StatusOK)
 	c.JSON(http.StatusOK, resp)
 }

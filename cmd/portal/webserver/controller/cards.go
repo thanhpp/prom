@@ -5,13 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/thanhpp/prom/pkg/rabbitmq"
-
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/prom/cmd/portal/service"
 	"github.com/thanhpp/prom/cmd/portal/webserver/dto"
 	"github.com/thanhpp/prom/pkg/ccmanrpc"
 	"github.com/thanhpp/prom/pkg/logger"
+	"github.com/thanhpp/prom/pkg/rabbitmq"
 	"github.com/thanhpp/prom/pkg/timerpc"
 )
 
@@ -98,6 +97,54 @@ func (cC *CardCtrl) CreateNewCard(c *gin.Context) {
 
 	resp := new(dto.RespError)
 	resp.SetCode(http.StatusOK)
+	c.JSON(http.StatusOK, resp)
+}
+
+// ------------------------------
+// GetCardByID ...
+// @Summary Get card by ID
+// @Description Get card by ID
+// @Produce json
+// @Param 	Authorization	header	string					true	"jwt"
+// @Param 	teamID			path	int						true	"teamID"
+// @Param	projectID		path	int						true	"projectID"
+// @Param 	cardID			path	int						true 	"cardID"
+// @Success 200 {object} dto.GetCardByIDResp "Get card OK"
+// @Tags card
+// @Router /teams/:teamID/projects/:projectID/cards/:cardID [GET]
+func (cC *CardCtrl) GetCardByID(c *gin.Context) {
+	prjID, err := getProjectIDFromParam(c)
+	if err != nil {
+		logger.Get().Errorf("Project ID from param error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
+	var cardID int
+	cardStr := c.Param("cardID")
+	if len(cardStr) == 0 {
+		logger.Get().Error("Empty cardID")
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, "Empty cardID")
+		return
+	}
+
+	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
+	if err != nil {
+		logger.Get().Errorf("Get project error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	card, err := service.GetCCManSrv().GetCardByID(c, int(project.ShardID), uint32(cardID))
+	if err != nil {
+		logger.Get().Errorf("Get card by ID error: %v", err)
+		ginAbortWithCodeMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	resp := new(dto.GetCardByIDResp)
+	resp.SetCode(http.StatusOK)
+	resp.SetData(card)
 	c.JSON(http.StatusOK, resp)
 }
 

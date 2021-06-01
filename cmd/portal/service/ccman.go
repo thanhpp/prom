@@ -475,6 +475,10 @@ func (cS *CCManSrv) UpdateColumnByID(ctx context.Context, shardID int, colID uin
 		return cS.error(ctx.Err())
 	}
 
+	// prevent unexpected update
+	col.ID = 0
+	col.ProjectIndex = 0
+
 	in := &ccmanrpc.UpdateColumnByIDReq{
 		ColumnID: colID,
 		Column:   col,

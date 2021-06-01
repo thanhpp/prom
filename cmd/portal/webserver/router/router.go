@@ -80,17 +80,18 @@ func NewRouter() (routers *gin.Engine) {
 			projects := teamsID.Group("/projects")
 			{
 				projects.GET("", prjCtrl.GetAllProjectsFromTeamID)
+				projects.GET("/recent", prjCtrl.GetRecentProject)
 				projects.POST("", prjCtrl.CreateNewProject)
 
 				projectID := projects.Group("/:projectID")
 				{
 					projectID.GET("", prjCtrl.GetProjectDetails)
-
 					colCtrl := new(controller.ColumnCtrl)
 					columns := projectID.Group("/columns")
 					{
 						columns.POST("", colCtrl.CreateNewColumn)
 						columns.POST("/reorder", colCtrl.ReorderColumns)
+						columns.PATCH("", colCtrl.UpdateColumn)
 						columns.DELETE("", colCtrl.DeleteColumn)
 					}
 

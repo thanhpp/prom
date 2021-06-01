@@ -1,5 +1,9 @@
 package dto
 
+import (
+	"github.com/thanhpp/prom/pkg/ccmanrpc"
+)
+
 type CreateNewCardReq struct {
 	ColumnID uint32 `json:"columnID"`
 	Card     struct {
@@ -41,4 +45,13 @@ type MoveCardColReq struct {
 
 type DeleteCardReq struct {
 	CardID uint32 `json:"cardID"`
+}
+
+type GetCardByIDResp struct {
+	RespError
+	Card *ccmanrpc.Card `json:"card"`
+}
+
+func (r *GetCardByIDResp) SetData(card *ccmanrpc.Card) {
+	r.Card = card
 }
