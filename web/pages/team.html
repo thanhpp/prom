@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8">  
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Team &mdash; Treno</title>
 
@@ -103,7 +103,7 @@
           </div>
           <ul id="sidebar" class="sidebar-menu">
               <li class="nav-item dropdown active">
-                <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
+                <a href="home.html" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
               </li>
               <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
                 <a id="navBarNewProject" href="" class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal" data-target="#newProjectModal">
@@ -127,45 +127,35 @@
      <div class="main-content">
       <section class="section">
         <div class="section-header">
-          <h1>Home</h1>
+          <h1 id="teamName"></h1>
         </div>
-<section class ="section">
-  <div class="row">
-    <div class="col-12 mb-4">
-      <div class="hero text-white bg-primary"">
-        <div class="hero-inner">
-          <h2>Welcome back, <span class="name"></span>!</h2>
-          <p class="lead">What's your plan for today?</p>
-          <div class="mt-4">
-            <a id="heroNewProject" href="#" data-toggle="modal" data-target="#newProjectModal" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="fas fa-plus"></i>New project...</a>
-          </div>
-        </div>
-      </div>
-    </div>
-</section>
-        <div class="section-body">
-          <h2 class="section-title">Recent Projects</h2>
-        </div>
-        <div id="recentProjects" class="row">
-          
-        </div>
-        <div class="section-body">
-          <h2 class="section-title">Recent activites</h2>
-        </div>
-        <div class="row" style="height:80%; overflow:hidden;">
-          <div class="col-lg-12 col-md-12 col-12 col-sm-12">
+
+        <div class="section-body row">
+          <div class="col-7">
             <div class="card">
+              <div class="card-header">
+                <h4>Projects</h4>
+              </div>
+              <div id="projects" class="card-body row">
+              </div>
+
+            </div>
+          </div>
+          <div class="col-5">
+            <div class="card">
+              <div class="card-header">
+                <h4>Members</h4>
+              </div>
               <div class="card-body">
-                <ul class="list-unstyled list-unstyled-border">
-                  <li class="media">
-                    <img class="mr-3 rounded-circle" width="50" src="../assets/img/avatar/avatar-1.png" alt="avatar">
-                    <div class="media-body">
-                      <div class="float-right text-primary">Now</div>
-                      <div class="media-title">Nguyen Ba Nam</div>
-                      <span class="text-small text-muted">Add a new column to Birthday Party projects</span>
-                    </div>
-                  </li>
-                </ul>
+                <div class="input-group mb-3">
+                  <input id="addNewMember" type="text" class="form-control" placeholder="Add a person to your team" aria-label="">
+                  <div class="input-group-append">
+                    <button id="addNewMemberButton" class="btn btn-primary disabled" type="button">Add</button>
+                  </div>
+                </div>
+              </div>
+              <div id="currentMembers" class="card-footer">
+                
               </div>
             </div>
           </div>

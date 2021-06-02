@@ -457,3 +457,5 @@ function addEventListenerToHeader() {
     });
   }
 }
+
+document.getElementById("editTeam").setAttribute('href', "http://127.0.0.1:5501/web/pages/team.html?id="+projectTeamID);
