@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -128,6 +129,13 @@ func (cC *CardCtrl) GetCardByID(c *gin.Context) {
 		return
 	}
 
+	cardID, err = strconv.Atoi(cardStr)
+	if err != nil {
+		logger.Get().Error("cardID invalid")
+		ginAbortWithCodeMsg(c, http.StatusNotAcceptable, err.Error())
+		return
+	}
+
 	project, err := service.GetUsrManService().GetProjectByID(c, prjID)
 	if err != nil {
 		logger.Get().Errorf("Get project error: %v", err)
@@ -135,6 +143,7 @@ func (cC *CardCtrl) GetCardByID(c *gin.Context) {
 		return
 	}
 
+	fmt.Println("cardID", uint32(cardID))
 	card, err := service.GetCCManSrv().GetCardByID(c, int(project.ShardID), uint32(cardID))
 	if err != nil {
 		logger.Get().Errorf("Get card by ID error: %v", err)

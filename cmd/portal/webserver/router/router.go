@@ -98,6 +98,7 @@ func NewRouter() (routers *gin.Engine) {
 					cardCtrl := new(controller.CardCtrl)
 					cards := projectID.Group("/cards")
 					{
+						cards.GET("/:cardID", cardCtrl.GetCardByID)
 						cards.POST("", cardCtrl.CreateNewCard)
 						cards.POST("/reorder", cardCtrl.ReorderCard)
 						cards.PATCH("", cardCtrl.UpdateCard)

@@ -214,7 +214,6 @@ func (cS *CCManSrv) GetCardByID(ctx context.Context, shardID int, cardID uint32)
 	resp, err := client.GetCardByID(ctx, in)
 	if err != nil {
 		checkServiceFailError(shardID, err)
-		checkServiceFailError(shardID, err)
 		return nil, cS.error(err)
 	}
 
